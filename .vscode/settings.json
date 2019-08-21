@@ -1,0 +1,5 @@
+{
+    "eslint.packageManager": "yarn",
+    "eslint.autoFixOnSave": true,
+    "eslint.lintTask.enable": true
+}
