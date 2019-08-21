@@ -1,5 +1,11 @@
 # vscode-cy-helper
 Extension for cypress.
+## Installation
+* Download file `vscode-cy-helper-{version}.vsix` from this repository
+* Open VS Code extensions menu
+* In up right corner with 3 dots menu find option `install from VSIX`
+* Select file downloaded vsix file
+
 ## Configuration
 in `.vscode/settings.json`:    
 

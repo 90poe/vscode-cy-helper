@@ -1,6 +1,5 @@
 const vscode = require('vscode');
 const parser = require('./findCommand');
-const { Selection } = vscode;
 
 const activate = context => {
   const packageManager = vscode.workspace
@@ -95,7 +94,14 @@ const activate = context => {
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.openCustomCommand', () => {
       const editor = vscode.window.activeTextEditor;
-      let commandName = editor.document.getText(editor.selection);
+      let commandName;
+      if (editor.selection.start.line === editor.selection.end.line) {
+        let line = editor.document.lineAt(editor.selection.active.line).text;
+        let commandNamePattern = /\.(.*)\(/g;
+        commandName = commandNamePattern.exec(line).pop();
+      } else {
+        commandName = editor.document.getText(editor.selection);
+      }
       let currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName
         .split('/cypress/')
         .shift();
@@ -107,10 +113,10 @@ const activate = context => {
       vscode.workspace.openTextDocument(openPath).then(doc => {
         vscode.window.showTextDocument(doc).then(doc => {
           let { line, column } = location.loc;
-          const cursor = doc.selection.active;
-          const nextCursor = cursor.with(line - 1, column);
-          let selection = new Selection(nextCursor, nextCursor);
-          doc.revealRange(selection, 1);
+          var p = new vscode.Position(line - 1, column);
+          var s = new vscode.Selection(p, p);
+          doc.selection = s;
+          doc.revealRange(s, 1);
         });
       });
     })
