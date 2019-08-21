@@ -1,0 +1,86 @@
+{
+  "name": "vscode-cy-helper",
+  "version": "0.0.1",
+  "description": "vscode cypress helper",
+  "main": "index.js",
+  "repository": "https://github.com/90poe/vscode-cy-helper",
+  "author": "<oleksandr.shevtsov@90poe.io>",
+  "license": "UNLICENSED",
+  "private": true,
+  "engines": {
+    "vscode": "^1.37.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onCommand:extension.openSpecFile",
+    "onCommand:extension.openSingleSpec",
+    "onCommand:extension.openCustomCommand"
+  ],
+  "publisher": "Shelex",
+  "contributes": {
+    "commands": [
+      {
+        "command": "extension.openSpecFile",
+        "title": "Open Cypress Spec File"
+      },
+      {
+        "command": "extension.openSingleSpec",
+        "title": "Open Cypress Single Spec"
+      },
+      {
+        "command": "extension.openCustomCommand",
+        "title": "Go to Custom Command Definition"
+      }
+    ],
+    "menus": {
+      "editor/context": [
+        {
+          "command": "extension.openSpecFile",
+          "group": "Cypress"
+        },
+        {
+          "command": "extension.openSingleSpec",
+          "group": "Cypress"
+        },
+        {
+          "command": "extension.openCustomCommand",
+          "group": "navigation"
+        }
+      ]
+    },
+    "configuration": {
+      "title": "CypressHelper",
+      "properties": {
+        "cypressHelper.packageManager": {
+          "type": "string",
+          "default": "yarn",
+          "description": "Specify package manager to use - npm|yarn|npx"
+        },
+        "cypressHelper.commandForOpen": {
+          "type": "string",
+          "default": "cypress open",
+          "description": "Specify command used for opening cypress"
+        },
+        "cypressHelper.customCommandsFolder": {
+          "type": "string",
+          "default": "cypress/support",
+          "description": "Specify path to folder with custom commands"
+        }
+      }
+    }
+  },
+  "devDependencies": {
+    "@types/vscode": "^1.37.0",
+    "eslint": "^6.2.1",
+    "eslint-config-prettier": "^6.1.0",
+    "eslint-plugin-prettier": "^3.1.0",
+    "prettier": "^1.18.2"
+  },
+  "dependencies": {
+    "@babel/parser": "^7.5.5",
+    "fs-extra": "^8.1.0",
+    "klaw-sync": "^6.0.0"
+  }
+}
