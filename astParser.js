@@ -205,14 +205,20 @@ const generateTypeDefinitions = (folder, excludes, typeDefFile) => {
     window.showErrorMessage(errorDuplicate, { modal: true });
   }
   if (added.length) {
-    window.showInformationMessage(`New command types added: ${added}`, {
-      modal: true
-    });
+    window.showInformationMessage(
+      `New command types added:\n${added.join('\n')}`,
+      {
+        modal: true
+      }
+    );
   }
   if (deleted.length) {
-    window.showInformationMessage(`Deleted command types: ${deleted}`, {
-      modal: true
-    });
+    window.showInformationMessage(
+      `Deleted command types:\n${deleted.join('\n')}`,
+      {
+        modal: true
+      }
+    );
   }
 };
 
