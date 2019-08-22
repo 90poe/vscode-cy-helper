@@ -181,9 +181,8 @@ const typeDefinitions = (files, excludes) => {
 
 const generateTypeDefinitions = (folder, excludes, typeDefFile) => {
   let files = supportFiles(folder);
+  let { window } = vscode;
   let { commandsFound, typeDefs } = typeDefinitions(files, excludes);
-  let channel = vscode.window.createOutputChannel('cypressHelper');
-  channel.show();
   let availableTypeDefinitions = customCommandsAvailable(typeDefFile);
   let added = _.difference(commandsFound, availableTypeDefinitions);
   let deleted = _.difference(availableTypeDefinitions, commandsFound);
@@ -191,21 +190,30 @@ const generateTypeDefinitions = (folder, excludes, typeDefFile) => {
   if (commandsFound.length === foundUniqueCommands.length) {
     if (typeDefs.length) {
       fs.outputFileSync(typeDefFile, wrapTemplate(typeDefs), 'utf-8');
-      channel.append(`Type definitions generated and saved to:
-      ${typeDefFile}\n`);
+      window.showInformationMessage('Type definitions generated and saved');
+      vscode.workspace.openTextDocument(typeDefFile).then(doc => {
+        vscode.window.showTextDocument(doc, { preview: false });
+      });
     } else {
-      channel.append(`No commands required type definitions found\n`);
+      window.showWarningMessage('No commands required type definitions found');
     }
-    channel.append('No duplicates found\n');
+    window.showInformationMessage('No duplicates found');
   } else {
-    let errorDuplicate = `Command already exist: ${_.uniq(
+    let errorDuplicate = `Command already exist:\n${_.uniq(
       _.filter(commandsFound, (v, i, a) => a.indexOf(v) !== i)
-    )}\n`;
-    vscode.window.showErrorMessage(errorDuplicate);
-    channel.append(errorDuplicate);
+    ).join('\n')}`;
+    window.showErrorMessage(errorDuplicate, { modal: true });
   }
-  added.length && channel.append(`New command types added: ${added}\n`);
-  deleted.length && channel.append(`Deleted command types: ${deleted}\n`);
+  if (added.length) {
+    window.showInformationMessage(`New command types added: ${added}`, {
+      modal: true
+    });
+  }
+  if (deleted.length) {
+    window.showInformationMessage(`Deleted command types: ${deleted}`, {
+      modal: true
+    });
+  }
 };
 
 module.exports = {
