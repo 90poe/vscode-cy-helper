@@ -11,9 +11,11 @@ in `.vscode/settings.json`:
 
 | setting                              | description                           | default           |    
 |:--------------------------------------|:---------------------------------------|:-------------------|    
-| `cypressHelper.packageManager`       | package manager to use - npm|yarn|npx | `yarn`            |    
+| `cypressHelper.packageManager`       | package manager to use - npm/yarn/npx | `yarn`            |    
 | `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
 | `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
+| `cypressHelper.typeDefinitionFile` | Specify file to save generated custom commands file   | `cypress/support/customCommands.d.ts`|    
+| `cypressHelper.typeDefinitionExcludePatterns` | Specify strings should be not included in file paths while looking for commands  | `.d.ts` |    
 
 ## Usage
 ### Open cypress custom command definition
@@ -25,3 +27,6 @@ From menu select `Open Cypress Spec File`
 
 ### Running a single spec
 From menu select `Open Cypress Single Spec`
+
+### Generate type definitions for Cypress custom commands
+From menu select `Genarate Cypress Custom Command types`

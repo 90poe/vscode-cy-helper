@@ -1,16 +1,17 @@
 const vscode = require('vscode');
-const parser = require('./findCommand');
+const {
+  getCypressCommandImplementation,
+  generateTypeDefinitions
+} = require('./astParser');
 
 const activate = context => {
-  let packageManager = vscode.workspace
-    .getConfiguration()
-    .get('cypressHelper.packageManager');
-  let commandForOpen = vscode.workspace
-    .getConfiguration()
-    .get('cypressHelper.commandForOpen');
-  let customCommandsFolder = vscode.workspace
-    .getConfiguration()
-    .get('cypressHelper.customCommandsFolder');
+  let {
+    packageManager,
+    commandForOpen,
+    customCommandsFolder,
+    typeDefinitionFile,
+    typeDefinitionExcludePatterns
+  } = vscode.workspace.getConfiguration().cypressHelper;
 
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.openSpecFile', () => {
@@ -46,9 +47,9 @@ const activate = context => {
         .filter(e => Boolean(e));
       let selectedScenarioIndex = scenarioIndexes.find(
         (scenarioIndex, position) => {
+          let nextLine = scenarioIndexes[position + 1] || scenarioIndex;
           return (
-            line.lineNumber >= scenarioIndex &&
-            line.lineNumber <= scenarioIndexes[position + 1]
+            line.lineNumber >= scenarioIndex && line.lineNumber <= nextLine
           );
         }
       );
@@ -104,7 +105,7 @@ const activate = context => {
       let currentlyOpenTabfilePath = vscode.window.activeTextEditor.document.fileName
         .split('/cypress/')
         .shift();
-      let location = parser(
+      let location = getCypressCommandImplementation(
         `${currentlyOpenTabfilePath}/${customCommandsFolder}`,
         commandName
       );
@@ -119,6 +120,23 @@ const activate = context => {
         });
       });
     })
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      'extension.generateCustomCommandTypes',
+      () => {
+        let root = vscode.window.activeTextEditor.document.fileName
+          .split('/cypress/')
+          .shift();
+
+        generateTypeDefinitions(
+          `${root}/${customCommandsFolder}`,
+          typeDefinitionExcludePatterns,
+          `${root}/${typeDefinitionFile}`
+        );
+      }
+    )
   );
 };
 exports.activate = activate;

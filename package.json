@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "vscode cypress helper",
   "main": "index.js",
   "repository": "https://github.com/90poe/vscode-cy-helper",
@@ -16,7 +16,8 @@
   "activationEvents": [
     "onCommand:extension.openSpecFile",
     "onCommand:extension.openSingleSpec",
-    "onCommand:extension.openCustomCommand"
+    "onCommand:extension.openCustomCommand",
+    "onCommand:extension.generateCustomCommandTypes"
   ],
   "publisher": "Shelex",
   "contributes": {
@@ -39,6 +40,10 @@
       {
         "command": "extension.openCustomCommand",
         "title": "Go to Custom Command Definition"
+      },
+      {
+        "command": "extension.generateCustomCommandTypes",
+        "title": "Genarate Cypress Custom Command types"
       }
     ],
     "menus": {
@@ -57,6 +62,10 @@
           "when": "resourceLangId == javascript",
           "command": "extension.openCustomCommand",
           "group": "navigation"
+        },
+        {
+          "command": "extension.generateCustomCommandTypes",
+          "group": "z_commands"
         }
       ]
     },
@@ -77,6 +86,16 @@
           "type": "string",
           "default": "cypress/support",
           "description": "Specify path to folder with custom commands"
+        },
+        "cypressHelper.typeDefinitionFile": {
+          "type": "string",
+          "default": "cypress/support/customCommands.d.ts",
+          "description": "Specify file to save generated custom commands file"
+        },
+        "cypressHelper.typeDefinitionExcludePatterns": {
+          "type": "string",
+          "default": ".d.ts",
+          "description": "Specify strings should be not included in file paths while looking for commands"
         }
       }
     }
