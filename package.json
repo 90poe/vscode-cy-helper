@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "vscode cypress helper",
   "main": "index.js",
   "repository": "https://github.com/90poe/vscode-cy-helper",
@@ -20,6 +20,13 @@
   ],
   "publisher": "Shelex",
   "contributes": {
+    "keybindings": [
+      {
+        "command": "extension.openCustomCommand",
+        "key": "alt+f12",
+        "mac": "alt+f12"
+      }
+    ],
     "commands": [
       {
         "command": "extension.openSpecFile",
@@ -37,14 +44,17 @@
     "menus": {
       "editor/context": [
         {
+          "when": "resourceLangId == feature || resourceLangId == javascript",
           "command": "extension.openSpecFile",
           "group": "Cypress"
         },
         {
+          "when": "resourceLangId == feature || resourceLangId == javascript",
           "command": "extension.openSingleSpec",
           "group": "Cypress"
         },
         {
+          "when": "resourceLangId == javascript",
           "command": "extension.openCustomCommand",
           "group": "navigation"
         }
