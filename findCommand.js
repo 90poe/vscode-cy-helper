@@ -1,6 +1,7 @@
 let Parser = require('@babel/parser');
 const fs = require('fs-extra');
 const klawSync = require('klaw-sync');
+const _ = require('lodash');
 
 /**
  * Constant paths for detecting `Cypress.Commands.add`

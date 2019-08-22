@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "vscode cypress helper",
   "main": "index.js",
   "repository": "https://github.com/90poe/vscode-cy-helper",
@@ -82,6 +82,7 @@
   "dependencies": {
     "@babel/parser": "^7.5.5",
     "fs-extra": "^8.1.0",
-    "klaw-sync": "^6.0.0" 
+    "klaw-sync": "^6.0.0",
+    "lodash": "^4.17.15"
   }
 }

@@ -2,22 +2,20 @@ const vscode = require('vscode');
 const parser = require('./findCommand');
 
 const activate = context => {
-  const packageManager = vscode.workspace
+  let packageManager = vscode.workspace
     .getConfiguration()
     .get('cypressHelper.packageManager');
-  const commandForOpen = vscode.workspace
+  let commandForOpen = vscode.workspace
     .getConfiguration()
     .get('cypressHelper.commandForOpen');
-  const customCommandsFolder = vscode.workspace
+  let customCommandsFolder = vscode.workspace
     .getConfiguration()
     .get('cypressHelper.customCommandsFolder');
-  const cucumberUsed =
-    vscode.window.activeTextEditor.document.languageId === 'feature';
 
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.openSpecFile', () => {
-      const terminal = vscode.window.createTerminal('CypressRun');
-      const currentlyOpenTabfilePath =
+      let terminal = vscode.window.createTerminal('CypressRun');
+      let currentlyOpenTabfilePath =
         vscode.window.activeTextEditor.document.fileName;
       terminal.show();
       terminal.sendText(
@@ -28,11 +26,13 @@ const activate = context => {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.openSingleSpec', () => {
-      const terminal = vscode.window.createTerminal('CypressRun');
-      const editor = vscode.window.activeTextEditor;
-      const currentlyOpenTabfilePath = editor.document.fileName;
-      const line = editor.document.lineAt(editor.selection.active.line);
-      const fullText = editor.document.getText();
+      let cucumberUsed =
+        vscode.window.activeTextEditor.document.languageId === 'feature';
+      let terminal = vscode.window.createTerminal('CypressRun');
+      let editor = vscode.window.activeTextEditor;
+      let currentlyOpenTabfilePath = editor.document.fileName;
+      let line = editor.document.lineAt(editor.selection.active.line);
+      let fullText = editor.document.getText();
       let scenarioIndexes = fullText
         .split('\n')
         .map((line, row) => {
@@ -53,9 +53,8 @@ const activate = context => {
         }
       );
       if (cucumberUsed) {
-        const previousLineText = editor.document.lineAt(
-          selectedScenarioIndex - 1
-        ).text;
+        let previousLineText = editor.document.lineAt(selectedScenarioIndex - 1)
+          .text;
         if (!previousLineText.includes('@focus')) {
           editor
             .edit(editBuilder => {
@@ -69,9 +68,9 @@ const activate = context => {
             });
         }
       } else {
-        const itLine = editor.document.lineAt(selectedScenarioIndex);
-        const itText = editor.document.getText(itLine.range);
-        const indexOfIt = editor.document.getText(itText.range).indexOf('it(');
+        let itLine = editor.document.lineAt(selectedScenarioIndex);
+        let itText = editor.document.getText(itLine.range);
+        let indexOfIt = editor.document.getText(itText.range).indexOf('it(');
         editor
           .edit(editBuilder => {
             editBuilder.replace(
@@ -93,7 +92,7 @@ const activate = context => {
 
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.openCustomCommand', () => {
-      const editor = vscode.window.activeTextEditor;
+      let editor = vscode.window.activeTextEditor;
       let commandName;
       if (editor.selection.start.line === editor.selection.end.line) {
         let line = editor.document.lineAt(editor.selection.active.line).text;
@@ -113,8 +112,8 @@ const activate = context => {
       vscode.workspace.openTextDocument(openPath).then(doc => {
         vscode.window.showTextDocument(doc).then(doc => {
           let { line, column } = location.loc;
-          var p = new vscode.Position(line - 1, column);
-          var s = new vscode.Selection(p, p);
+          let p = new vscode.Position(line - 1, column);
+          let s = new vscode.Selection(p, p);
           doc.selection = s;
           doc.revealRange(s, 1);
         });
