@@ -19,7 +19,6 @@ vscode.window.onDidCloseTerminal(terminal => {
       disposeTerminal();
     }
     let editor = window.activeTextEditor;
-    let cucumberUsed = editor.document.languageId === 'feature';
     let fullText = editor.document.getText();
     editor
       .edit(editBuilder => {
@@ -35,20 +34,9 @@ vscode.window.onDidCloseTerminal(terminal => {
           })
           .filter(e => Boolean(e));
         focused.map(row => {
-          let {
-            text,
-            firstNonWhitespaceCharacterIndex
-          } = editor.document.lineAt(row);
-          let textPosition = new vscode.Range(
-            row,
-            firstNonWhitespaceCharacterIndex,
-            row,
-            firstNonWhitespaceCharacterIndex + cucumberUsed
-              ? FOCUS_TAG.length
-              : TEST_BLOCK.length
-          );
+          let { text, range } = editor.document.lineAt(row);
           let newText = text.replace(FOCUS_TAG, '').replace(TEST_BLOCK, '');
-          editBuilder.replace(textPosition, newText);
+          editBuilder.replace(range, newText);
         });
       })
       .then(() => {
@@ -128,7 +116,7 @@ const activate = context => {
           .edit(editBuilder => {
             editBuilder.replace(
               new vscode.Position(selectedScenarioIndex, 0),
-              `${FOCUS_TAG}${previousLineText.length ? ' ' : ''}`
+              FOCUS_TAG
             );
           })
           .then(() => {
