@@ -1,4 +1,4 @@
-const vscode = require('vscode');
+const { window, workspace } = require('vscode');
 let Parser = require('@babel/parser');
 const fs = require('fs-extra');
 const klawSync = require('klaw-sync');
@@ -24,7 +24,7 @@ const s = {
 /**
  * Check if statement is `Cypress.Commands.add`
  */
-const filterCypressCommandAddStatements = body => {
+const findCypressCommandAddStatements = body => {
   return body.filter(
     statement =>
       _.get(statement, 'type') === 'ExpressionStatement' &&
@@ -120,7 +120,7 @@ const parseArguments = args => {
  * @param {string} folder - folder with custom commands
  * @param {string} targetCommand - command for search
  */
-const getCypressCommandImplementation = (folder, targetCommand) => {
+const cypressCommandLocation = (folder, targetCommand) => {
   let location = supportFiles(folder)
     .map(file => {
       let stat = fs.lstatSync(file.path);
@@ -128,7 +128,7 @@ const getCypressCommandImplementation = (folder, targetCommand) => {
         let AST = Parser.parse(fs.readFileSync(file.path, 'utf-8'), {
           sourceType: 'module'
         });
-        let commands = filterCypressCommandAddStatements(AST.program.body);
+        let commands = findCypressCommandAddStatements(AST.program.body);
         let commandNames = commands.map(c => c.expression.arguments[0].value);
         if (commandNames.includes(targetCommand)) {
           let index = commandNames.indexOf(targetCommand);
@@ -161,7 +161,7 @@ const typeDefinitions = (files, excludes) => {
           let AST = Parser.parse(fs.readFileSync(file.path, 'utf-8'), {
             sourceType: 'module'
           });
-          let commands = filterCypressCommandAddStatements(AST.program.body);
+          let commands = findCypressCommandAddStatements(AST.program.body);
           let typeDefBody = commands.map(command => {
             let commandName = command.expression.arguments[0].value;
             commandsFound.push(commandName);
@@ -181,7 +181,6 @@ const typeDefinitions = (files, excludes) => {
 
 const generateTypeDefinitions = (folder, excludes, typeDefFile) => {
   let files = supportFiles(folder);
-  let { window } = vscode;
   let { commandsFound, typeDefs } = typeDefinitions(files, excludes);
   let availableTypeDefinitions = customCommandsAvailable(typeDefFile);
   let added = _.difference(commandsFound, availableTypeDefinitions);
@@ -191,8 +190,8 @@ const generateTypeDefinitions = (folder, excludes, typeDefFile) => {
     if (typeDefs.length) {
       fs.outputFileSync(typeDefFile, wrapTemplate(typeDefs), 'utf-8');
       window.showInformationMessage('Type definitions generated and saved');
-      vscode.workspace.openTextDocument(typeDefFile).then(doc => {
-        vscode.window.showTextDocument(doc, { preview: false });
+      workspace.openTextDocument(typeDefFile).then(doc => {
+        window.showTextDocument(doc, { preview: false });
       });
     } else {
       window.showWarningMessage('No commands required type definitions found');
@@ -223,6 +222,6 @@ const generateTypeDefinitions = (folder, excludes, typeDefFile) => {
 };
 
 module.exports = {
-  getCypressCommandImplementation,
+  cypressCommandLocation,
   generateTypeDefinitions
 };

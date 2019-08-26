@@ -1,43 +1,42 @@
 const vscode = require('vscode');
 const { workspace, window } = vscode;
 const {
-  getCypressCommandImplementation,
+  cypressCommandLocation,
   generateTypeDefinitions
 } = require('./astParser');
 
 const TERMINAL_NAME = 'CypressRun';
 const FOCUS_TAG = '@focus';
 const TEST_BLOCK = 'it(';
+const TEST_ONLY_BLOCK = '.only';
 
 /**
  * TERMINAL:
  */
 let _activeTerminal = null;
-vscode.window.onDidCloseTerminal(terminal => {
+window.onDidCloseTerminal(terminal => {
   if (terminal.name === TERMINAL_NAME) {
     if (!terminal.disposed) {
       disposeTerminal();
     }
     let editor = window.activeTextEditor;
-    let fullText = editor.document.getText();
+    let fullText = editor.document.getText().split('\n');
     editor
       .edit(editBuilder => {
-        let focused = fullText
-          .split('\n')
-          .map((line, row) => {
-            if (
-              line.trim().startsWith(FOCUS_TAG) ||
-              line.trim().startsWith(TEST_BLOCK)
-            ) {
-              return row;
-            }
-          })
-          .filter(e => Boolean(e));
-        focused.map(row => {
-          let { text, range } = editor.document.lineAt(row);
-          let newText = text.replace(FOCUS_TAG, '').replace(TEST_BLOCK, '');
-          editBuilder.replace(range, newText);
-        });
+        fullText
+          .filter(
+            row =>
+              row.trim().startsWith(FOCUS_TAG) ||
+              row.trim().includes(TEST_ONLY_BLOCK)
+          )
+          .map(row => fullText.indexOf(row))
+          .map(index => {
+            let { text, range } = editor.document.lineAt(index);
+            let newText = text
+              .replace(FOCUS_TAG, '')
+              .replace(TEST_ONLY_BLOCK, '');
+            editBuilder.replace(range, newText);
+          });
       })
       .then(() => {
         editor.document.save();
@@ -45,7 +44,7 @@ vscode.window.onDidCloseTerminal(terminal => {
   }
 });
 const createTerminal = () => {
-  _activeTerminal = vscode.window.createTerminal(TERMINAL_NAME);
+  _activeTerminal = window.createTerminal(TERMINAL_NAME);
   return _activeTerminal;
 };
 const disposeTerminal = () => {
@@ -76,8 +75,6 @@ const activate = context => {
     let currentlyOpenTabfilePath = window.activeTextEditor.document.fileName;
     let terminal = getTerminal();
     terminal.show();
-    terminal.sendText();
-    vscode.commands.executeCommand('');
     terminal.sendText(
       `${packageManager} ${commandForOpen} --config testFiles=${currentlyOpenTabfilePath}`
     );
@@ -85,29 +82,23 @@ const activate = context => {
 
   const openSingleSpec = () => {
     let editor = window.activeTextEditor;
-    let cucumberUsed = editor.document.languageId === 'feature';
+    let cucumberPreprocessorUsed = editor.document.languageId === 'feature';
     let line = editor.document.lineAt(editor.selection.active.line);
-    let fullText = editor.document.getText();
+    let lineNumber = line.lineNumber + 1;
+    let fullText = editor.document.getText().split('\n');
     let scenarioIndexes = fullText
-      .split('\n')
-      .map((line, row) => {
-        if (
-          line.trim().startsWith('Scenario') ||
-          line.trim().startsWith(TEST_BLOCK)
-        ) {
-          return row;
-        }
-      })
-      .filter(e => Boolean(e));
+      .filter(
+        row =>
+          row.trim().startsWith('Scenario') || row.trim().startsWith(TEST_BLOCK)
+      )
+      .map(row => fullText.indexOf(row));
     let selectedScenarioIndex =
       scenarioIndexes.find((scenarioIndex, position) => {
-        let nextLine = scenarioIndexes[position + 1] || line.lineNumber + 1;
-        return (
-          line.lineNumber + 1 >= scenarioIndex &&
-          line.lineNumber + 1 <= nextLine
-        );
+        let nextLine = scenarioIndexes[position + 1] || lineNumber;
+        return lineNumber >= scenarioIndex && lineNumber <= nextLine;
       }) - 1;
-    if (cucumberUsed) {
+    !selectedScenarioIndex && window.showErrorMessage('Test not found');
+    if (cucumberPreprocessorUsed) {
       let { text: previousLineText } = editor.document.lineAt(
         selectedScenarioIndex
       );
@@ -124,16 +115,15 @@ const activate = context => {
           });
       }
     } else {
-      let testLine = editor.document.lineAt(selectedScenarioIndex);
-      let testText = editor.document.getText(testLine.range);
-      let indexOfTest = editor.document
-        .getText(testText.range)
-        .indexOf(TEST_BLOCK);
+      let { range: lineRange } = editor.document.lineAt(selectedScenarioIndex);
+      let { range: testRange } = editor.document.getText(lineRange);
+      let indexOfTest = editor.document.getText(testRange).indexOf(TEST_BLOCK);
+      !indexOfTest && window.showErrorMessage('Test not found');
       editor
         .edit(editBuilder => {
           editBuilder.replace(
             new vscode.Position(selectedScenarioIndex, indexOfTest + 2),
-            '.only'
+            TEST_ONLY_BLOCK
           );
         })
         .then(() => {
@@ -155,10 +145,11 @@ const activate = context => {
     } else {
       commandName = editor.revealRangedocument.getText(editor.selection);
     }
-    let location = getCypressCommandImplementation(
+    let location = cypressCommandLocation(
       `${root}/${customCommandsFolder}`,
       commandName
     );
+    !location && window.showErrorMessage('Command not found');
     let openPath = vscode.Uri.file(location.file);
     workspace.openTextDocument(openPath).then(doc => {
       window.showTextDocument(doc).then(doc => {
