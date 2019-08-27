@@ -1,10 +1,12 @@
 # vscode-cy-helper
-Extension for cypress.
+Cypress extension for vs code  
 ## Installation
 * Download file `vscode-cy-helper-{version}.vsix` from this repository
 * Open VS Code extensions menu
 * In up right corner with 3 dots menu find option `install from VSIX`
-* Select file downloaded vsix file
+* Select file downloaded vsix file  
+
+![](./assets/install.gif)
 
 ## Configuration
 in `.vscode/settings.json`:    
@@ -22,11 +24,17 @@ in `.vscode/settings.json`:
 In a spec file or step definition (in case of cucumber) select name of target command, 
 and from menu select `Go to Custom Command Definition`
 
+![](./assets/goToCommand.gif)
+
 ### Open Cypress window for single spec file
 From menu select `Open Cypress Spec File`
 
 ### Running a single spec
 From menu select `Open Cypress Single Spec`
 
+![](./assets/openSingleSpec.gif)
+
 ### Generate type definitions for Cypress custom commands
 From menu select `Genarate Cypress Custom Command types`
+
+![](./assets/generateTypes.gif)
