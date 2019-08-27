@@ -26,11 +26,9 @@ and from menu select `Go to Custom Command Definition`
 
 ![](./assets/goToCommand.gif)
 
-### Open Cypress window for single spec file
-From menu select `Open Cypress Spec File`
-
-### Running a single spec
-From menu select `Open Cypress Single Spec`
+### Open Cypress window
+* for opening file - select in menu `Open Cypress Spec File`
+* for marking some tests with `only` tags - select in menu `Open Cypress Single Spec`
 
 ![](./assets/openSingleSpec.gif)
 
