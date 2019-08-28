@@ -17,7 +17,7 @@ in `.vscode/settings.json`:
 | `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
 | `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
 | `cypressHelper.typeDefinitionFile` | Specify file to save generated custom commands file   | `cypress/support/customCommands.d.ts`|    
-| `cypressHelper.typeDefinitionExcludePatterns` | Specify strings should be not included in file paths while looking for commands  | `.d.ts` |    
+| `cypressHelper.typeDefinitionExcludePatterns` | Specify array of glob path patterns that should be excluded from types generation  | [`**/*.ts`] |    
 
 ## Usage
 ### Open cypress custom command definition
