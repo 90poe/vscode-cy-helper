@@ -11,8 +11,10 @@ exports.openCustomCommand = () => {
   if (editor.selection.start.line === editor.selection.end.line) {
     let editor = window.activeTextEditor;
     let line = editor.document.lineAt(editor.selection.active.line).text;
-    let commandNamePattern = /\.(.*)\(/g;
-    commandName = commandNamePattern.exec(line).pop();
+    let commandNamePattern = /\.(.*?)\(/g;
+    let regexedString = commandNamePattern.exec(line);
+    !regexedString && window.showErrorMessage('Custom command not found');
+    commandName = regexedString.pop();
   } else {
     commandName = editor.revealRangedocument.getText(editor.selection);
   }
@@ -20,7 +22,7 @@ exports.openCustomCommand = () => {
     `${root}/${customCommandsFolder}`,
     commandName
   );
-  !location && window.showErrorMessage('Command not found');
+  !location && window.showErrorMessage('Custom command not found');
   let openPath = vscode.Uri.file(location.file);
   workspace.openTextDocument(openPath).then(doc => {
     window.showTextDocument(doc).then(doc => {

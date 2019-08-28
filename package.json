@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "vscode cypress helper",
   "main": "./src/extension",
   "repository": "https://github.com/90poe/vscode-cy-helper",
@@ -93,9 +93,12 @@
           "description": "Specify file to save generated custom commands file"
         },
         "cypressHelper.typeDefinitionExcludePatterns": {
-          "type": "string",
-          "default": ".d.ts",
-          "description": "Specify strings should be not included in file paths while looking for commands"
+          "type": "array",
+          "default": ["**/*.ts"],
+          "description": "Specify glob style patterns to exclude from custom commands search",
+          "items": {
+            "type":"string"
+          }
         }
       }
     }
@@ -112,6 +115,7 @@
     "@babel/parser": "^7.5.5",
     "fs-extra": "^8.1.0",
     "klaw-sync": "^6.0.0",
-    "lodash": "^4.17.15"
+    "lodash": "^4.17.15",
+    "minimatch": "^3.0.4"
   }
 }

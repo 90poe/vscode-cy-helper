@@ -2,6 +2,7 @@ let Parser = require('@babel/parser');
 const fs = require('fs-extra');
 const klawSync = require('klaw-sync');
 const _ = require('lodash');
+const minimatch = require('minimatch');
 
 /**
  * Get all support files
@@ -146,7 +147,7 @@ const typeDefinitions = (files, excludes) => {
         let stat = fs.lstatSync(file.path);
         if (
           !stat.isDirectory() &&
-          excludes.split(',').every(s => !file.path.includes(s))
+          excludes.every(s => !minimatch(file.path, s))
         ) {
           let AST = Parser.parse(fs.readFileSync(file.path, 'utf-8'), {
             sourceType: 'module'
