@@ -22,6 +22,30 @@ const wrapTemplate = commands => `declare namespace Cypress {
   }
 }`;
 
+const writeTypeDefinition = (typeDefFile, typeDefs) => {
+  fs.outputFileSync(typeDefFile, wrapTemplate(typeDefs), 'utf-8');
+  window.showInformationMessage('Type definitions generated and saved');
+  workspace.openTextDocument(typeDefFile).then(doc => {
+    window.showTextDocument(doc, { preview: false });
+  });
+};
+
+const cleanTypes = (incorrect, definitions) => {
+  return definitions.filter(
+    d =>
+      !incorrect.includes(
+        d
+          .split('(')
+          .shift()
+          .trim()
+      )
+  );
+};
+
+const cleanCommands = (incorrect, available) => {
+  return available.filter(a => !incorrect.includes(a));
+};
+
 exports.generateCustomCommandTypes = () => {
   let editor = window.activeTextEditor;
   let root = editor.document.fileName.split('/cypress/').shift();
@@ -33,26 +57,36 @@ exports.generateCustomCommandTypes = () => {
   let files = supportFiles(folder);
   let { commandsFound, typeDefs } = typeDefinitions(files, excludes);
   let availableTypeDefinitions = customCommandsAvailable(typeDefFile);
-  let added = _.difference(commandsFound, availableTypeDefinitions);
-  let deleted = _.difference(availableTypeDefinitions, commandsFound);
-  let foundUniqueCommands = _.uniq(commandsFound);
-  if (commandsFound.length === foundUniqueCommands.length) {
+  let uniqueCommands = _.uniq(commandsFound);
+  let incorrectCommands = uniqueCommands.filter(c => c.includes('-'));
+  if (incorrectCommands.length) {
+    window.showErrorMessage(
+      `Incorrect command syntax:\n${incorrectCommands.join('\n')}`,
+      { modal: true }
+    );
+    typeDefs = cleanTypes(incorrectCommands, typeDefs);
+    commandsFound = cleanCommands(incorrectCommands, commandsFound);
+    uniqueCommands = cleanCommands(incorrectCommands, uniqueCommands);
+  }
+  if (commandsFound.length === uniqueCommands.length) {
     if (typeDefs.length) {
-      fs.outputFileSync(typeDefFile, wrapTemplate(typeDefs), 'utf-8');
-      window.showInformationMessage('Type definitions generated and saved');
-      workspace.openTextDocument(typeDefFile).then(doc => {
-        window.showTextDocument(doc, { preview: false });
-      });
+      writeTypeDefinition(typeDefFile, typeDefs);
     } else {
       window.showWarningMessage('No commands required type definitions found');
     }
     window.showInformationMessage('No duplicates found');
   } else {
-    let errorDuplicate = `Command already exist:\n${_.uniq(
+    let duplicates = _.uniq(
       _.filter(commandsFound, (v, i, a) => a.indexOf(v) !== i)
-    ).join('\n')}`;
-    window.showErrorMessage(errorDuplicate, { modal: true });
+    );
+    let messageForDuplicate = `Duplicated commands:\n${duplicates.join('\n')}`;
+    window.showErrorMessage(messageForDuplicate, { modal: true });
+    typeDefs = cleanTypes(duplicates, typeDefs);
+    commandsFound = cleanCommands(duplicates, commandsFound);
+    writeTypeDefinition(typeDefFile, typeDefs);
   }
+  let added = _.difference(commandsFound, availableTypeDefinitions);
+  let removed = _.difference(availableTypeDefinitions, commandsFound);
   if (added.length) {
     window.showInformationMessage(
       `New command types added:\n${added.join('\n')}`,
@@ -61,9 +95,9 @@ exports.generateCustomCommandTypes = () => {
       }
     );
   }
-  if (deleted.length) {
+  if (removed.length) {
     window.showInformationMessage(
-      `Deleted command types:\n${deleted.join('\n')}`,
+      `Removed command types:\n${removed.join('\n')}`,
       {
         modal: true
       }
