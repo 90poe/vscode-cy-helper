@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { openSpecFile } = require('./openSpecFile');
-const { openSingleSpec } = require('./openSingleSpec');
+const { openSingleTest } = require('./openSingleTest');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const { removeTags } = require('./terminal');
@@ -8,7 +8,7 @@ const { removeTags } = require('./terminal');
 const activate = context => {
   context.subscriptions.push(
     vscode.commands.registerCommand('extension.openSpecFile', openSpecFile),
-    vscode.commands.registerCommand('extension.openSingleSpec', openSingleSpec),
+    vscode.commands.registerCommand('extension.openSingleTest', openSingleTest),
     vscode.commands.registerCommand(
       'extension.openCustomCommand',
       openCustomCommand

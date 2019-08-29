@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { window } = vscode;
-const { TERMINAL_NAME, FOCUS_TAG, TEST_ONLY_BLOCK } = require('./constants');
+const { TERMINAL_NAME, FOCUS_TAG, ONLY_BLOCK } = require('./constants');
 
 let _activeTerminal = null;
 
@@ -17,7 +17,7 @@ const removeTags = terminal => {
           .map((line, row) => {
             if (
               line.trim().startsWith(FOCUS_TAG) ||
-              line.trim().includes(TEST_ONLY_BLOCK)
+              line.trim().includes(ONLY_BLOCK)
             ) {
               return row;
             }
@@ -25,9 +25,7 @@ const removeTags = terminal => {
           .filter(e => Boolean(e));
         focused.map(row => {
           let { text, range } = editor.document.lineAt(row);
-          let newText = text
-            .replace(FOCUS_TAG, '')
-            .replace(TEST_ONLY_BLOCK, '');
+          let newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
           editBuilder.replace(range, newText);
         });
       })

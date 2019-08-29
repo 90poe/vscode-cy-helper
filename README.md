@@ -30,7 +30,7 @@ and from menu select `Go to Custom Command Definition`
 * for opening file - select in menu `Open Cypress Spec File`
 * for marking some tests with `only` tags - select in menu `Open Cypress Single Spec`
 
-![](./assets/openSingleSpec.gif)
+![](./assets/openSingleTest.gif)
 
 ### Generate type definitions for Cypress custom commands
 From menu select `Genarate Cypress Custom Command types`

@@ -2,9 +2,14 @@ const vscode = require('vscode');
 const { window } = vscode;
 const { openSpecFile } = require('./openSpecFile');
 
-const { FOCUS_TAG, TEST_BLOCK, TEST_ONLY_BLOCK } = require('./constants');
+const {
+  FOCUS_TAG,
+  TEST_BLOCK,
+  TEST_ONLY_BLOCK,
+  ONLY_BLOCK
+} = require('./constants');
 
-exports.openSingleSpec = () => {
+exports.openSingleTest = () => {
   let editor = window.activeTextEditor;
   let cucumberPreprocessorUsed = editor.document.languageId === 'feature';
   let line = editor.document.lineAt(editor.selection.active.line);
@@ -13,7 +18,9 @@ exports.openSingleSpec = () => {
   let scenarioIndexes = fullText
     .filter(
       row =>
-        row.trim().startsWith('Scenario') || row.trim().startsWith(TEST_BLOCK)
+        row.trim().startsWith('Scenario') ||
+        row.trim().startsWith(TEST_BLOCK) ||
+        row.trim().startsWith(TEST_ONLY_BLOCK)
     )
     .map(row => fullText.indexOf(row));
   let selectedScenarioIndex = scenarioIndexes.find(
@@ -40,16 +47,14 @@ exports.openSingleSpec = () => {
         });
     }
   } else {
-    let { range: lineRange } = editor.document.lineAt(selectedScenarioIndex);
-    let { range: testRange } = editor.document.getText(lineRange);
-    let indexOfTest = editor.document.getText(testRange).indexOf(TEST_BLOCK);
-    !indexOfTest && window.showErrorMessage('Test not found');
+    let { text, range } = editor.document.lineAt(selectedScenarioIndex);
+    let indexOfTest = text.indexOf(TEST_BLOCK);
+    let indexOfOnly = text.indexOf(TEST_ONLY_BLOCK);
+    !indexOfTest && !indexOfOnly && window.showErrorMessage('Test not found');
+    let newText = text.replace(TEST_BLOCK, `it${ONLY_BLOCK}(`);
     editor
       .edit(editBuilder => {
-        editBuilder.replace(
-          new vscode.Position(selectedScenarioIndex, indexOfTest + 2),
-          TEST_ONLY_BLOCK
-        );
+        editBuilder.replace(range, newText);
       })
       .then(() => {
         editor.document.save();

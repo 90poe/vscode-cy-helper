@@ -15,7 +15,7 @@
   ],
   "activationEvents": [
     "onCommand:extension.openSpecFile",
-    "onCommand:extension.openSingleSpec",
+    "onCommand:extension.openSingleTest",
     "onCommand:extension.openCustomCommand",
     "onCommand:extension.generateCustomCommandTypes"
   ],
@@ -34,8 +34,8 @@
         "title": "Open Cypress Spec File"
       },
       {
-        "command": "extension.openSingleSpec",
-        "title": "Open Cypress Single Spec"
+        "command": "extension.openSingleTest",
+        "title": "Open Cypress Single Test"
       },
       {
         "command": "extension.openCustomCommand",
@@ -55,11 +55,11 @@
         },
         {
           "when": "resourceLangId == feature || resourceLangId == javascript",
-          "command": "extension.openSingleSpec",
+          "command": "extension.openSingleTest",
           "group": "Cypress"
         },
         {
-          "when": "resourceLangId == javascript",
+          "when": "resourceLangId == javascript || resourceLangId == typescript",
           "command": "extension.openCustomCommand",
           "group": "navigation"
         },
