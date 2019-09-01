@@ -71,10 +71,10 @@ exports.generateCustomCommandTypes = () => {
   if (commandsFound.length === uniqueCommands.length) {
     if (typeDefs.length) {
       writeTypeDefinition(typeDefFile, typeDefs);
+      window.showInformationMessage('No duplicates found');
     } else {
       window.showWarningMessage('No commands required type definitions found');
     }
-    window.showInformationMessage('No duplicates found');
   } else {
     let duplicates = _.uniq(
       _.filter(commandsFound, (v, i, a) => a.indexOf(v) !== i)

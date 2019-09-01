@@ -3,6 +3,7 @@ const { openSpecFile } = require('./openSpecFile');
 const { openSingleTest } = require('./openSingleTest');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
+const { findUnusedCustomCommands } = require('./findUnusedCustomCommands');
 const { removeTags } = require('./terminal');
 
 const activate = context => {
@@ -16,6 +17,10 @@ const activate = context => {
     vscode.commands.registerCommand(
       'extension.generateCustomCommandTypes',
       generateCustomCommandTypes
+    ),
+    vscode.commands.registerCommand(
+      'extension.findUnusedCustomCommands',
+      findUnusedCustomCommands
     )
   );
 

@@ -18,12 +18,10 @@ const findClosestRange = (indexedMatches, target) => {
   );
 };
 
-exports.openCustomCommand = () => {
+const detectCustomCommand = () => {
   let editor = window.activeTextEditor;
-  let root = editor.document.fileName.split('/cypress/').shift();
   let commandName;
   if (editor.selection.start.character === editor.selection.end.character) {
-    let editor = window.activeTextEditor;
     let { text: line } = editor.document.lineAt(editor.selection.active.line);
     let commandNamePattern = /\.(.*?)\(/g;
     let matches = _.flatten(
@@ -48,6 +46,13 @@ exports.openCustomCommand = () => {
   } else {
     commandName = editor.document.getText(editor.selection);
   }
+  return commandName;
+};
+
+const openCustomCommand = () => {
+  let editor = window.activeTextEditor;
+  let root = editor.document.fileName.split('/cypress/').shift();
+  let commandName = detectCustomCommand();
   let location = cypressCommandLocation(
     `${root}/${customCommandsFolder}`,
     commandName
@@ -55,7 +60,7 @@ exports.openCustomCommand = () => {
   !location && window.showErrorMessage('Custom command not found');
   let openPath = vscode.Uri.file(location.file);
   workspace.openTextDocument(openPath).then(doc => {
-    window.showTextDocument(doc).then(doc => {
+    window.showTextDocument(doc, { preview: false }).then(doc => {
       let { line, column } = location.loc;
       let p = new vscode.Position(line - 1, column);
       let s = new vscode.Selection(p, p);
@@ -63,4 +68,9 @@ exports.openCustomCommand = () => {
       doc.revealRange(s, 1);
     });
   });
+};
+
+module.exports = {
+  openCustomCommand,
+  detectCustomCommand
 };

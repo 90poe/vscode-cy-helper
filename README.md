@@ -36,3 +36,9 @@ and from menu select `Go to Custom Command Definition`
 From menu select `Genarate Cypress Custom Command types`
 
 ![](./assets/generateTypes.gif)
+
+### Find not used Cypress custom commands
+From command palette select command `Find not used Cypress custom commands`  
+After item selection - source file with command will be opened.  
+
+![](./assets/findUnusedCustomCommands.gif)

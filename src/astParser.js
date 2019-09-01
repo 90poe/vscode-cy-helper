@@ -9,9 +9,18 @@ const minimatch = require('minimatch');
  */
 const supportFiles = folder =>
   klawSync(folder, {
-    traverseAll: true
+    traverseAll: true,
+    nodir: true,
+    filter: ({ path }) => !path.includes('node_modules') && path.endsWith('.js')
   }) || [];
 
+/**
+ * AST tree by file path
+ */
+const parse = filepath =>
+  Parser.parse(fs.readFileSync(filepath, 'utf-8'), {
+    sourceType: 'module'
+  }) || null;
 /**
  * Constant paths for detecting `Cypress.Commands.add`
  */
@@ -113,19 +122,16 @@ const parseArguments = args => {
  */
 const cypressCommandLocation = (folder, targetCommand) => {
   let location = supportFiles(folder)
-    .map(file => {
-      let stat = fs.lstatSync(file.path);
-      if (!stat.isDirectory() && file.path.endsWith('.js')) {
-        let AST = Parser.parse(fs.readFileSync(file.path, 'utf-8'), {
-          sourceType: 'module'
-        });
+    .map(({ path }) => {
+      let AST = parse(path);
+      if (AST) {
         let commands = findCypressCommandAddStatements(AST.program.body);
         let commandNames = commands.map(c => c.expression.arguments[0].value);
         if (commandNames.includes(targetCommand)) {
           let index = commandNames.indexOf(targetCommand);
           let commandBody = commands[index];
           return {
-            file: file.path,
+            file: path,
             loc: commandBody.expression.arguments[0].loc.start
           };
         }
@@ -139,30 +145,37 @@ const cypressCommandLocation = (folder, targetCommand) => {
  * Parse files
  * Returns array of commands with types
  */
-const typeDefinitions = (files, excludes) => {
+const typeDefinitions = (
+  files,
+  excludes,
+  options = { includeLocationData: false }
+) => {
   let commandsFound = [];
   let typeDefs = _.flatten(
     files
+      .filter(({ path }) => excludes.every(s => !minimatch(path, s)))
       .map(file => {
-        let stat = fs.lstatSync(file.path);
-        if (
-          !stat.isDirectory() &&
-          excludes.every(s => !minimatch(file.path, s))
-        ) {
-          let AST = Parser.parse(fs.readFileSync(file.path, 'utf-8'), {
-            sourceType: 'module'
-          });
+        let AST = parse(file.path);
+        if (AST) {
           let commands = findCypressCommandAddStatements(AST.program.body);
           let typeDefBody = commands.map(command => {
-            let commandName = command.expression.arguments[0].value;
-            commandsFound.push(commandName);
+            let { value: commandName, loc } = command.expression.arguments[0];
+            commandsFound.push(
+              options.includeLocationData
+                ? {
+                    name: commandName,
+                    path: file.path,
+                    loc: loc
+                  }
+                : commandName
+            );
             let argsArray = parseArguments(command.expression.arguments);
             return `${commandName}(${argsArray.join(', ')}): Chainable<any>`;
           });
           return typeDefBody;
         }
       })
-      .filter(e => !_.isUndefined(e) && e.length !== 0)
+      .filter(e => !_.isUndefined(e))
   );
   return {
     commandsFound: commandsFound,
