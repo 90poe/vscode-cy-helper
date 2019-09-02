@@ -4,7 +4,10 @@ const { openSingleTest } = require('./openSingleTest');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const { findUnusedCustomCommands } = require('./findUnusedCustomCommands');
-const { findUnusedCucumberSteps } = require('./findUnusedCucumberSteps');
+const {
+  findUnusedCucumberSteps,
+  findCucumberStepUsage
+} = require('./cucumberStepsHelper');
 const { removeTags } = require('./terminal');
 
 const activate = context => {
@@ -29,6 +32,10 @@ const activate = context => {
     vscode.commands.registerCommand(
       'cypressHelper.findUnusedCucumberSteps',
       findUnusedCucumberSteps
+    ),
+    vscode.commands.registerCommand(
+      'cypressHelper.findCucumberStepUsage',
+      findCucumberStepUsage
     )
   );
 

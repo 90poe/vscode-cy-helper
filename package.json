@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Cypress Helper",
   "main": "./src/extension",
   "repository": "https://github.com/90poe/vscode-cy-helper",
@@ -19,7 +19,8 @@
     "onCommand:cypressHelper.openCustomCommand",
     "onCommand:cypressHelper.generateCustomCommandTypes",
     "onCommand:cypressHelper.findUnusedCustomCommands",
-    "onCommand:cypressHelper.findUnusedCucumberSteps"
+    "onCommand:cypressHelper.findUnusedCucumberSteps",
+    "onCommand:cypressHelper.findCucumberStepUsage"
   ],
   "publisher": "OleksandrShevtsov",
   "contributes": {
@@ -54,6 +55,10 @@
       {
         "command": "cypressHelper.findUnusedCucumberSteps",
         "title": "Cypress: Find not used Cucumber step definitions"
+      },
+      {
+        "command": "cypressHelper.findCucumberStepUsage",
+        "title": "Cypress: Get step definition references"
       }
     ],
     "menus": {
@@ -72,6 +77,11 @@
           "when": "resourceLangId == javascript || resourceLangId == typescript",
           "command": "cypressHelper.openCustomCommand",
           "group": "navigation"
+        },
+        {
+          "when": "resourceLangId == javascript",
+          "command": "cypressHelper.findCucumberStepUsage",
+          "group": "navigation@2"
         },
         {
           "command": "cypressHelper.generateCustomCommandTypes",
