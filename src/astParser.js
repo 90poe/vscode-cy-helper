@@ -7,20 +7,30 @@ const minimatch = require('minimatch');
 /**
  * Get all support files
  */
-const supportFiles = folder =>
+const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
   klawSync(folder, {
     traverseAll: true,
     nodir: true,
-    filter: ({ path }) => !path.includes('node_modules') && path.endsWith('.js')
+    filter: ({ path }) =>
+      !path.includes('node_modules') &&
+      path.endsWith(`${opts.name || ''}${opts.extension || ''}`)
   }) || [];
 
 /**
  * AST tree by file path
  */
-const parse = filepath =>
-  Parser.parse(fs.readFileSync(filepath, 'utf-8'), {
-    sourceType: 'module'
-  }) || null;
+const parseJS = filepath => {
+  try {
+    return (
+      Parser.parse(fs.readFileSync(filepath, 'utf-8'), {
+        sourceType: 'module'
+      }) || null
+    );
+  } catch (e) {
+    return null;
+  }
+};
+
 /**
  * Constant paths for detecting `Cypress.Commands.add`
  */
@@ -121,9 +131,9 @@ const parseArguments = args => {
  * @param {string} targetCommand - command for search
  */
 const cypressCommandLocation = (folder, targetCommand) => {
-  let location = supportFiles(folder)
+  let location = readFilesFromDir(folder)
     .map(({ path }) => {
-      let AST = parse(path);
+      let AST = parseJS(path);
       if (AST) {
         let commands = findCypressCommandAddStatements(AST.program.body);
         let commandNames = commands.map(c => c.expression.arguments[0].value);
@@ -155,7 +165,7 @@ const typeDefinitions = (
     files
       .filter(({ path }) => excludes.every(s => !minimatch(path, s)))
       .map(file => {
-        let AST = parse(file.path);
+        let AST = parseJS(file.path);
         if (AST) {
           let commands = findCypressCommandAddStatements(AST.program.body);
           let typeDefBody = commands.map(command => {
@@ -184,8 +194,9 @@ const typeDefinitions = (
 };
 
 module.exports = {
+  parseJS,
   cypressCommandLocation,
   typeDefinitions,
   customCommandsAvailable,
-  supportFiles
+  readFilesFromDir
 };

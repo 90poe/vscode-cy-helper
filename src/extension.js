@@ -4,23 +4,31 @@ const { openSingleTest } = require('./openSingleTest');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const { findUnusedCustomCommands } = require('./findUnusedCustomCommands');
+const { findUnusedCucumberSteps } = require('./findUnusedCucumberSteps');
 const { removeTags } = require('./terminal');
 
 const activate = context => {
   context.subscriptions.push(
-    vscode.commands.registerCommand('extension.openSpecFile', openSpecFile),
-    vscode.commands.registerCommand('extension.openSingleTest', openSingleTest),
+    vscode.commands.registerCommand('cypressHelper.openSpecFile', openSpecFile),
     vscode.commands.registerCommand(
-      'extension.openCustomCommand',
+      'cypressHelper.openSingleTest',
+      openSingleTest
+    ),
+    vscode.commands.registerCommand(
+      'cypressHelper.openCustomCommand',
       openCustomCommand
     ),
     vscode.commands.registerCommand(
-      'extension.generateCustomCommandTypes',
+      'cypressHelper.generateCustomCommandTypes',
       generateCustomCommandTypes
     ),
     vscode.commands.registerCommand(
-      'extension.findUnusedCustomCommands',
+      'cypressHelper.findUnusedCustomCommands',
       findUnusedCustomCommands
+    ),
+    vscode.commands.registerCommand(
+      'cypressHelper.findUnusedCucumberSteps',
+      findUnusedCucumberSteps
     )
   );
 

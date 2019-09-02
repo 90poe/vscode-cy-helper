@@ -9,36 +9,43 @@ Cypress extension for vs code
 ![](./assets/install.gif)
 
 ## Configuration
-in `.vscode/settings.json`:    
 
 | setting                              | description                           | default           |    
-|:--------------------------------------|:---------------------------------------|:-------------------|    
-| `cypressHelper.packageManager`       | package manager to use - npm/yarn/npx | `yarn`            |    
+|:--------------------------------------|:---------------------------------------|:-------------------|        
 | `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
 | `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
 | `cypressHelper.typeDefinitionFile` | Specify file to save generated custom commands file   | `cypress/support/customCommands.d.ts`|    
 | `cypressHelper.typeDefinitionExcludePatterns` | Specify array of glob path patterns that should be excluded from types generation  | [`**/*.ts`] |    
 
 ## Usage
-### Open cypress custom command definition
+### 1. Open cypress custom command definition
 In a spec file or step definition (in case of cucumber) select name of target command, 
-and from menu select `Go to Custom Command Definition`
+and from menu select `Cypress: Go to custom command definition`
 
 ![](./assets/goToCommand.gif)
 
-### Open Cypress window
-* for opening file - select in menu `Open Cypress Spec File`
-* for marking some tests with `only` tags - select in menu `Open Cypress Single Spec`
+### 2. Open Cypress window
+* for opening file - select in menu `Cypress: Open spec file`  
+* for marking some tests with `only` tags - select in menu `Cypress: Open single test`  
+Tags will be deleted when closing terminal
 
 ![](./assets/openSingleTest.gif)
 
-### Generate type definitions for Cypress custom commands
-From menu select `Genarate Cypress Custom Command types`
+### 3. Generate type definitions for Cypress custom commands
+From menu select `Cypress: Generate custom command types`
 
 ![](./assets/generateTypes.gif)
 
-### Find not used Cypress custom commands
-From command palette select command `Find not used Cypress custom commands`  
+### 4. Find not used Cypress custom commands
+From command palette select command `Cypress: Find not used custom commands`  
 After item selection - source file with command will be opened.  
 
 ![](./assets/findUnusedCustomCommands.gif)
+
+### 5. Find not used Cucumber step definitions
+With using Cypress cucumber preprocessor it is difficult  
+to define which steps are not used and are legacy
+From command palette select command `Cypress: Find not used Cucumber step definitions`  
+After item selection source file with step definition will be opened.  
+
+![](./assets/findUnusedStepDefinitions.gif)

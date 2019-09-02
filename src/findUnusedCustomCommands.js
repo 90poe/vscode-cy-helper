@@ -1,11 +1,13 @@
-const { typeDefinitions, supportFiles } = require('./astParser');
+const { typeDefinitions, readFilesFromDir } = require('./astParser');
 const vscode = require('vscode');
 const { workspace, window } = vscode;
 const fs = require('fs-extra');
+const { openDocumentAtPosition } = require('./utils');
+let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 
 exports.findUnusedCustomCommands = () => {
   let root = workspace.rootPath;
-  let workspaceFiles = supportFiles(root);
+  let workspaceFiles = readFilesFromDir(root);
   let { commandsFound } = typeDefinitions(workspaceFiles, [], {
     includeLocationData: true
   });
@@ -28,28 +30,20 @@ exports.findUnusedCustomCommands = () => {
   if (uniqueCommands) {
     let quickPickList = uniqueCommands.map(c => {
       return {
-        label: `${c.name}: ${c.path.replace(`${root}/`, '')}:${
-          c.loc.start.line
-        }`,
+        label: c.name,
+        detail: `${c.path
+          .replace(root, '')
+          .replace(`${customCommandsFolder}/`, '')}:${c.loc.start.line}`,
         data: c
       };
     });
     quickPickList.unshift({
       label: '',
-      description: `Found ${uniqueCommands.length} not used Cypress custom commands`
+      description: `Found ${uniqueCommands.length} not used Cypress custom commands:`
     });
-    window.showQuickPick(quickPickList).then(({ data }) => {
-      workspace.openTextDocument(data.path).then(doc => {
-        window.showTextDocument(doc).then(doc => {
-          let { start, end } = data.loc;
-          let p1 = new vscode.Position(start.line - 1, start.column);
-          let p2 = new vscode.Position(end.line - 1, end.column);
-          let s = new vscode.Selection(p1, p2);
-          doc.selection = s;
-          doc.revealRange(s, 1);
-        });
-      });
-    });
+    window
+      .showQuickPick(quickPickList)
+      .then(({ data }) => openDocumentAtPosition(data.path, data.loc.start));
   } else {
     window.showInformationMessage('No unused Cypress custom commands found');
   }

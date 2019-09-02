@@ -1,7 +1,7 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.1.4",
-  "description": "vscode cypress helper",
+  "version": "0.1.5",
+  "description": "Cypress Helper",
   "main": "./src/extension",
   "repository": "https://github.com/90poe/vscode-cy-helper",
   "author": "<oleksandr.shevtsov@90poe.io>",
@@ -14,74 +14,74 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.openSpecFile",
-    "onCommand:extension.openSingleTest",
-    "onCommand:extension.openCustomCommand",
-    "onCommand:extension.generateCustomCommandTypes",
-    "onCommand:extension.findUnusedCustomCommands"
+    "onCommand:cypressHelper.openSpecFile",
+    "onCommand:cypressHelper.openSingleTest",
+    "onCommand:cypressHelper.openCustomCommand",
+    "onCommand:cypressHelper.generateCustomCommandTypes",
+    "onCommand:cypressHelper.findUnusedCustomCommands",
+    "onCommand:cypressHelper.findUnusedCucumberSteps"
   ],
-  "publisher": "Shelex",
+  "publisher": "OleksandrShevtsov",
   "contributes": {
     "keybindings": [
       {
-        "command": "extension.openCustomCommand",
+        "command": "cypressHelper.openCustomCommand",
         "key": "alt+f12",
         "mac": "alt+f12"
       }
     ],
     "commands": [
       {
-        "command": "extension.openSpecFile",
-        "title": "Open Cypress Spec File"
+        "command": "cypressHelper.openSpecFile",
+        "title": "Cypress: Open spec file"
       },
       {
-        "command": "extension.findUnusedCustomCommands",
-        "title": "Find not used Cypress custom commands"
+        "command": "cypressHelper.openSingleTest",
+        "title": "Cypress: Open single test"
       },
       {
-        "command": "extension.openSingleTest",
-        "title": "Open Cypress Single Test"
+        "command": "cypressHelper.openCustomCommand",
+        "title": "Cypress: Go to custom command definition"
       },
       {
-        "command": "extension.openCustomCommand",
-        "title": "Go to Custom Command Definition"
+        "command": "cypressHelper.generateCustomCommandTypes",
+        "title": "Cypress: Generate custom command types"
       },
       {
-        "command": "extension.generateCustomCommandTypes",
-        "title": "Genarate Cypress Custom Command types"
+        "command": "cypressHelper.findUnusedCustomCommands",
+        "title": "Cypress: Find not used custom commands"
+      },
+      {
+        "command": "cypressHelper.findUnusedCucumberSteps",
+        "title": "Cypress: Find not used Cucumber step definitions"
       }
     ],
     "menus": {
       "editor/context": [
         {
           "when": "resourceLangId == feature || resourceLangId == javascript",
-          "command": "extension.openSpecFile",
+          "command": "cypressHelper.openSpecFile",
           "group": "Cypress"
         },
         {
           "when": "resourceLangId == feature || resourceLangId == javascript",
-          "command": "extension.openSingleTest",
+          "command": "cypressHelper.openSingleTest",
           "group": "Cypress"
         },
         {
           "when": "resourceLangId == javascript || resourceLangId == typescript",
-          "command": "extension.openCustomCommand",
+          "command": "cypressHelper.openCustomCommand",
           "group": "navigation"
         },
         {
-          "command": "extension.generateCustomCommandTypes",
+          "command": "cypressHelper.generateCustomCommandTypes",
           "group": "z_commands"
         }
       ]
     },
     "configuration": {
-      "title": "CypressHelper",
+      "title": "cypressHelper",
       "properties": {
-        "cypressHelper.packageManager": {
-          "type": "string",
-          "default": "yarn",
-          "description": "Specify package manager to use - npm|yarn|npx"
-        },
         "cypressHelper.commandForOpen": {
           "type": "string",
           "default": "cypress open",
@@ -95,14 +95,16 @@
         "cypressHelper.typeDefinitionFile": {
           "type": "string",
           "default": "cypress/support/customCommands.d.ts",
-          "description": "Specify file to save generated custom commands file"
+          "description": "Specify file to save generated custom commands types"
         },
         "cypressHelper.typeDefinitionExcludePatterns": {
           "type": "array",
-          "default": ["**/*.ts"],
-          "description": "Specify glob style patterns to exclude from custom commands search",
+          "default": [
+            "**/*.ts"
+          ],
+          "description": "Specify glob patterns to exclude some custom commands search",
           "items": {
-            "type":"string"
+            "type": "string"
           }
         }
       }
@@ -119,6 +121,7 @@
   "dependencies": {
     "@babel/parser": "^7.5.5",
     "fs-extra": "^8.1.0",
+    "gherkin": "5.1.0",
     "klaw-sync": "^6.0.0",
     "lodash": "^4.17.15",
     "minimatch": "^3.0.4"

@@ -2,7 +2,7 @@ const vscode = require('vscode');
 const { window, workspace } = vscode;
 const { cypressCommandLocation } = require('./astParser');
 const _ = require('lodash');
-
+const { openDocumentAtPosition } = require('./utils');
 let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 
 const findOverlap = (indexedMatches, target) => {
@@ -59,15 +59,7 @@ const openCustomCommand = () => {
   );
   !location && window.showErrorMessage('Custom command not found');
   let openPath = vscode.Uri.file(location.file);
-  workspace.openTextDocument(openPath).then(doc => {
-    window.showTextDocument(doc, { preview: false }).then(doc => {
-      let { line, column } = location.loc;
-      let p = new vscode.Position(line - 1, column);
-      let s = new vscode.Selection(p, p);
-      doc.selection = s;
-      doc.revealRange(s, 1);
-    });
-  });
+  openDocumentAtPosition(openPath, location.loc);
 };
 
 module.exports = {

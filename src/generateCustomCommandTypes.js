@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const {
   typeDefinitions,
   customCommandsAvailable,
-  supportFiles
+  readFilesFromDir
 } = require('./astParser');
 
 let {
@@ -54,7 +54,7 @@ exports.generateCustomCommandTypes = () => {
     typeDefinitionExcludePatterns,
     `${root}/${typeDefinitionFile}`
   ];
-  let files = supportFiles(folder);
+  let files = readFilesFromDir(folder);
   let { commandsFound, typeDefs } = typeDefinitions(files, excludes);
   let availableTypeDefinitions = customCommandsAvailable(typeDefFile);
   let uniqueCommands = _.uniq(commandsFound);
