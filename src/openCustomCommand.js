@@ -18,12 +18,17 @@ const findClosestRange = (indexedMatches, target) => {
   );
 };
 
-const detectCustomCommand = () => {
+const detectCustomCommand = (opts = { implementation: false }) => {
   let editor = window.activeTextEditor;
   let commandName;
   if (editor.selection.start.character === editor.selection.end.character) {
     let { text: line } = editor.document.lineAt(editor.selection.active.line);
-    let commandNamePattern = /\.(.*?)\(/g;
+    let commandNamePattern =
+      opts.implementation &&
+      line.includes("'") &&
+      (!line.includes('.') || line.includes('Cypress.Commands.add'))
+        ? /['"`].*?['"`]/g
+        : /\.(.*?)\(/g;
     let matches = _.flatten(
       line
         .match(commandNamePattern)

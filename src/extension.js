@@ -3,7 +3,10 @@ const { openSpecFile } = require('./openSpecFile');
 const { openSingleTest } = require('./openSingleTest');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
-const { findUnusedCustomCommands } = require('./findUnusedCustomCommands');
+const {
+  findUnusedCustomCommands,
+  findCustomCommandReferences
+} = require('./customCommandsHelper');
 const {
   findUnusedCucumberSteps,
   findCucumberStepUsage
@@ -36,6 +39,10 @@ const activate = context => {
     vscode.commands.registerCommand(
       'cypressHelper.findCucumberStepUsage',
       findCucumberStepUsage
+    ),
+    vscode.commands.registerCommand(
+      'cypressHelper.findCustomCommandReferences',
+      findCustomCommandReferences
     )
   );
 
