@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "description": "Cypress Helper",
   "main": "./src/extension",
   "repository": "https://github.com/90poe/vscode-cy-helper",

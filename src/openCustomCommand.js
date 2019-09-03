@@ -25,7 +25,7 @@ const detectCustomCommand = (opts = { implementation: false }) => {
     let { text: line } = editor.document.lineAt(editor.selection.active.line);
     let commandNamePattern =
       opts.implementation &&
-      line.includes("'") &&
+      (line.includes("'") || line.includes('"')) &&
       (!line.includes('.') || line.includes('Cypress.Commands.add'))
         ? /['"`].*?['"`]/g
         : /\.(.*?)\(/g;
