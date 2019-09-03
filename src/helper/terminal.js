@@ -1,5 +1,4 @@
-const vscode = require('vscode');
-const { window } = vscode;
+const { window } = require('vscode');
 const { TERMINAL_NAME, FOCUS_TAG, ONLY_BLOCK } = require('./constants');
 
 let _activeTerminal = null;

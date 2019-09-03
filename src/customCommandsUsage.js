@@ -1,8 +1,7 @@
-const { typeDefinitions, readFilesFromDir } = require('./astParser');
-const vscode = require('vscode');
-const { workspace, window } = vscode;
+const { typeDefinitions } = require('./parser/AST');
+const { workspace } = require('vscode');
 const fs = require('fs-extra');
-const { openDocumentAtPosition } = require('./utils');
+const { showQuickPickMenu, readFilesFromDir } = require('./helper/utils');
 const { detectCustomCommand } = require('./openCustomCommand');
 let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 const root = workspace.rootPath;
@@ -33,8 +32,8 @@ const findUnusedCustomCommands = () => {
       command => new RegExp(`\\.${command.name}\\(`, 'g').exec(content) === null
     );
   });
-  if (uniqueCommands) {
-    let quickPickList = uniqueCommands.map(c => {
+  showQuickPickMenu(uniqueCommands, {
+    mapperFunction: c => {
       return {
         label: c.name,
         detail: `${c.path
@@ -42,17 +41,10 @@ const findUnusedCustomCommands = () => {
           .replace(`${customCommandsFolder}/`, '')}:${c.loc.start.line}`,
         data: c
       };
-    });
-    quickPickList.unshift({
-      label: '',
-      description: `Found ${uniqueCommands.length} not used Cypress custom commands:`
-    });
-    window
-      .showQuickPick(quickPickList)
-      .then(({ data }) => openDocumentAtPosition(data.path, data.loc.start));
-  } else {
-    window.showInformationMessage('No unused Cypress custom commands found');
-  }
+    },
+    header: `Found ${uniqueCommands.length} not used Cypress custom commands:`,
+    notFoundMessage: 'No unused Cypress custom commands found'
+  });
 };
 
 const findCustomCommandReferences = () => {
@@ -81,23 +73,16 @@ const findCustomCommandReferences = () => {
       }
     });
   });
-  if (references) {
-    let quickPickList = references.map(c => {
+  showQuickPickMenu(references, {
+    mapperFunction: c => {
       return {
         label: `${c.path.replace(root, '')}:${c.loc.start.line}`,
         data: c
       };
-    });
-    quickPickList.unshift({
-      label: '',
-      description: `Found ${references.length} command references:`
-    });
-    window
-      .showQuickPick(quickPickList)
-      .then(({ data }) => openDocumentAtPosition(data.path, data.loc.start));
-  } else {
-    window.showInformationMessage(`No references found for: ${commandName}`);
-  }
+    },
+    header: `Found ${references.length} usages of command "${commandName}":`,
+    notFoundMessage: `No references found for: "${commandName}"`
+  });
 };
 
 module.exports = {

@@ -6,12 +6,12 @@ const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const {
   findUnusedCustomCommands,
   findCustomCommandReferences
-} = require('./customCommandsHelper');
+} = require('./customCommandsUsage');
 const {
   findUnusedCucumberSteps,
   findCucumberStepUsage
-} = require('./cucumberStepsHelper');
-const { removeTags } = require('./terminal');
+} = require('./cucumberStepsUsage');
+const { removeTags } = require('./helper/terminal');
 
 const activate = context => {
   context.subscriptions.push(

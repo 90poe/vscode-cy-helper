@@ -1,11 +1,8 @@
 const { window, workspace } = require('vscode');
 const _ = require('lodash');
 const fs = require('fs-extra');
-const {
-  typeDefinitions,
-  customCommandsAvailable,
-  readFilesFromDir
-} = require('./astParser');
+const { typeDefinitions, customCommandsAvailable } = require('./parser/AST');
+const { readFilesFromDir } = require('./helper/utils');
 
 let {
   customCommandsFolder,
@@ -69,8 +66,8 @@ exports.generateCustomCommandTypes = () => {
     uniqueCommands = cleanCommands(incorrectCommands, uniqueCommands);
   }
   if (commandsFound.length === uniqueCommands.length) {
+    writeTypeDefinition(typeDefFile, typeDefs);
     if (typeDefs.length) {
-      writeTypeDefinition(typeDefFile, typeDefs);
       window.showInformationMessage('No duplicates found');
     } else {
       window.showWarningMessage('No commands required type definitions found');

@@ -1,5 +1,4 @@
-const vscode = require('vscode');
-const { window } = vscode;
+const { window, Position } = require('vscode');
 const { openSpecFile } = require('./openSpecFile');
 
 const {
@@ -7,7 +6,7 @@ const {
   TEST_BLOCK,
   TEST_ONLY_BLOCK,
   ONLY_BLOCK
-} = require('./constants');
+} = require('./helper/constants');
 
 exports.openSingleTest = () => {
   let editor = window.activeTextEditor;
@@ -38,7 +37,7 @@ exports.openSingleTest = () => {
       editor
         .edit(editBuilder => {
           editBuilder.replace(
-            new vscode.Position(selectedScenarioIndex - 1, 0),
+            new Position(selectedScenarioIndex - 1, 0),
             FOCUS_TAG
           );
         })

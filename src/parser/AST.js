@@ -1,20 +1,9 @@
 let Parser = require('@babel/parser');
 const fs = require('fs-extra');
-const klawSync = require('klaw-sync');
 const _ = require('lodash');
 const minimatch = require('minimatch');
-
-/**
- * Get all support files
- */
-const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
-  klawSync(folder, {
-    traverseAll: true,
-    nodir: true,
-    filter: ({ path }) =>
-      !path.includes('node_modules') &&
-      path.endsWith(`${opts.name || ''}${opts.extension || ''}`)
-  }) || [];
+const { readFilesFromDir } = require('../helper/utils');
+const { CUCUMBER_KEYWORDS } = require('../helper/constants');
 
 /**
  * AST tree by file path
@@ -32,24 +21,16 @@ const parseJS = filepath => {
 };
 
 /**
- * Constant paths for detecting `Cypress.Commands.add`
- */
-const s = {
-  calleeParent: 'expression.callee.object.object.name',
-  calleeChild: 'expression.callee.object.property.name',
-  calleeMethod: 'expression.callee.property.name'
-};
-
-/**
  * Check if statement is `Cypress.Commands.add`
  */
 const findCypressCommandAddStatements = body => {
   return body.filter(
     statement =>
       _.get(statement, 'type') === 'ExpressionStatement' &&
-      _.get(statement, s.calleeParent) === 'Cypress' &&
-      _.get(statement, s.calleeChild) === 'Commands' &&
-      _.get(statement, s.calleeMethod) === 'add'
+      _.get(statement, 'expression.callee.object.object.name') === 'Cypress' &&
+      _.get(statement, 'expression.callee.object.property.name') ===
+        'Commands' &&
+      _.get(statement, 'expression.callee.property.name') === 'add'
   );
 };
 
@@ -193,10 +174,51 @@ const typeDefinitions = (
   };
 };
 
+/**
+ * Parse AST body to find cucumber step definition
+ * @param {object} body
+ */
+
+const findCucumberStepDefinitions = body => {
+  return body.filter(
+    statement =>
+      _.get(statement, 'type') === 'ExpressionStatement' &&
+      _.get(statement, 'expression.type') === 'CallExpression' &&
+      _.get(statement, 'expression.callee.type') === 'Identifier' &&
+      CUCUMBER_KEYWORDS.includes(_.get(statement, 'expression.callee.name'))
+  );
+};
+
+/**
+ * Find all step definitions in framework
+ * @param {string} stepDefinitionPath - path with root
+ */
+
+const parseStepDefinitions = stepDefinitionPath => {
+  let stepLiterals = [];
+  readFilesFromDir(stepDefinitionPath).map(file => {
+    let AST = parseJS(file.path);
+    findCucumberStepDefinitions(AST.program.body).map(step => {
+      let stepValue =
+        _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
+          ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
+          : _.get(step, 'expression.arguments.0.value');
+      // TO DO: handle regexp step definitions
+      stepLiterals.push({
+        [stepValue]: {
+          path: file.path,
+          loc: step.expression.arguments[0].loc.start
+        }
+      });
+    });
+  });
+  return stepLiterals;
+};
+
 module.exports = {
   parseJS,
   cypressCommandLocation,
   typeDefinitions,
-  customCommandsAvailable,
-  readFilesFromDir
+  parseStepDefinitions,
+  customCommandsAvailable
 };

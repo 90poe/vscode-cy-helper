@@ -1,8 +1,7 @@
-const vscode = require('vscode');
-const { window, workspace } = vscode;
-const { cypressCommandLocation } = require('./astParser');
+const { window, workspace, Uri } = require('vscode');
+const { cypressCommandLocation } = require('./parser/AST');
 const _ = require('lodash');
-const { openDocumentAtPosition } = require('./utils');
+const { openDocumentAtPosition } = require('./helper/utils');
 let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 
 const findOverlap = (indexedMatches, target) => {
@@ -29,10 +28,10 @@ const detectCustomCommand = (opts = { implementation: false }) => {
       (!line.includes('.') || line.includes('Cypress.Commands.add'))
         ? /['"`].*?['"`]/g
         : /\.(.*?)\(/g;
+    let match = line.match(commandNamePattern);
+    !match && window.showWarningMessage('Cannot find command');
     let matches = _.flatten(
-      line
-        .match(commandNamePattern)
-        .map(() => commandNamePattern.exec(line).pop())
+      match.map(() => commandNamePattern.exec(line).pop())
     );
     const selectionIndex = editor.selection.start.character;
     const indexedMatches = matches.map(m => {
@@ -63,7 +62,7 @@ const openCustomCommand = () => {
     commandName
   );
   !location && window.showErrorMessage('Custom command not found');
-  let openPath = vscode.Uri.file(location.file);
+  let openPath = Uri.file(location.file);
   openDocumentAtPosition(openPath, location.loc);
 };
 

@@ -1,5 +1,5 @@
 const { window, workspace } = require('vscode');
-const { getTerminal } = require('./terminal');
+const { getTerminal } = require('./helper/terminal');
 
 let { commandForOpen } = workspace.getConfiguration().cypressHelper;
 

@@ -1,6 +1,6 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.1.8",
+  "version": "0.1.9",
   "description": "Cypress Helper",
   "main": "./src/extension",
   "repository": "https://github.com/90poe/vscode-cy-helper",
@@ -35,35 +35,35 @@
     "commands": [
       {
         "command": "cypressHelper.openSpecFile",
-        "title": "Cypress: Open spec file"
+        "title": "Cypress: Open Spec File"
       },
       {
         "command": "cypressHelper.openSingleTest",
-        "title": "Cypress: Open single test"
+        "title": "Cypress: Open Single Test"
       },
       {
         "command": "cypressHelper.openCustomCommand",
-        "title": "Cypress: Go to custom command definition"
+        "title": "Cypress: Go to Custom Command Definition"
       },
       {
         "command": "cypressHelper.generateCustomCommandTypes",
-        "title": "Cypress: Generate custom command types"
+        "title": "Cypress: Generate Custom Command Types"
       },
       {
         "command": "cypressHelper.findUnusedCustomCommands",
-        "title": "Cypress: Find not used custom commands"
+        "title": "Cypress: Find Unused Custom Commands"
       },
       {
         "command": "cypressHelper.findUnusedCucumberSteps",
-        "title": "Cypress: Find not used Cucumber step definitions"
+        "title": "Cypress: Find Unused Cucumber Step Definitions"
       },
       {
         "command": "cypressHelper.findCucumberStepUsage",
-        "title": "Cypress: Get step definition references"
+        "title": "Cypress: Step Defintion All References"
       },
       {
         "command": "cypressHelper.findCustomCommandReferences",
-        "title": "Cypress: Get custom command references"
+        "title": "Cypress: Commands All References"
       }
     ],
     "menus": {
