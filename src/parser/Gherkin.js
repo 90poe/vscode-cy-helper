@@ -8,11 +8,13 @@ const { readFilesFromDir, root } = require('../helper/utils');
 const INTEGER_REGEXP = '\\d+';
 const WORD_REGEXP = '[^\\s]+';
 const STRING_REGEXP = '(\\".*\\"|\\\'.*\\\')';
+const FLOAT_REGEXP = '(?=.*d.*)[-+]?d*(?:.(?=d.*))?d*(?:d+[E][+-]?d+)?';
+const PARAMETER = '<.*>';
+// TO DO: Find custom cucumber defined types programmatically
+// Our framework custom types:
 const ARRAY_REGEXP = '\\[.*?\\]';
 const BOOLEAN_REGEXP = '(true)|(false)';
 const DATE_REGEXP = '(.*)';
-const FLOAT_REGEXP = '(?=.*d.*)[-+]?d*(?:.(?=d.*))?d*(?:d+[E][+-]?d+)?';
-const PARAMETER = '<.*>';
 
 const PATTERN = type => {
   return `(${type}|${PARAMETER})`;
