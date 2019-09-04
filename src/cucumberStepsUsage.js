@@ -32,7 +32,7 @@ const findCucumberStepUsage = () => {
   let { text: line, range } = editor.document.lineAt(
     editor.selection.active.line
   );
-  let stepDefinitionPattern = /['"`](.*?)[\'\"\`]/g;
+  let stepDefinitionPattern = /['"`/](.*?)['"`/]/g;
   let stepLiteralMatch = line.match(stepDefinitionPattern);
   !stepLiteralMatch && window.showWarningMessage('Cannot find step definition');
   let stepLiteral = stepLiteralMatch[0].replace(/['"`]/g, '');

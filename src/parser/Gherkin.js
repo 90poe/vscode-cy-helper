@@ -88,15 +88,28 @@ const parseFeatures = () => {
   return steps;
 };
 
+const parseRegexp = literal => {
+  if (literal.startsWith('/') && literal.endsWith('/')) {
+    let pureString = literal.replace(/\//g, '');
+    try {
+      return new RegExp(pureString);
+    } catch (e) {
+      return null;
+    }
+  }
+};
+
 const calculateUsage = (features, stepDefinitions) =>
   stepDefinitions.map(step => {
     let literal = Object.keys(step)[0];
     let { path, loc } = step[literal];
     let hasNoTypes = !literal.includes('{') && !literal.includes('}');
-    let literalRegexp = prepareRegexpForLiteral(literal);
-    let usage = hasNoTypes
-      ? features.filter(s => s.step === literal)
-      : features.filter(s => literalRegexp.exec(s.step) !== null);
+    let isStepRegexp = parseRegexp(literal);
+    let literalRegexp = isStepRegexp || prepareRegexpForLiteral(literal);
+    let usage =
+      hasNoTypes && !isStepRegexp
+        ? features.filter(s => s.step === literal)
+        : features.filter(s => literalRegexp.exec(s.step) !== null);
     let matches = usage.length;
     return {
       step: literal,
