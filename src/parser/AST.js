@@ -190,6 +190,48 @@ const findCucumberStepDefinitions = body => {
 };
 
 /**
+ * Parse AST body to find cucumber type definition expression
+ * @param {object} body
+ */
+
+const defineCucumberTypeDefinition = body => {
+  return body.filter(
+    statement =>
+      _.get(statement, 'type') === 'ExpressionStatement' &&
+      _.get(statement, 'expression.type') === 'CallExpression' &&
+      _.get(statement, 'expression.callee.type') === 'Identifier' &&
+      _.get(statement, 'expression.callee.name') === 'defineParameterType'
+  );
+};
+
+/**
+ * Traverse files to find custom types declaration
+ * @param {string} path - folder with files
+ */
+
+const findCucumberCustomTypes = path => {
+  const typeDefinitions = [];
+  readFilesFromDir(path).find(file => {
+    let AST = parseJS(file.path);
+    if (AST) {
+      let types = defineCucumberTypeDefinition(AST.program.body);
+      types.map(type => {
+        let { properties } = type.expression.arguments[0];
+        let name = properties.find(p => p.key.name === 'name').value.value;
+        let regexp = properties.find(p => p.key.name === 'regexp').value
+          .pattern;
+        typeDefinitions.push({
+          name: name,
+          pattern: regexp
+        });
+      });
+    }
+    return typeDefinitions.length;
+  });
+  return typeDefinitions;
+};
+
+/**
  * Find all step definitions in framework
  * @param {string} stepDefinitionPath - path with root
  */
@@ -220,5 +262,6 @@ module.exports = {
   cypressCommandLocation,
   typeDefinitions,
   parseStepDefinitions,
+  findCucumberCustomTypes,
   customCommandsAvailable
 };

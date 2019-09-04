@@ -1,16 +1,15 @@
 const { window } = require('vscode');
 const {
-  getCucumberStepsPath,
   composeUsageReport,
   parseFeatures,
-  calculateUsage
+  calculateUsage,
+  stepDefinitionPath
 } = require('./parser/Gherkin');
 const { showQuickPickMenu } = require('./helper/utils');
 const _ = require('lodash');
 
 const findUnusedCucumberSteps = () => {
-  let stepDefinitionPath = getCucumberStepsPath();
-  const usages = composeUsageReport(stepDefinitionPath);
+  const usages = composeUsageReport();
   let unused = usages.filter(u => u.matches === 0);
   showQuickPickMenu(unused, {
     mapperFunction: c => {
@@ -47,7 +46,7 @@ const findCucumberStepUsage = () => {
   ];
   let features = parseFeatures();
   let stats = calculateUsage(features, stepDefinition);
-  let usages = _.get(stats, '0.usage');
+  let usages = _.get(stats, '0.usage') || [];
   showQuickPickMenu(usages, {
     mapperFunction: c => {
       return {
