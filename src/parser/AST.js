@@ -57,8 +57,8 @@ const customCommandsAvailable = file => {
 };
 
 /**
- * Parse arguments of custom command
- * Returns array of arguments already converted to string with type
+ *  - Parse arguments of custom command
+ *  - Returns array of arguments already converted to string with type
  */
 const parseArguments = args => {
   let parsedArgs = _.tail(args).map(arg => {
@@ -133,8 +133,8 @@ const cypressCommandLocation = (folder, targetCommand) => {
 };
 
 /**
- * Parse files
- * Returns array of commands with types
+ *  - Parse files
+ *  - Returns array of commands with types
  */
 const typeDefinitions = (
   files,
@@ -245,7 +245,6 @@ const parseStepDefinitions = stepDefinitionPath => {
         _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
           ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
           : _.get(step, 'expression.arguments.0.value');
-      // TO DO: handle regexp step definitions
       stepLiterals.push({
         [stepValue]: {
           path: file.path,

@@ -4,10 +4,23 @@ const _ = require('lodash');
 const { openDocumentAtPosition } = require('./helper/utils');
 let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 
+/**
+ * check if target index is inside ranges
+ * in case there is several commands used in row
+ * @param {*[]} indexedMatches
+ * @param {number} target
+ */
 const findOverlap = (indexedMatches, target) => {
   return indexedMatches.find(str => target >= str.start && target <= str.end);
 };
 
+/**
+ * in case no overlap found
+ * lookup for closest command range
+ * in case there is several commands used in row
+ * @param {*[]} indexedMatches
+ * @param {number} target
+ */
 const findClosestRange = (indexedMatches, target) => {
   return indexedMatches.reduce((prev, curr) =>
     Math.abs(curr.start - target) < Math.abs(prev.start - target) &&
@@ -17,6 +30,12 @@ const findClosestRange = (indexedMatches, target) => {
   );
 };
 
+/**
+ *  - find custom command in row with cursor
+ *  - check if it declaration: `Cypress.Commands.add('command', ...)`
+ * or usage: `.command()`
+ * @param {*} opts
+ */
 const detectCustomCommand = (opts = { implementation: false }) => {
   let editor = window.activeTextEditor;
   let commandName;
@@ -53,6 +72,11 @@ const detectCustomCommand = (opts = { implementation: false }) => {
   return commandName;
 };
 
+/**
+ *  - get command name
+ *  - find its location
+ *  - open document with cursor on command definition
+ */
 const openCustomCommand = () => {
   let editor = window.activeTextEditor;
   let root = editor.document.fileName.split('/cypress/').shift();

@@ -5,6 +5,10 @@ const GherkinParser = new Gherkin.Parser();
 const { parseStepDefinitions, findCucumberCustomTypes } = require('./AST');
 const { readFilesFromDir, root } = require('../helper/utils');
 
+/**
+ *  Find where cucumber step definitions are stored
+ *  by checking package.json for configuration
+ */
 const getCucumberStepsPath = () => {
   const packages = readFilesFromDir(root, {
     name: 'package',
@@ -59,6 +63,10 @@ const PATTERN = type => {
   return `(${type}|${PARAMETER})`;
 };
 
+/**
+ * Replace step definition placeholders with types regexp
+ * @param {string} literal
+ */
 const prepareRegexpForLiteral = literal => {
   let basicTypesLiteral = `^${literal.replace(/\//g, '|')}$`;
   allTypeRegexp.map(({ pattern, replace }) => {
@@ -68,6 +76,9 @@ const prepareRegexpForLiteral = literal => {
   return stepDefinitionRegexp;
 };
 
+/**
+ * Read all feature files and return find steps used
+ */
 const parseFeatures = () => {
   const features = readFilesFromDir(`${root}/cypress`, {
     extension: '.feature'
@@ -88,6 +99,10 @@ const parseFeatures = () => {
   return steps;
 };
 
+/**
+ * try parsing step definition and return regexp or null
+ * @param {string} literal
+ */
 const parseRegexp = literal => {
   if (literal.startsWith('/') && literal.endsWith('/')) {
     let pureString = literal.replace(/\//g, '');
@@ -99,6 +114,11 @@ const parseRegexp = literal => {
   }
 };
 
+/**
+ * check where step definitions are used
+ * @param {string[]} features - feature files
+ * @param {*[]} stepDefinitions - step definitions
+ */
 const calculateUsage = (features, stepDefinitions) =>
   stepDefinitions.map(step => {
     let literal = Object.keys(step)[0];
@@ -120,6 +140,11 @@ const calculateUsage = (features, stepDefinitions) =>
     };
   });
 
+/**
+ * -  parse step definitions
+ * -  parse feature files
+ * -  compare and return usage array
+ */
 const composeUsageReport = () => {
   const stepDefinitionsParsed = parseStepDefinitions(
     `${root}/${stepDefinitionPath}`

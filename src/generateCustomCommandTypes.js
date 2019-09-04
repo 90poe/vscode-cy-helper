@@ -19,6 +19,11 @@ const wrapTemplate = commands => `declare namespace Cypress {
   }
 }`;
 
+/**
+ * write gathered type definitions to file
+ * @param {string} typeDefFile
+ * @param {string[]} typeDefs
+ */
 const writeTypeDefinition = (typeDefFile, typeDefs) => {
   fs.outputFileSync(typeDefFile, wrapTemplate(typeDefs), 'utf-8');
   window.showInformationMessage('Type definitions generated and saved');
@@ -27,6 +32,11 @@ const writeTypeDefinition = (typeDefFile, typeDefs) => {
   });
 };
 
+/**
+ * remove not valid entries from type definitions
+ * @param {string[]} incorrect
+ * @param {string[]} definitions
+ */
 const cleanTypes = (incorrect, definitions) => {
   return definitions.filter(
     d =>
@@ -39,6 +49,11 @@ const cleanTypes = (incorrect, definitions) => {
   );
 };
 
+/**
+ * remove not valid entries from found commands
+ * @param {string[]} incorrect
+ * @param {string[]} available
+ */
 const cleanCommands = (incorrect, available) => {
   return available.filter(a => !incorrect.includes(a));
 };
