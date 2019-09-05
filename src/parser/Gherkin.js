@@ -16,11 +16,11 @@ const getCucumberStepsPath = () => {
   });
   let cucumberConfig;
   packages.find(p => {
-    let content = JSON.parse(fs.readFileSync(p.path));
+    const content = JSON.parse(fs.readFileSync(p.path));
     cucumberConfig = _.get(content, 'cypress-cucumber-preprocessor');
     return cucumberConfig;
   });
-  let stepDefinitionPath = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
+  const stepDefinitionPath = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
     ? 'cypress/integration'
     : _.get(cucumberConfig, 'step_definitions') ||
       'cypress/support/step_definitions';
@@ -72,7 +72,7 @@ const prepareRegexpForLiteral = literal => {
   allTypeRegexp.map(({ pattern, replace }) => {
     basicTypesLiteral = basicTypesLiteral.replace(replace, PATTERN(pattern));
   });
-  let stepDefinitionRegexp = new RegExp(basicTypesLiteral, 'g') || null;
+  const stepDefinitionRegexp = new RegExp(basicTypesLiteral, 'g') || null;
   return stepDefinitionRegexp;
 };
 
@@ -85,7 +85,9 @@ const parseFeatures = () => {
   });
   let steps = [];
   features.map(file => {
-    let { feature } = GherkinParser.parse(fs.readFileSync(file.path, 'utf-8'));
+    const { feature } = GherkinParser.parse(
+      fs.readFileSync(file.path, 'utf-8')
+    );
     feature.children.map(child =>
       child.steps.map(step => {
         steps.push({
@@ -105,7 +107,7 @@ const parseFeatures = () => {
  */
 const parseRegexp = literal => {
   if (literal.startsWith('/') && literal.endsWith('/')) {
-    let pureString = literal.replace(/\//g, '');
+    const pureString = literal.replace(/\//g, '');
     try {
       return new RegExp(pureString);
     } catch (e) {
@@ -121,16 +123,16 @@ const parseRegexp = literal => {
  */
 const calculateUsage = (features, stepDefinitions) =>
   stepDefinitions.map(step => {
-    let literal = Object.keys(step)[0];
-    let { path, loc } = step[literal];
-    let hasNoTypes = !literal.includes('{') && !literal.includes('}');
-    let isStepRegexp = parseRegexp(literal);
-    let literalRegexp = isStepRegexp || prepareRegexpForLiteral(literal);
-    let usage =
+    const literal = Object.keys(step)[0];
+    const { path, loc } = step[literal];
+    const hasNoTypes = !literal.includes('{') && !literal.includes('}');
+    const isStepRegexp = parseRegexp(literal);
+    const literalRegexp = isStepRegexp || prepareRegexpForLiteral(literal);
+    const usage =
       hasNoTypes && !isStepRegexp
         ? features.filter(s => s.step === literal)
         : features.filter(s => literalRegexp.exec(s.step) !== null);
-    let matches = usage.length;
+    const matches = usage.length;
     return {
       step: literal,
       matches: matches,

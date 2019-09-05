@@ -16,9 +16,9 @@ const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
 const openDocumentAtPosition = (path, position) => {
   workspace.openTextDocument(path).then(doc => {
     window.showTextDocument(doc, { preview: false }).then(doc => {
-      let { line, column } = position;
-      let p = new Position(line - 1, column);
-      let s = new Selection(p, p);
+      const { line, column } = position;
+      const p = new Position(line - 1, column);
+      const s = new Selection(p, p);
       doc.selection = s;
       doc.revealRange(s, 1);
     });
@@ -40,7 +40,7 @@ const showQuickPickMenu = (
   }
 ) => {
   if (array.length) {
-    let quickPickList = array.map(opts.mapperFunction);
+    const quickPickList = array.map(opts.mapperFunction);
     quickPickList.unshift({
       label: '',
       description: opts.header

@@ -8,11 +8,11 @@ const removeTags = terminal => {
     if (!terminal.disposed) {
       disposeTerminal();
     }
-    let editor = window.activeTextEditor;
-    let fullText = editor.document.getText().split('\n');
+    const editor = window.activeTextEditor;
+    const fullText = editor.document.getText().split('\n');
     editor
       .edit(editBuilder => {
-        let focused = fullText
+        const focused = fullText
           .map((line, row) => {
             if (
               line.trim().startsWith(FOCUS_TAG) ||
@@ -23,8 +23,8 @@ const removeTags = terminal => {
           })
           .filter(e => Boolean(e));
         focused.map(row => {
-          let { text, range } = editor.document.lineAt(row);
-          let newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
+          const { text, range } = editor.document.lineAt(row);
+          const newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
           editBuilder.replace(range, newText);
         });
       })

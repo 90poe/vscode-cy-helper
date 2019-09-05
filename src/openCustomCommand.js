@@ -2,7 +2,7 @@ const { window, workspace, Uri } = require('vscode');
 const { cypressCommandLocation } = require('./parser/AST');
 const _ = require('lodash');
 const { openDocumentAtPosition } = require('./helper/utils');
-let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
+const { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 
 /**
  * check if target index is inside ranges
@@ -37,31 +37,31 @@ const findClosestRange = (indexedMatches, target) => {
  * @param {*} opts
  */
 const detectCustomCommand = (opts = { implementation: false }) => {
-  let editor = window.activeTextEditor;
+  const editor = window.activeTextEditor;
   let commandName;
   if (editor.selection.start.character === editor.selection.end.character) {
-    let { text: line } = editor.document.lineAt(editor.selection.active.line);
-    let commandNamePattern =
+    const { text: line } = editor.document.lineAt(editor.selection.active.line);
+    const commandNamePattern =
       opts.implementation &&
       (line.includes("'") || line.includes('"')) &&
       (!line.includes('.') || line.includes('Cypress.Commands.add'))
         ? /['"`].*?['"`]/g
         : /\.(.*?)\(/g;
-    let match = line.match(commandNamePattern);
+    const match = line.match(commandNamePattern);
     !match && window.showWarningMessage('Cannot find command');
-    let matches = _.flatten(
+    const matches = _.flatten(
       match.map(() => commandNamePattern.exec(line).pop())
     );
     const selectionIndex = editor.selection.start.character;
     const indexedMatches = matches.map(m => {
-      let index = line.indexOf(m);
+      const index = line.indexOf(m);
       return {
         start: index,
         end: index + m.length,
         match: m
       };
     });
-    let closest =
+    const closest =
       findOverlap(indexedMatches, selectionIndex) ||
       findClosestRange(indexedMatches, selectionIndex);
     !closest && window.showErrorMessage('Custom command not found');
@@ -78,15 +78,15 @@ const detectCustomCommand = (opts = { implementation: false }) => {
  *  - open document with cursor on command definition
  */
 const openCustomCommand = () => {
-  let editor = window.activeTextEditor;
-  let root = editor.document.fileName.split('/cypress/').shift();
-  let commandName = detectCustomCommand();
-  let location = cypressCommandLocation(
+  const editor = window.activeTextEditor;
+  const root = editor.document.fileName.split('/cypress/').shift();
+  const commandName = detectCustomCommand();
+  const location = cypressCommandLocation(
     `${root}/${customCommandsFolder}`,
     commandName
   );
   !location && window.showErrorMessage('Custom command not found');
-  let openPath = Uri.file(location.file);
+  const openPath = Uri.file(location.file);
   openDocumentAtPosition(openPath, location.loc);
 };
 

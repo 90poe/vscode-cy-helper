@@ -1,4 +1,4 @@
-let Parser = require('@babel/parser');
+const Parser = require('@babel/parser');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const minimatch = require('minimatch');
@@ -39,9 +39,11 @@ const findCypressCommandAddStatements = body => {
  */
 const customCommandsAvailable = file => {
   try {
-    let fileContent = fs.readFileSync(file, 'utf-8');
-    let commandPattern = /^ +.*\(.*: Chainable<any>$/m;
-    let commands = fileContent.split('\n').map(row => commandPattern.exec(row));
+    const fileContent = fs.readFileSync(file, 'utf-8');
+    const commandPattern = /^ +.*\(.*: Chainable<any>$/m;
+    const commands = fileContent
+      .split('\n')
+      .map(row => commandPattern.exec(row));
     return commands
       .filter(c => c !== null)
       .map(item =>
@@ -61,14 +63,14 @@ const customCommandsAvailable = file => {
  *  - Returns array of arguments already converted to string with type
  */
 const parseArguments = args => {
-  let parsedArgs = _.tail(args).map(arg => {
+  const parsedArgs = _.tail(args).map(arg => {
     switch (arg.type) {
       case 'ObjectExpression':
-        let [property] = arg.properties;
+        const [property] = arg.properties;
         return `${property.key.name}: any`;
       case 'ArrowFunctionExpression':
-        let { params } = arg;
-        let parsedParams = params.map(param => {
+        const { params } = arg;
+        const parsedParams = params.map(param => {
           let parsedParam = '';
           switch (param.type) {
             case 'AssignmentPattern':
@@ -112,15 +114,15 @@ const parseArguments = args => {
  * @param {string} targetCommand - command for search
  */
 const cypressCommandLocation = (folder, targetCommand) => {
-  let location = readFilesFromDir(folder)
+  const location = readFilesFromDir(folder)
     .map(({ path }) => {
-      let AST = parseJS(path);
+      const AST = parseJS(path);
       if (AST) {
-        let commands = findCypressCommandAddStatements(AST.program.body);
-        let commandNames = commands.map(c => c.expression.arguments[0].value);
+        const commands = findCypressCommandAddStatements(AST.program.body);
+        const commandNames = commands.map(c => c.expression.arguments[0].value);
         if (commandNames.includes(targetCommand)) {
-          let index = commandNames.indexOf(targetCommand);
-          let commandBody = commands[index];
+          const index = commandNames.indexOf(targetCommand);
+          const commandBody = commands[index];
           return {
             file: path,
             loc: commandBody.expression.arguments[0].loc.start
@@ -142,15 +144,15 @@ const typeDefinitions = (
   options = { includeLocationData: false }
 ) => {
   let commandsFound = [];
-  let typeDefs = _.flatten(
+  const typeDefs = _.flatten(
     files
       .filter(({ path }) => excludes.every(s => !minimatch(path, s)))
       .map(file => {
-        let AST = parseJS(file.path);
+        const AST = parseJS(file.path);
         if (AST) {
-          let commands = findCypressCommandAddStatements(AST.program.body);
-          let typeDefBody = commands.map(command => {
-            let { value: commandName, loc } = command.expression.arguments[0];
+          const commands = findCypressCommandAddStatements(AST.program.body);
+          const typeDefBody = commands.map(command => {
+            const { value: commandName, loc } = command.expression.arguments[0];
             commandsFound.push(
               options.includeLocationData
                 ? {
@@ -160,7 +162,7 @@ const typeDefinitions = (
                   }
                 : commandName
             );
-            let argsArray = parseArguments(command.expression.arguments);
+            const argsArray = parseArguments(command.expression.arguments);
             return `${commandName}(${argsArray.join(', ')}): Chainable<any>`;
           });
           return typeDefBody;
@@ -212,13 +214,12 @@ const defineCucumberTypeDefinition = body => {
 const findCucumberCustomTypes = path => {
   const typeDefinitions = [];
   readFilesFromDir(path).find(file => {
-    let AST = parseJS(file.path);
+    const AST = parseJS(file.path);
     if (AST) {
-      let types = defineCucumberTypeDefinition(AST.program.body);
-      types.map(type => {
-        let { properties } = type.expression.arguments[0];
-        let name = properties.find(p => p.key.name === 'name').value.value;
-        let regexp = properties.find(p => p.key.name === 'regexp').value
+      defineCucumberTypeDefinition(AST.program.body).map(type => {
+        const { properties } = type.expression.arguments[0];
+        const name = properties.find(p => p.key.name === 'name').value.value;
+        const regexp = properties.find(p => p.key.name === 'regexp').value
           .pattern;
         typeDefinitions.push({
           name: name,
@@ -239,9 +240,9 @@ const findCucumberCustomTypes = path => {
 const parseStepDefinitions = stepDefinitionPath => {
   let stepLiterals = [];
   readFilesFromDir(stepDefinitionPath).map(file => {
-    let AST = parseJS(file.path);
+    const AST = parseJS(file.path);
     findCucumberStepDefinitions(AST.program.body).map(step => {
-      let stepValue =
+      const stepValue =
         _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
           ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
           : _.get(step, 'expression.arguments.0.value');

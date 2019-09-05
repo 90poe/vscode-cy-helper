@@ -3,31 +3,31 @@ const { workspace } = require('vscode');
 const fs = require('fs-extra');
 const { showQuickPickMenu, readFilesFromDir } = require('./helper/utils');
 const { detectCustomCommand } = require('./openCustomCommand');
-let { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
+const { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
 const root = workspace.rootPath;
 
 const findCustomCommands = workspaceFiles => {
-  let { commandsFound } = typeDefinitions(workspaceFiles, [], {
+  const { commandsFound } = typeDefinitions(workspaceFiles, [], {
     includeLocationData: true
   });
-  let uniqueCommands = Array.from(new Set(commandsFound.map(c => c.name))).map(
-    name => {
-      let { path, loc } = commandsFound.find(c => c.name === name);
-      return {
-        name: name,
-        path: path,
-        loc: loc
-      };
-    }
-  );
+  const uniqueCommands = Array.from(
+    new Set(commandsFound.map(c => c.name))
+  ).map(name => {
+    const { path, loc } = commandsFound.find(c => c.name === name);
+    return {
+      name: name,
+      path: path,
+      loc: loc
+    };
+  });
   return uniqueCommands;
 };
 
 const findUnusedCustomCommands = () => {
-  let workspaceFiles = readFilesFromDir(root);
+  const workspaceFiles = readFilesFromDir(root);
   let uniqueCommands = findCustomCommands(workspaceFiles);
   workspaceFiles.map(file => {
-    let content = fs.readFileSync(file.path, 'utf-8');
+    const content = fs.readFileSync(file.path, 'utf-8');
     uniqueCommands = uniqueCommands.filter(
       command => new RegExp(`\\.${command.name}\\(`, 'g').exec(content) === null
     );
@@ -48,18 +48,18 @@ const findUnusedCustomCommands = () => {
 };
 
 const findCustomCommandReferences = () => {
-  let commandName = detectCustomCommand({ implementation: true }).replace(
+  const commandName = detectCustomCommand({ implementation: true }).replace(
     /['"`]/g,
     ''
   );
-  let commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
-  let workspaceFiles = readFilesFromDir(root);
-  let references = [];
+  const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
+  const workspaceFiles = readFilesFromDir(root);
+  const references = [];
   workspaceFiles.map(file => {
-    let content = fs.readFileSync(file.path, 'utf-8').split('\n');
+    const content = fs.readFileSync(file.path, 'utf-8').split('\n');
     content.map((row, index) => {
-      let hasCommand = commandPattern.exec(row);
-      let column = row.indexOf(commandName);
+      const hasCommand = commandPattern.exec(row);
+      const column = row.indexOf(commandName);
       if (hasCommand) {
         references.push({
           path: file.path,

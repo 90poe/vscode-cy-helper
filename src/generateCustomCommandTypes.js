@@ -4,7 +4,7 @@ const fs = require('fs-extra');
 const { typeDefinitions, customCommandsAvailable } = require('./parser/AST');
 const { readFilesFromDir } = require('./helper/utils');
 
-let {
+const {
   customCommandsFolder,
   typeDefinitionFile,
   typeDefinitionExcludePatterns
@@ -59,18 +59,21 @@ const cleanCommands = (incorrect, available) => {
 };
 
 exports.generateCustomCommandTypes = () => {
-  let editor = window.activeTextEditor;
-  let root = editor.document.fileName.split('/cypress/').shift();
-  let [folder, excludes, typeDefFile] = [
+  const editor = window.activeTextEditor;
+  const root = editor.document.fileName.split('/cypress/').shift();
+  const [folder, excludes, typeDefFile] = [
     `${root}/${customCommandsFolder}`,
     typeDefinitionExcludePatterns,
     `${root}/${typeDefinitionFile}`
   ];
-  let files = readFilesFromDir(folder);
-  let { commandsFound, typeDefs } = typeDefinitions(files, excludes);
-  let availableTypeDefinitions = customCommandsAvailable(typeDefFile);
+  const customCommandFiles = readFilesFromDir(folder);
+  let { commandsFound, typeDefs } = typeDefinitions(
+    customCommandFiles,
+    excludes
+  );
+  const availableTypeDefinitions = customCommandsAvailable(typeDefFile);
   let uniqueCommands = _.uniq(commandsFound);
-  let incorrectCommands = uniqueCommands.filter(c => c.includes('-'));
+  const incorrectCommands = uniqueCommands.filter(c => c.includes('-'));
   if (incorrectCommands.length) {
     window.showErrorMessage(
       `Incorrect command syntax:\n${incorrectCommands.join('\n')}`,
@@ -88,17 +91,19 @@ exports.generateCustomCommandTypes = () => {
       window.showWarningMessage('No commands required type definitions found');
     }
   } else {
-    let duplicates = _.uniq(
+    const duplicates = _.uniq(
       _.filter(commandsFound, (v, i, a) => a.indexOf(v) !== i)
     );
-    let messageForDuplicate = `Duplicated commands:\n${duplicates.join('\n')}`;
+    const messageForDuplicate = `Duplicated commands:\n${duplicates.join(
+      '\n'
+    )}`;
     window.showErrorMessage(messageForDuplicate, { modal: true });
     typeDefs = cleanTypes(duplicates, typeDefs);
     commandsFound = cleanCommands(duplicates, commandsFound);
     writeTypeDefinition(typeDefFile, typeDefs);
   }
-  let added = _.difference(commandsFound, availableTypeDefinitions);
-  let removed = _.difference(availableTypeDefinitions, commandsFound);
+  const added = _.difference(commandsFound, availableTypeDefinitions);
+  const removed = _.difference(availableTypeDefinitions, commandsFound);
   if (added.length) {
     window.showInformationMessage(
       `New command types added:\n${added.join('\n')}`,
