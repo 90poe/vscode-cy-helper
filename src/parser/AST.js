@@ -80,10 +80,6 @@ const parseArguments = args =>
             ),
           () => parseFnParams(arg.params)
         )
-        .when(
-          arg => arg.type === 'FunctionExpression',
-          () => parseFunctionParams(arg)
-        )
         .default(arg => `${arg.value}: any`)
     )
   );
@@ -100,7 +96,7 @@ const parseFnParams = params =>
         param => param.type === 'AssignmentPattern',
         () => {
           const leftPart = `${param.left.name}?: `;
-          const rightPart = parseRightPartOfArrowFn(param.right);
+          const rightPart = parseRightPartOfArgument(param.right);
           return `${leftPart}${rightPart}`;
         }
       )
@@ -116,7 +112,7 @@ const parseFnParams = params =>
  * Cypress.Commands.Add('command', (arg1 = false) => {})
  * @param {object} right
  */
-const parseRightPartOfArrowFn = right =>
+const parseRightPartOfArgument = right =>
   match(right)
     .when(right => right.type === 'ObjectExpression', () => 'object')
     .when(right => right.type === 'ArrayExpression', () => 'any[]')
