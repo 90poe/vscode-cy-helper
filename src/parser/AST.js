@@ -2,7 +2,7 @@ const Parser = require('@babel/parser');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const minimatch = require('minimatch');
-const { readFilesFromDir } = require('../helper/utils');
+const { readFilesFromDir, match } = require('../helper/utils');
 const { CUCUMBER_KEYWORDS, regexp } = require('../helper/constants');
 
 /**
@@ -59,53 +59,70 @@ const customCommandsAvailable = file => {
 
 /**
  *  - Parse arguments of custom command
+ *  - Cypress.Commands.Add('command', () => {})
+ *  - first argument is name of command
+ *  - others are parsed for types
  *  - Returns array of arguments already converted to string with type
+ *  @param {*[]} args
  */
-const parseArguments = args => {
-  const parsedArgs = _.tail(args).map(arg => {
-    switch (arg.type) {
-      case 'ObjectExpression':
-        const [property] = arg.properties;
-        return `${property.key.name}: any`;
-      case 'ArrowFunctionExpression':
-        const { params } = arg;
-        const parsedParams = params.map(param => {
-          let parsedParam = '';
-          switch (param.type) {
-            case 'AssignmentPattern':
-              parsedParam = `${param.left.name}?: `;
-              switch (param.right.type) {
-                case 'ObjectExpression':
-                  parsedParam += 'object';
-                  break;
-                case 'ArrayExpression':
-                  parsedParam += 'any[]';
-                  break;
-                default:
-                  if (_.has(param, 'right.value')) {
-                    parsedParam += `${typeof param.right.value}`;
-                  } else {
-                    parsedParam += 'any';
-                  }
-                  break;
-              }
-              break;
-            case 'RestElement':
-              parsedParam = `${param.argument.name}: any[]`;
-              break;
-            default:
-              parsedParam = `${param.name}: any`;
-              break;
-          }
-          return parsedParam;
-        });
-        return parsedParams;
-      default:
-        return `${arg.value}: any`;
-    }
-  });
-  return _.flatten(parsedArgs);
-};
+const parseArguments = args =>
+  _.flatten(
+    _.tail(args).map(arg =>
+      match(arg)
+        .when(
+          arg => arg.type === 'ObjectExpression',
+          () => `${arg.properties[0].key.name}: any`
+        )
+        .when(
+          arg =>
+            ['FunctionExpression', 'ArrowFunctionExpression'].includes(
+              arg.type
+            ),
+          () => parseFnParams(arg.params)
+        )
+        .when(
+          arg => arg.type === 'FunctionExpression',
+          () => parseFunctionParams(arg)
+        )
+        .default(arg => `${arg.value}: any`)
+    )
+  );
+
+/**
+ * Parses arguments from arrow function like:
+ * Cypress.Commands.Add('command', (arg1, arg2, arg3) => {})
+ * @param {*[]} params
+ */
+const parseFnParams = params =>
+  params.map(param =>
+    match(param)
+      .when(
+        param => param.type === 'AssignmentPattern',
+        () => {
+          const leftPart = `${param.left.name}?: `;
+          const rightPart = parseRightPartOfArrowFn(param.right);
+          return `${leftPart}${rightPart}`;
+        }
+      )
+      .when(
+        param => param.type === 'RestElement',
+        () => `${param.argument.name}: any[]`
+      )
+      .default(param => `${param.name}: any`)
+  );
+
+/**
+ * Parses right side of assignment expression%
+ * Cypress.Commands.Add('command', (arg1 = false) => {})
+ * @param {object} right
+ */
+const parseRightPartOfArrowFn = right =>
+  match(right)
+    .when(right => right.type === 'ObjectExpression', () => 'object')
+    .when(right => right.type === 'ArrayExpression', () => 'any[]')
+    .default(right =>
+      _.has(right, 'value') ? `${typeof right.value}` : 'any'
+    );
 
 /**
  * Find custom command implementation
