@@ -1,10 +1,13 @@
-const { typeDefinitions } = require('./parser/AST');
-const { workspace } = require('vscode');
 const fs = require('fs-extra');
-const { showQuickPickMenu, readFilesFromDir } = require('./helper/utils');
+const { typeDefinitions } = require('./parser/AST');
+const {
+  showQuickPickMenu,
+  readFilesFromDir,
+  config,
+  root
+} = require('./helper/utils');
 const { detectCustomCommand } = require('./openCustomCommand');
-const { customCommandsFolder } = workspace.getConfiguration().cypressHelper;
-const root = workspace.rootPath;
+const { customCommandsFolder } = config;
 
 const findCustomCommands = workspaceFiles => {
   const { commandsFound } = typeDefinitions(workspaceFiles, [], {
@@ -48,10 +51,7 @@ const findUnusedCustomCommands = () => {
 };
 
 const findCustomCommandReferences = () => {
-  const commandName = detectCustomCommand({ implementation: true }).replace(
-    /['"`]/g,
-    ''
-  );
+  const commandName = detectCustomCommand().replace(/['"`]/g, '');
   const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
   const workspaceFiles = readFilesFromDir(root);
   const references = [];

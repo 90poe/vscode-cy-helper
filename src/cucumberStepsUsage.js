@@ -1,12 +1,13 @@
 const { window } = require('vscode');
+const _ = require('lodash');
 const {
   composeUsageReport,
   parseFeatures,
   calculateUsage,
   stepDefinitionPath
 } = require('./parser/Gherkin');
-const { showQuickPickMenu } = require('./helper/utils');
-const _ = require('lodash');
+const { showQuickPickMenu, show } = require('./helper/utils');
+const { message, regexp } = require('./helper/constants');
 
 const findUnusedCucumberSteps = () => {
   const usages = composeUsageReport();
@@ -28,13 +29,13 @@ const findUnusedCucumberSteps = () => {
 
 const findCucumberStepUsage = () => {
   const editor = window.activeTextEditor;
-  const path = editor.document.uri.fsPath;
+  const path = editor.document.fileName;
   const { text: line, range } = editor.document.lineAt(
     editor.selection.active.line
   );
-  const stepDefinitionPattern = /['"`/](.*?)['"`/]/g;
+  const stepDefinitionPattern = regexp.STEP_DEFINITION;
   const stepLiteralMatch = line.match(stepDefinitionPattern);
-  !stepLiteralMatch && window.showWarningMessage('Cannot find step definition');
+  !stepLiteralMatch && show('warn', message.NO_STEP);
   const stepLiteral = stepLiteralMatch[0].replace(/['"`]/g, '');
   const stepDefinition = [
     {

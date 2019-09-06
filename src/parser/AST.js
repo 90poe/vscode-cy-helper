@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const minimatch = require('minimatch');
 const { readFilesFromDir } = require('../helper/utils');
-const { CUCUMBER_KEYWORDS } = require('../helper/constants');
+const { CUCUMBER_KEYWORDS, regexp } = require('../helper/constants');
 
 /**
  * AST tree by file path
@@ -40,10 +40,9 @@ const findCypressCommandAddStatements = body => {
 const customCommandsAvailable = file => {
   try {
     const fileContent = fs.readFileSync(file, 'utf-8');
-    const commandPattern = /^ +.*\(.*: Chainable<any>$/m;
     const commands = fileContent
       .split('\n')
-      .map(row => commandPattern.exec(row));
+      .map(row => regexp.TS_DEFINITION.exec(row));
     return commands
       .filter(c => c !== null)
       .map(item =>

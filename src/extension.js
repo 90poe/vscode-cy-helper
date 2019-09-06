@@ -45,7 +45,6 @@ const activate = context => {
       findCustomCommandReferences
     )
   );
-
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));
 };
 exports.activate = activate;

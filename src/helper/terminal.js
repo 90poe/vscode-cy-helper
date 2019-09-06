@@ -1,4 +1,5 @@
 const { window } = require('vscode');
+const { editDocument } = require('./utils');
 const { TERMINAL_NAME, FOCUS_TAG, ONLY_BLOCK } = require('./constants');
 
 let _activeTerminal = null;
@@ -10,27 +11,24 @@ const removeTags = terminal => {
     }
     const editor = window.activeTextEditor;
     const fullText = editor.document.getText().split('\n');
-    editor
-      .edit(editBuilder => {
-        const focused = fullText
-          .map((line, row) => {
-            if (
-              line.trim().startsWith(FOCUS_TAG) ||
-              line.trim().includes(ONLY_BLOCK)
-            ) {
-              return row;
-            }
-          })
-          .filter(e => Boolean(e));
-        focused.map(row => {
-          const { text, range } = editor.document.lineAt(row);
-          const newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
-          editBuilder.replace(range, newText);
-        });
+    const testRows = fullText
+      .map((line, row) => {
+        if (
+          line.trim().startsWith(FOCUS_TAG) ||
+          line.trim().includes(ONLY_BLOCK)
+        ) {
+          return row;
+        }
       })
-      .then(() => {
-        editor.document.save();
-      });
+      .filter(e => Boolean(e));
+    const newTexts = [];
+    const markAsOnly = testRows.map(row => {
+      const { text, range } = editor.document.lineAt(row);
+      const newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
+      newTexts.push(newText);
+      return range;
+    });
+    editDocument(markAsOnly, newTexts);
   }
 };
 

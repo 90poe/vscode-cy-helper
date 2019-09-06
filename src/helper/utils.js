@@ -1,8 +1,10 @@
 const { workspace, window, Position, Selection } = require('vscode');
 const _ = require('lodash');
 const klawSync = require('klaw-sync');
+const { message } = require('./constants');
 
 const root = workspace.workspaceFolders[0].uri.fsPath;
+const config = workspace.getConfiguration().cypressHelper;
 
 const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
   klawSync(folder, {
@@ -13,15 +15,19 @@ const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
       path.endsWith(`${opts.name || ''}${opts.extension || ''}`)
   }) || [];
 
+const openDocument = path => {
+  return workspace.openTextDocument(path).then(doc => {
+    return window.showTextDocument(doc, { preview: false });
+  });
+};
+
 const openDocumentAtPosition = (path, position) => {
-  workspace.openTextDocument(path).then(doc => {
-    window.showTextDocument(doc, { preview: false }).then(doc => {
-      const { line, column } = position;
-      const p = new Position(line - 1, column);
-      const s = new Selection(p, p);
-      doc.selection = s;
-      doc.revealRange(s, 1);
-    });
+  openDocument(path).then(doc => {
+    const { line, column } = position;
+    const p = new Position(line - 1, column);
+    const s = new Selection(p, p);
+    doc.selection = s;
+    doc.revealRange(s, 1);
   });
 };
 
@@ -36,7 +42,7 @@ const showQuickPickMenu = (
       };
     },
     header: 'Quick pick header',
-    notFoundMessage: 'Not found items for quick pick menu'
+    notFoundMessage: message.DEFAULT_NO_ITEMS_QUICKMENU
   }
 ) => {
   if (array.length) {
@@ -51,13 +57,41 @@ const showQuickPickMenu = (
         openDocumentAtPosition(data.path, _.get(data, 'loc.start') || data.loc)
       );
   } else {
-    window.showInformationMessage(opts.notFoundMessage);
+    show('Info', opts.notFoundMessage);
   }
+};
+
+const show = (level, message, isModal = false) => {
+  const levels = ['Information', 'Warning', 'Error'];
+  const method =
+    levels.find(
+      l => level.charAt(0).toLowerCase() === l.charAt(0).toLowerCase()
+    ) || levels[0];
+  window[`show${method}Message`](message, {
+    modal: isModal
+  });
+};
+
+const editDocument = (position, newText) => {
+  const editor = window.activeTextEditor;
+  editor
+    .edit(editBuilder => {
+      _.isArray(position)
+        ? position.map((p, i) => editBuilder.replace(p, newText[i]))
+        : editBuilder.replace(position, newText);
+    })
+    .then(() => {
+      editor.document.save();
+    });
 };
 
 module.exports = {
   readFilesFromDir,
+  openDocument,
+  editDocument,
   openDocumentAtPosition,
   showQuickPickMenu,
-  root
+  config,
+  root,
+  show
 };

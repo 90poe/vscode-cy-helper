@@ -80,7 +80,7 @@ const prepareRegexpForLiteral = literal => {
  * Read all feature files and return find steps used
  */
 const parseFeatures = () => {
-  const features = readFilesFromDir(`${root}/cypress`, {
+  const features = readFilesFromDir(root, {
     extension: '.feature'
   });
   let steps = [];

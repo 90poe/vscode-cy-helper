@@ -1,7 +1,7 @@
-const { window, workspace } = require('vscode');
+const { window } = require('vscode');
 const { getTerminal } = require('./helper/terminal');
-
-const { commandForOpen } = workspace.getConfiguration().cypressHelper;
+const { config } = require('./helper/utils');
+const { commandForOpen } = config;
 
 exports.openSpecFile = () => {
   const spec = window.activeTextEditor.document.fileName;
