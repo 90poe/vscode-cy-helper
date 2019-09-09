@@ -1,12 +1,17 @@
 {
   "name": "vscode-cy-helper",
-  "version": "0.2.3",
-  "description": "Cypress Helper",
+  "version": "0.2.4",
+  "displayName": "Cypress Helper",
+  "description": "Extension for cypress.io testing tool",
   "main": "./src/extension",
   "repository": "https://github.com/90poe/vscode-cy-helper",
-  "author": "<oleksandr.shevtsov@90poe.io>",
+  "author": {
+    "name": "Oleksandr Shevtsov",
+    "email": "oleksandr.shevtsov@90poe.io"
+  },
   "license": "UNLICENSED",
   "private": true,
+  "icon": "assets/icon.png",
   "engines": {
     "vscode": "^1.37.0"
   },
