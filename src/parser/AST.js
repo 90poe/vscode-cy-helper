@@ -117,7 +117,9 @@ const parseRightPartOfArgument = right =>
     .when(right => right.type === 'ObjectExpression', () => 'object')
     .when(right => right.type === 'ArrayExpression', () => 'any[]')
     .default(right =>
-      _.has(right, 'value') ? `${typeof right.value}` : 'any'
+      _.has(right, 'value') && !_.isNil(right.value)
+        ? `${typeof right.value}`
+        : 'any'
     );
 
 /**
