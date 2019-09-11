@@ -1,2 +1,4 @@
 node_modules
 .DS_Store
+.scannerwork
+sonar-project.properties

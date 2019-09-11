@@ -20,11 +20,11 @@ const getCucumberStepsPath = () => {
     cucumberConfig = _.get(content, 'cypress-cucumber-preprocessor');
     return cucumberConfig;
   });
-  const stepDefinitionPath = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
+  const path = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
     ? 'cypress/integration'
     : _.get(cucumberConfig, 'step_definitions') ||
       'cypress/support/step_definitions';
-  return stepDefinitionPath;
+  return path;
 };
 
 const stepDefinitionPath = getCucumberStepsPath();
@@ -152,11 +152,7 @@ const composeUsageReport = () => {
     `${root}/${stepDefinitionPath}`
   );
   const stepsFromFeatures = parseFeatures();
-  return calculateUsage(
-    stepsFromFeatures,
-    stepDefinitionsParsed,
-    stepDefinitionPath
-  );
+  return calculateUsage(stepsFromFeatures, stepDefinitionsParsed);
 };
 
 module.exports = {

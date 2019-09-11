@@ -61,13 +61,13 @@ const showQuickPickMenu = (
   }
 };
 
-const show = (level, message, isModal = false) => {
+const show = (level, notification, isModal = false) => {
   const levels = ['Information', 'Warning', 'Error'];
   const method =
     levels.find(
       l => level.charAt(0).toLowerCase() === l.charAt(0).toLowerCase()
     ) || levels[0];
-  window[`show${method}Message`](message, {
+  window[`show${method}Message`](notification, {
     modal: isModal
   });
 };
