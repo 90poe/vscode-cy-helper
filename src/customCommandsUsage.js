@@ -13,28 +13,28 @@ const findCustomCommands = workspaceFiles => {
   const { commandsFound } = typeDefinitions(workspaceFiles, [], {
     includeLocationData: true
   });
-  const uniqueCommands = Array.from(
-    new Set(commandsFound.map(c => c.name))
-  ).map(name => {
-    const { path, loc } = commandsFound.find(c => c.name === name);
-    return {
-      name: name,
-      path: path,
-      loc: loc
-    };
-  });
+  const uniqueCommands = commandsFound
+    .map(c => c.name)
+    .map(name => {
+      const { path, loc } = commandsFound.find(c => c.name === name);
+      return {
+        name: name,
+        path: path,
+        loc: loc
+      };
+    });
   return uniqueCommands;
 };
 
 const findUnusedCustomCommands = () => {
   const workspaceFiles = readFilesFromDir(root);
   let uniqueCommands = findCustomCommands(workspaceFiles);
-  workspaceFiles.map(file => {
+  for (const file of workspaceFiles) {
     const content = fs.readFileSync(file.path, 'utf-8');
     uniqueCommands = uniqueCommands.filter(
       command => new RegExp(`\\.${command.name}\\(`, 'g').exec(content) === null
     );
-  });
+  }
   showQuickPickMenu(uniqueCommands, {
     mapperFunction: c => {
       return {
@@ -54,25 +54,26 @@ const findCustomCommandReferences = () => {
   const commandName = detectCustomCommand().replace(/['"`]/g, '');
   const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
   const workspaceFiles = readFilesFromDir(root);
-  const references = [];
-  workspaceFiles.map(file => {
-    const content = fs.readFileSync(file.path, 'utf-8').split('\n');
-    content.map((row, index) => {
-      const hasCommand = commandPattern.exec(row);
-      const column = row.indexOf(commandName);
-      if (hasCommand) {
-        references.push({
-          path: file.path,
-          loc: {
-            start: {
-              line: index + 1,
-              column: column
+  const references = _.flatten(
+    workspaceFiles.map(file => {
+      const content = fs.readFileSync(file.path, 'utf-8').split('\n');
+      return content.map((row, index) => {
+        const hasCommand = commandPattern.exec(row);
+        if (hasCommand) {
+          const column = row.indexOf(commandName);
+          return {
+            path: file.path,
+            loc: {
+              start: {
+                line: index + 1,
+                column: column
+              }
             }
-          }
-        });
-      }
-    });
-  });
+          };
+        }
+      });
+    })
+  ).filter(e => Boolean(e));
   showQuickPickMenu(references, {
     mapperFunction: c => {
       return {

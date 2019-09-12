@@ -210,7 +210,7 @@ const findCucumberStepDefinitions = body => {
  * @param {object} body
  */
 
-const defineCucumberTypeDefinition = body => {
+const findCucumberTypeDefinition = body => {
   return body.filter(
     statement =>
       _.get(statement, 'type') === 'ExpressionStatement' &&
@@ -226,19 +226,19 @@ const defineCucumberTypeDefinition = body => {
  */
 
 const findCucumberCustomTypes = path => {
-  const cucumberTypes = [];
+  let cucumberTypes = [];
   readFilesFromDir(path).find(file => {
     const AST = parseJS(file.path);
     if (AST) {
-      defineCucumberTypeDefinition(AST.program.body).map(type => {
+      cucumberTypes = findCucumberTypeDefinition(AST.program.body).map(type => {
         const { properties } = type.expression.arguments[0];
         const name = properties.find(p => p.key.name === 'name').value.value;
         const regexValue = properties.find(p => p.key.name === 'regexp').value
           .pattern;
-        cucumberTypes.push({
+        return {
           name: name,
           pattern: regexValue
-        });
+        };
       });
     }
     return cucumberTypes.length;
@@ -251,25 +251,24 @@ const findCucumberCustomTypes = path => {
  * @param {string} stepDefinitionPath - path with root
  */
 
-const parseStepDefinitions = stepDefinitionPath => {
-  let stepLiterals = [];
-  readFilesFromDir(stepDefinitionPath).map(file => {
-    const AST = parseJS(file.path);
-    findCucumberStepDefinitions(AST.program.body).map(step => {
-      const stepValue =
-        _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
-          ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
-          : _.get(step, 'expression.arguments.0.value');
-      stepLiterals.push({
-        [stepValue]: {
-          path: file.path,
-          loc: step.expression.arguments[0].loc.start
-        }
+const parseStepDefinitions = stepDefinitionPath =>
+  _.flatten(
+    readFilesFromDir(stepDefinitionPath).map(file => {
+      const AST = parseJS(file.path);
+      return findCucumberStepDefinitions(AST.program.body).map(step => {
+        const stepValue =
+          _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
+            ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
+            : _.get(step, 'expression.arguments.0.value');
+        return {
+          [stepValue]: {
+            path: file.path,
+            loc: step.expression.arguments[0].loc.start
+          }
+        };
       });
-    });
-  });
-  return stepLiterals;
-};
+    })
+  ).filter(e => Boolean(e));
 
 module.exports = {
   parseJS,
