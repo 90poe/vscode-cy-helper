@@ -13,16 +13,16 @@ const findCustomCommands = workspaceFiles => {
   const { commandsFound } = typeDefinitions(workspaceFiles, [], {
     includeLocationData: true
   });
-  const uniqueCommands = commandsFound
-    .map(c => c.name)
-    .map(name => {
-      const { path, loc } = commandsFound.find(c => c.name === name);
-      return {
-        name: name,
-        path: path,
-        loc: loc
-      };
-    });
+  const uniqueCommands = commandsFound.map(found => {
+    const { path, loc } = commandsFound.find(
+      command => command.name === found.name
+    );
+    return {
+      name: found.name,
+      path: path,
+      loc: loc
+    };
+  });
   return uniqueCommands;
 };
 
