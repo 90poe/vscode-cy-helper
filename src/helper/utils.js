@@ -85,26 +85,6 @@ const editDocument = (position, newText) => {
     });
 };
 
-const matched = x => ({
-  when: () => matched(x),
-  default: () => x
-});
-
-/**
- * Helper to replace switch statements with:
- * @example
-  match(10)
-  .when(x => x < 0, () => 0)
-  .when(x => x >= 0 && x <= 1, () => 1)
-  .default(x => x * 10)
-   => 100
- * @param {*} x
- */
-const match = x => ({
-  when: (pred, fn) => (pred(x) ? matched(fn(x)) : match(x)),
-  default: fn => fn(x)
-});
-
 module.exports = {
   readFilesFromDir,
   openDocument,
@@ -113,6 +93,5 @@ module.exports = {
   showQuickPickMenu,
   config,
   root,
-  show,
-  match
+  show
 };
