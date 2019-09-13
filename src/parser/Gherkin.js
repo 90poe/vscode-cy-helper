@@ -14,12 +14,14 @@ const getCucumberStepsPath = () => {
     name: 'package',
     extension: '.json'
   });
+
   let cucumberConfig;
   packages.find(p => {
     const content = JSON.parse(fs.readFileSync(p.path));
     cucumberConfig = _.get(content, 'cypress-cucumber-preprocessor');
     return cucumberConfig;
   });
+
   const path = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
     ? 'cypress/integration'
     : _.get(cucumberConfig, 'step_definitions') ||
@@ -28,6 +30,7 @@ const getCucumberStepsPath = () => {
 };
 
 const stepDefinitionPath = getCucumberStepsPath();
+
 const cucumberTypes = [
   {
     name: 'string',
@@ -48,7 +51,9 @@ const cucumberTypes = [
 ];
 
 const customTypes = findCucumberCustomTypes(`${root}/${stepDefinitionPath}`);
+
 const allTypes = [...cucumberTypes, ...customTypes];
+
 const allTypeRegexp = allTypes.map(({ name, pattern }) => {
   return {
     name: name,
@@ -69,9 +74,11 @@ const PATTERN = type => {
  */
 const prepareRegexpForLiteral = literal => {
   let basicTypesLiteral = `^${literal.replace(/\//g, '|')}$`;
+
   allTypeRegexp.map(({ pattern, replace }) => {
     basicTypesLiteral = basicTypesLiteral.replace(replace, PATTERN(pattern));
   });
+
   const stepDefinitionRegexp = new RegExp(basicTypesLiteral, 'g') || null;
   return stepDefinitionRegexp;
 };
@@ -123,14 +130,18 @@ const calculateUsage = (features, stepDefinitions) =>
   stepDefinitions.map(step => {
     const literal = Object.keys(step)[0];
     const { path, loc } = step[literal];
+
     const hasNoTypes = !literal.includes('{') && !literal.includes('}');
     const isStepRegexp = parseRegexp(literal);
     const literalRegexp = isStepRegexp || prepareRegexpForLiteral(literal);
+
     const usage =
       hasNoTypes && !isStepRegexp
         ? features.filter(s => s.step === literal)
         : features.filter(s => literalRegexp.exec(s.step) !== null);
+
     const matches = usage.length;
+
     return {
       step: literal,
       matches: matches,

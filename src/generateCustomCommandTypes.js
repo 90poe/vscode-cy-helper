@@ -62,27 +62,31 @@ const cleanCommands = (incorrect, available) => {
 };
 
 exports.generateCustomCommandTypes = () => {
-  const [folder, excludes, typeDefFile] = [
-    `${root}/${customCommandsFolder}`,
-    typeDefinitionExcludePatterns,
-    `${root}/${typeDefinitionFile}`
-  ];
+  const folder = `${root}/${customCommandsFolder}`;
+  const excludes = typeDefinitionExcludePatterns;
+  const typeDefFile = `${root}/${typeDefinitionFile}`;
+
   const customCommandFiles = readFilesFromDir(folder);
   let { commandsFound, typeDefs } = typeDefinitions(
     customCommandFiles,
     excludes
   );
+
   const availableTypeDefinitions = customCommandsAvailable(typeDefFile);
+
   let uniqueCommands = _.uniq(commandsFound);
   const incorrectCommands = uniqueCommands.filter(c => c.includes('-'));
+
   if (incorrectCommands.length) {
     show('err', message.INVALID_SYNTAX(incorrectCommands), true);
     typeDefs = cleanTypes(incorrectCommands, typeDefs);
     commandsFound = cleanCommands(incorrectCommands, commandsFound);
     uniqueCommands = cleanCommands(incorrectCommands, uniqueCommands);
   }
+
   if (commandsFound.length === uniqueCommands.length) {
     writeTypeDefinition(typeDefFile, typeDefs);
+
     if (typeDefs.length) {
       show('info', message.NO_COMMAND_DUPLICATES);
     } else {
@@ -93,12 +97,16 @@ exports.generateCustomCommandTypes = () => {
       _.filter(commandsFound, (v, i, a) => a.indexOf(v) !== i)
     );
     show('err', message.DUPLICATED_COMMANDS(duplicates), true);
+
     typeDefs = cleanTypes(duplicates, typeDefs);
     commandsFound = cleanCommands(duplicates, commandsFound);
+
     writeTypeDefinition(typeDefFile, typeDefs);
   }
+
   const added = _.difference(commandsFound, availableTypeDefinitions);
   const removed = _.difference(availableTypeDefinitions, commandsFound);
+
   added.length && show('info', message.NEW_COMMANDS(added), true);
   removed.length && show('info', message.REMOVED_COMMANDS(removed), true);
 };

@@ -29,12 +29,14 @@ const findCustomCommands = workspaceFiles => {
 const findUnusedCustomCommands = () => {
   const workspaceFiles = readFilesFromDir(root);
   let uniqueCommands = findCustomCommands(workspaceFiles);
+
   for (const file of workspaceFiles) {
     const content = fs.readFileSync(file.path, 'utf-8');
     uniqueCommands = uniqueCommands.filter(
       command => new RegExp(`\\.${command.name}\\(`, 'g').exec(content) === null
     );
   }
+
   showQuickPickMenu(uniqueCommands, {
     mapperFunction: c => {
       return {
@@ -54,6 +56,7 @@ const findCustomCommandReferences = () => {
   const commandName = detectCustomCommand().replace(/['"`]/g, '');
   const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
   const workspaceFiles = readFilesFromDir(root);
+
   const references = _.flatten(
     workspaceFiles.map(file => {
       const content = fs.readFileSync(file.path, 'utf-8').split('\n');
@@ -74,6 +77,7 @@ const findCustomCommandReferences = () => {
       });
     })
   ).filter(e => Boolean(e));
+
   showQuickPickMenu(references, {
     mapperFunction: c => {
       return {

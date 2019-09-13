@@ -6,6 +6,11 @@ const { message } = require('./constants');
 const root = workspace.workspaceFolders[0].uri.fsPath;
 const config = workspace.getConfiguration().cypressHelper;
 
+/**
+ * Read files recursively from directory
+ * @param {string} folder
+ * @param {object} opts
+ */
 const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
   klawSync(folder, {
     traverseAll: true,
@@ -15,12 +20,21 @@ const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
       path.endsWith(`${opts.name || ''}${opts.extension || ''}`)
   }) || [];
 
+/**
+ * Open document in vscode
+ * @param {*} path
+ */
 const openDocument = path => {
   return workspace.openTextDocument(path).then(doc => {
     return window.showTextDocument(doc, { preview: false });
   });
 };
 
+/**
+ * Open document and set cursor to position
+ * @param {*} path
+ * @param {*} position
+ */
 const openDocumentAtPosition = (path, position) => {
   openDocument(path).then(doc => {
     const { line, column } = position;
@@ -31,6 +45,11 @@ const openDocumentAtPosition = (path, position) => {
   });
 };
 
+/**
+ * Show vscode quick pick menu
+ * @param {*} array
+ * @param {*} opts
+ */
 const showQuickPickMenu = (
   array,
   opts = {
@@ -47,10 +66,12 @@ const showQuickPickMenu = (
 ) => {
   if (array.length) {
     const quickPickList = array.map(opts.mapperFunction);
+
     quickPickList.unshift({
       label: '',
       description: opts.header
     });
+
     window
       .showQuickPick(quickPickList)
       .then(({ data }) =>
@@ -61,6 +82,12 @@ const showQuickPickMenu = (
   }
 };
 
+/**
+ * Show user notification
+ * @param {string} level - info | warn | err
+ * @param {string} notification - message
+ * @param {boolean} isModal - show window with confirmation
+ */
 const show = (level, notification, isModal = false) => {
   const levels = ['Information', 'Warning', 'Error'];
   const method =
@@ -72,6 +99,11 @@ const show = (level, notification, isModal = false) => {
   });
 };
 
+/**
+ * Edit document at position
+ * @param {*} position
+ * @param {*} newText
+ */
 const editDocument = (position, newText) => {
   const editor = window.activeTextEditor;
   editor

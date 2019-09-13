@@ -44,6 +44,7 @@ const findClosestRange = (indexedMatches, target) => {
 const detectCustomCommand = () => {
   const editor = window.activeTextEditor;
   let commandName;
+
   if (editor.selection.start.character === editor.selection.end.character) {
     const { text: line } = editor.document.lineAt(editor.selection.active.line);
     const declarationExpression =
@@ -51,6 +52,7 @@ const detectCustomCommand = () => {
       line.endsWith("',") ||
       line.endsWith('",');
     const implementationExpression = line.includes('.') && line.includes('(');
+
     let pattern;
     if (declarationExpression) {
       pattern = regexp.COMMAND_DECLARATION;
@@ -59,10 +61,13 @@ const detectCustomCommand = () => {
     } else {
       pattern = regexp.TS_DEFINITION;
     }
+
     const match = line.match(pattern);
     !match && show('err', message.NO_COMMAND);
+
     const matches = _.flatten(match.map(() => pattern.exec(line).pop()));
     const selectionIndex = editor.selection.start.character;
+
     const indexedMatches = matches.map(m => {
       const index = line.indexOf(m);
       return {
@@ -71,9 +76,11 @@ const detectCustomCommand = () => {
         match: m
       };
     });
+
     const closest =
       findOverlap(indexedMatches, selectionIndex) ||
       findClosestRange(indexedMatches, selectionIndex);
+
     !closest && show('err', message.NO_COMMAND);
     commandName = closest.match.trim();
   } else {

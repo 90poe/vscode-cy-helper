@@ -9,26 +9,30 @@ const removeTags = terminal => {
     if (!terminal.disposed) {
       disposeTerminal();
     }
+
     const editor = window.activeTextEditor;
     const fullText = editor.document.getText().split('\n');
-    const testRows = fullText
-      .map((line, row) => {
+
+    const testIndexes = fullText
+      .map((line, index) => {
         if (
           line.trim().startsWith(FOCUS_TAG) ||
           line.trim().includes(ONLY_BLOCK)
         ) {
-          return row;
+          return index;
         }
       })
       .filter(e => Boolean(e));
+
     const newTexts = [];
-    const markAsOnly = testRows.map(row => {
-      const { text, range } = editor.document.lineAt(row);
+    const testLocation = testIndexes.map(index => {
+      const { text, range } = editor.document.lineAt(index);
       const newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
       newTexts.push(newText);
       return range;
     });
-    editDocument(markAsOnly, newTexts);
+
+    editDocument(testLocation, newTexts);
   }
 };
 
@@ -44,15 +48,13 @@ const disposeTerminal = () => {
 };
 
 const getTerminal = () => {
-  if (_activeTerminal) {
-    _activeTerminal.reused = true;
-  } else {
+  if (!_activeTerminal) {
     createTerminal();
   }
   return _activeTerminal;
 };
 
 module.exports = {
-  getTerminal: getTerminal,
-  removeTags: removeTags
+  getTerminal,
+  removeTags
 };
