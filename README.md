@@ -1,12 +1,5 @@
 # vscode-cy-helper
-Cypress extension for vs code  
-## Installation
-* Download file `vscode-cy-helper-{version}.vsix` from this repository
-* Open VS Code extensions menu
-* In up right corner with 3 dots menu find option `install from VSIX`
-* Select file downloaded vsix file  
-
-![](./assets/install.gif)
+Cypress extension for vs code
 
 ## Configuration
 

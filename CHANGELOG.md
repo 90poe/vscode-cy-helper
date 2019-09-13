@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.5] - 2019-09-13
+### Changed
+ - codebase improvements
+
 ## [0.2.4] - 2019-09-09
 ### Added
  - extension logo and description
@@ -16,6 +20,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
  recognized as object
 
 ## [0.2.2] - 2019-09-06
+### Changed
+ - codebase improvements
 
 ## [0.2.1] - 2019-09-04
 ### Added
@@ -26,6 +32,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Support custom cucumber types created with `defineParameterType`
 
 ## [0.1.9] - 2019-09-04
+### Changed
+ - codebase improvements
 
 ## [0.1.8] - 2019-09-04
 ### Changed
@@ -61,7 +69,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - use glob pattern for excludes from custom commands search
 
-## [0.1.0] - 2019-08-27 
+## [0.1.0] - 2019-08-27
+### Changed
+ - codebase improvements 
 
 ## [0.0.9] - 2019-08-23
 ### Added
@@ -89,8 +99,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - conditions for showing menu items for commands
 
 ## [0.0.3] - 2019-08-22
+### Changed
+ - codebase improvements
 
 ## [0.0.2] - 2019-08-21
+### Changed
+ - codebase improvements
 
 ## [0.0.1] - 2019-08-21
 ### Added
