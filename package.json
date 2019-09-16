@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.2.5",
+	"version": "0.2.6",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -74,31 +74,32 @@
 		"menus": {
 			"editor/context": [
 				{
-					"when": "resourceLangId == feature || resourceLangId == javascript",
+					"when": "resourceLangId =~ /(feature|javascript)/ && config.cypressHelper.menuItems.OpenSpecFile",
 					"command": "cypressHelper.openSpecFile",
 					"group": "Cypress"
 				},
 				{
-					"when": "resourceLangId == feature || resourceLangId == javascript",
+					"when": "resourceLangId =~ /(feature|javascript)/ && config.cypressHelper.menuItems.OpenSingleTest",
 					"command": "cypressHelper.openSingleTest",
 					"group": "Cypress"
 				},
 				{
-					"when": "resourceLangId == javascript || resourceLangId == typescript",
+					"when": "resourceLangId =~ /(typescript|javascript)/ && config.cypressHelper.menuItems.GoToCustomCommand",
 					"command": "cypressHelper.openCustomCommand",
 					"group": "navigation"
 				},
 				{
-					"when": "resourceLangId == javascript",
+					"when": "resourceLangId == 'javascript' && config.cypressHelper.menuItems.FindStepDefinitionReferences",
 					"command": "cypressHelper.findCucumberStepUsage",
 					"group": "navigation@2"
 				},
 				{
-					"when": "resourceLangId == javascript",
+					"when": "resourceLangId == 'javascript' && config.cypressHelper.menuItems.FindCustomCommandReferences",
 					"command": "cypressHelper.findCustomCommandReferences",
 					"group": "navigation@2"
 				},
 				{
+					"when": "config.cypressHelper.menuItems.GenerateCustomCommandTypes",
 					"command": "cypressHelper.generateCustomCommandTypes",
 					"group": "z_commands"
 				}
@@ -130,6 +131,47 @@
 					"description": "Specify glob patterns to exclude some custom commands search",
 					"items": {
 						"type": "string"
+					}
+				},
+				"cypressHelper.menuItems": {
+					"type": "object",
+					"default": {
+						"OpenSingleTest": true,
+						"OpenSpecFile": true,
+						"GenerateCustomCommandTypes": true,
+						"GoToCustomCommand": true,
+						"FindCustomCommandReferences": true,
+						"FindStepDefinitionReferences": true
+					},
+					"description": "display menu items for commands",
+					"items": {
+						"type": "object",
+						"properties": {
+							"OpenSingleTest": {
+								"type": "boolean",
+								"default": true
+							},
+							"OpenSpecFile": {
+								"type": "boolean",
+								"default": true
+							},
+							"GenerateCustomCommandTypes": {
+								"type": "boolean",
+								"default": true
+							},
+							"GoToCustomCommand": {
+								"type": "boolean",
+								"default": true
+							},
+							"FindCustomCommandReferences": {
+								"type": "boolean",
+								"default": true
+							},
+							"FindStepDefinitionReferences": {
+								"type": "boolean",
+								"default": true
+							}
+						}
 					}
 				}
 			}

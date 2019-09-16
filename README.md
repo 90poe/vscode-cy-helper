@@ -8,7 +8,8 @@ Cypress extension for vs code
 | `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
 | `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
 | `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
-| `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |    
+| `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
+| `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"OpenSingleTest": true,`<br/> `"OpenSpecFile": true,` <br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 
 ## Available commands or menu items
 * [Go to cypress custom command definition](#1-open-cypress-custom-command-definition)
