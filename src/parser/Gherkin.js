@@ -87,24 +87,23 @@ const prepareRegexpForLiteral = literal => {
  * Read all feature files and return where steps used
  */
 const parseFeatures = () =>
-  _.flatten(
+  _.flatMap(
     readFilesFromDir(root, {
       extension: '.feature'
-    }).map(file => {
+    }),
+    file => {
       const { feature } = GherkinParser.parse(
         fs.readFileSync(file.path, 'utf-8')
       );
-      return _.flatten(
-        feature.children.map(child =>
-          child.steps.map(step => ({
-            step: step.text.replace(/\\/g, ''),
-            loc: step.location,
-            path: file.path
-          }))
-        )
+      return _.flatMap(feature.children, child =>
+        child.steps.map(step => ({
+          step: step.text.replace(/\\/g, ''),
+          loc: step.location,
+          path: file.path
+        }))
       );
-    })
-  ).filter(e => Boolean(e));
+    }
+  ).filter(_.identity);
 
 /**
  * try parsing step definition and return regexp or null

@@ -65,7 +65,7 @@ const detectCustomCommand = () => {
     const match = line.match(pattern);
     !match && show('err', message.NO_COMMAND);
 
-    const matches = _.flatten(match.map(() => pattern.exec(line).pop()));
+    const matches = _.flatMap(match, () => pattern.exec(line).pop());
     const selectionIndex = editor.selection.start.character;
 
     const indexedMatches = matches.map(m => {

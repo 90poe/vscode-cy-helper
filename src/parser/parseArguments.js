@@ -7,22 +7,19 @@
  *  @param {*[]} commandArguments
  */
 const parseArguments = commandArguments =>
-  _.flatten(
-    _.tail(commandArguments).map(arg =>
-      match(arg)
-        .when(
-          () => arg.type === 'ObjectExpression',
-          () => `${arg.properties[0].key.name}: any`
-        )
-        .when(
-          () =>
-            ['FunctionExpression', 'ArrowFunctionExpression'].includes(
-              arg.type
-            ),
-          () => parseFnParams(arg.params)
-        )
-        .default(() => `${arg.value}: any`)
-    )
+  _.flatMap(_.tail(commandArguments), arg =>
+    match(arg)
+      .when(
+        () => arg.type === 'ObjectExpression',
+        () => `${arg.properties[0].key.name}: any`
+      )
+      .when(
+        () =>
+          arg.type === 'FunctionExpression' ||
+          arg.type === 'ArrowFunctionExpression',
+        () => parseFnParams(arg.params)
+      )
+      .default(() => `${arg.value}: any`)
   );
 
 /**

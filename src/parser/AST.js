@@ -44,15 +44,13 @@ const customCommandsAvailable = file => {
     const commands = fileContent
       .split('\n')
       .map(row => regexp.TS_DEFINITION.exec(row));
-    return commands
-      .filter(c => c !== null)
-      .map(item =>
-        item
-          .pop()
-          .split('(')
-          .shift()
-          .trim()
-      );
+    return commands.filter(_.identity).map(item =>
+      item
+        .pop()
+        .split('(')
+        .shift()
+        .trim()
+    );
   } catch (e) {
     return [];
   }
@@ -80,7 +78,7 @@ const cypressCommandLocation = (folder, targetCommand) => {
         }
       }
     })
-    .filter(x => Boolean(x));
+    .filter(_.identity);
   return location[0] || null;
 };
 
@@ -94,32 +92,31 @@ const typeDefinitions = (
   options = { includeLocationData: false }
 ) => {
   let commandsFound = [];
-  const typeDefs = _.flatten(
-    files
-      .filter(({ path }) => excludes.every(s => !minimatch(path, s)))
-      .map(file => {
-        const AST = parseJS(file.path);
-        if (AST) {
-          const commands = findCypressCommandAddStatements(AST.program.body);
-          const typeDefBody = commands.map(command => {
-            const { value: commandName, loc } = command.expression.arguments[0];
-            commandsFound.push(
-              options.includeLocationData
-                ? {
-                    name: commandName,
-                    path: file.path,
-                    loc: loc
-                  }
-                : commandName
-            );
-            const argsArray = parseArguments(command.expression.arguments);
-            return `${commandName}(${argsArray.join(', ')}): Chainable<any>`;
-          });
-          return typeDefBody;
-        }
-      })
-      .filter(e => !_.isUndefined(e))
+  const suitableFiles = files.filter(({ path }) =>
+    excludes.every(s => !minimatch(path, s))
   );
+
+  const typeDefs = _.flatMap(suitableFiles, file => {
+    const AST = parseJS(file.path);
+    if (AST) {
+      const commands = findCypressCommandAddStatements(AST.program.body);
+      const typeDefBody = commands.map(command => {
+        const { value: commandName, loc } = command.expression.arguments[0];
+        commandsFound.push(
+          options.includeLocationData
+            ? {
+                name: commandName,
+                path: file.path,
+                loc: loc
+              }
+            : commandName
+        );
+        const argsArray = parseArguments(command.expression.arguments);
+        return `${commandName}(${argsArray.join(', ')}): Chainable<any>`;
+      });
+      return typeDefBody;
+    }
+  }).filter(_.identity);
   return {
     commandsFound: commandsFound,
     typeDefs: typeDefs
@@ -188,23 +185,21 @@ const findCucumberCustomTypes = path => {
  */
 
 const parseStepDefinitions = stepDefinitionPath =>
-  _.flatten(
-    readFilesFromDir(stepDefinitionPath).map(file => {
-      const AST = parseJS(file.path);
-      return findCucumberStepDefinitions(AST.program.body).map(step => {
-        const stepValue =
-          _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
-            ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
-            : _.get(step, 'expression.arguments.0.value');
-        return {
-          [stepValue]: {
-            path: file.path,
-            loc: step.expression.arguments[0].loc.start
-          }
-        };
-      });
-    })
-  ).filter(e => Boolean(e));
+  _.flatMap(readFilesFromDir(stepDefinitionPath), file => {
+    const AST = parseJS(file.path);
+    return findCucumberStepDefinitions(AST.program.body).map(step => {
+      const stepValue =
+        _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
+          ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
+          : _.get(step, 'expression.arguments.0.value');
+      return {
+        [stepValue]: {
+          path: file.path,
+          loc: step.expression.arguments[0].loc.start
+        }
+      };
+    });
+  }).filter(_.identity);
 
 module.exports = {
   parseJS,

@@ -22,7 +22,7 @@ const removeTags = terminal => {
           return index;
         }
       })
-      .filter(e => Boolean(e));
+      .filter(_.identity);
 
     const newTexts = [];
     const testLocation = testIndexes.map(index => {

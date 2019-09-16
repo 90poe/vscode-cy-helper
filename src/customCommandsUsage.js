@@ -57,26 +57,24 @@ const findCustomCommandReferences = () => {
   const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
   const workspaceFiles = readFilesFromDir(root);
 
-  const references = _.flatten(
-    workspaceFiles.map(file => {
-      const content = fs.readFileSync(file.path, 'utf-8').split('\n');
-      return content.map((row, index) => {
-        const hasCommand = commandPattern.exec(row);
-        if (hasCommand) {
-          const column = row.indexOf(commandName);
-          return {
-            path: file.path,
-            loc: {
-              start: {
-                line: index + 1,
-                column: column
-              }
+  const references = _.flatMap(workspaceFiles, file => {
+    const content = fs.readFileSync(file.path, 'utf-8').split('\n');
+    return content.map((row, index) => {
+      const hasCommand = commandPattern.exec(row);
+      if (hasCommand) {
+        const column = row.indexOf(commandName);
+        return {
+          path: file.path,
+          loc: {
+            start: {
+              line: index + 1,
+              column: column
             }
-          };
-        }
-      });
-    })
-  ).filter(e => Boolean(e));
+          }
+        };
+      }
+    });
+  }).filter(_.identity);
 
   showQuickPickMenu(references, {
     mapperFunction: c => {
