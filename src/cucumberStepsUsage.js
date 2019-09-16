@@ -23,8 +23,8 @@ const findUnusedCucumberSteps = () => {
         data: c
       };
     },
-    header: `Found ${unused.length} not used Step Definitions:`,
-    notFoundMessage: 'All step definitions are used'
+    header: message.UNUSED_STEPS_FOUND(unused.length),
+    notFoundMessage: message.UNUSED_STEPS_NOT_FOUND
   });
 };
 
@@ -37,11 +37,11 @@ const findCucumberStepUsage = () => {
   );
 
   const stepDefinitionPattern = regexp.STEP_DEFINITION;
-  const stepLiteralMatch = line.match(stepDefinitionPattern);
+  const stepLiteralMatch = line.replace('/', '|').match(stepDefinitionPattern);
 
   !stepLiteralMatch && show('warn', message.NO_STEP);
 
-  const stepLiteral = stepLiteralMatch[0].replace(/['"`]/g, '');
+  const stepLiteral = stepLiteralMatch[0].replace(regexp.QUOTES, '');
   const stepDefinition = [
     {
       [stepLiteral]: {
@@ -63,8 +63,8 @@ const findCucumberStepUsage = () => {
         data: c
       };
     },
-    header: `Found ${usages.length} usages of step: "${stepLiteral}":`,
-    notFoundMessage: `Not found usage for step: "${stepLiteral}"`
+    header: message.REFERENCE_STEPS_FOUND(usages.length, stepLiteral),
+    notFoundMessage: message.REFERECE_STEPS_NOT_FOUND(stepLiteral)
   });
 };
 

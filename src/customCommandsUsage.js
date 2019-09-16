@@ -6,6 +6,7 @@ const {
   config,
   root
 } = require('./helper/utils');
+const { message, regexp } = require('./helper/constants');
 const { detectCustomCommand } = require('./openCustomCommand');
 const { customCommandsFolder } = config;
 
@@ -47,13 +48,13 @@ const findUnusedCustomCommands = () => {
         data: c
       };
     },
-    header: `Found ${uniqueCommands.length} not used Cypress custom commands:`,
-    notFoundMessage: 'No unused Cypress custom commands found'
+    header: message.UNUSED_COMMANDS_FOUND(uniqueCommands.length),
+    notFoundMessage: message.UNUSED_COMMANDS_NOT_FOUND
   });
 };
 
 const findCustomCommandReferences = () => {
-  const commandName = detectCustomCommand().replace(/['"`]/g, '');
+  const commandName = detectCustomCommand().replace(regexp.QUOTES, '');
   const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
   const workspaceFiles = readFilesFromDir(root);
 
@@ -83,8 +84,8 @@ const findCustomCommandReferences = () => {
         data: c
       };
     },
-    header: `Found ${references.length} usages of command "${commandName}":`,
-    notFoundMessage: `No references found for: "${commandName}"`
+    header: message.REFERENCE_COMMAND_FOUND(references.length, commandName),
+    notFoundMessage: message.REFERENCE_NOT_FOUND(commandName)
   });
 };
 
