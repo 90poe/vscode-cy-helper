@@ -9,7 +9,7 @@
 		"name": "Oleksandr Shevtsov",
 		"email": "oleksandr.shevtsov@90poe.io"
 	},
-	"license": "UNLICENSED",
+	"license": "MIT",
 	"private": true,
 	"icon": "assets/icon.png",
 	"engines": {
