@@ -56,9 +56,9 @@ yarn install
 
 Make sure you can run the tests.
 
-```bash
-yarn test
-```
+ - Open Vs Code debugger
+ - Select `Extension Tests`
+ - Check Debug Console for results
 
 #### 3. Find a feature to work on
 
