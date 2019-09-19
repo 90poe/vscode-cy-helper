@@ -1,0 +1,17 @@
+ ____ ___  _ ____  ____  _____ ____  ____    _     _____ _     ____  _____ ____ 
+/   _\\  \///  __\/  __\/  __// ___\/ ___\  / \ /|/  __// \   /  __\/  __//  __\
+|  /   \  / |  \/||  \/||  \  |    \|    \  | |_|||  \  | |   |  \/||  \  |  \/|
+|  \__ / /  |  __/|    /|  /_ \___ |\___ |  | | |||  /_ | |_/\|  __/|  /_ |    /
+\____//_/   \_/   \_/\_\\____\\____/\____/  \_/ \|\____\\____/\_/   \____\\_/\_\
+                                                                                
+
+/* Humans */
+oleksandr        @Shelex     maintainer
+
+/* Organizations */
+90poe       https://www.openocean.studio/
+
+/* Thanks */
+Thanks to 90poe for giving birth to this project and allowing it to be open sourced.
+
+Also, thanks to all contributors and users (assuming there are more) of connectctl.
