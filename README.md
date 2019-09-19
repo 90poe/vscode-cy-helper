@@ -57,3 +57,8 @@ From menu select `Cypress: Get custom command references`
 From menu select `Cypress: Get step definition references`
 
 ![](./assets/stepDefinitionReference.gif)
+
+## License
+
+Copyright 2019 90poe.  This project is licensed under the Apache 2.0 License.  
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
