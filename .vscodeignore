@@ -1,3 +1,5 @@
 assets/**.gif
 .gitignore
 **/.eslintrc.json
+.vscode-test
+test

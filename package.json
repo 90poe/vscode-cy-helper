@@ -181,14 +181,19 @@
 	},
 	"devDependencies": {
 		"@types/fs-extra": "^8.0.0",
+		"@types/glob": "^7.1.1",
 		"@types/klaw-sync": "^6.0.0",
 		"@types/lodash": "^4.14.138",
+		"@types/mocha": "^5.2.7",
 		"@types/node": "^10.12.21",
 		"@types/vscode": "^1.38.0",
 		"eslint": "^5.13.0",
 		"eslint-config-prettier": "^6.1.0",
 		"eslint-plugin-prettier": "^3.1.0",
-		"prettier": "^1.18.2"
+		"glob": "^7.1.4",
+		"mocha": "^6.2.0",
+		"prettier": "^1.18.2",
+		"vscode-test": "^1.2.0"
 	},
 	"dependencies": {
 		"@babel/parser": "^7.5.5",
