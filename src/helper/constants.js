@@ -47,7 +47,8 @@ module.exports = {
     COMMAND_DECLARATION: /['"`].*?['"`]/g,
     COMMAND_USAGE: /\.(.*?)\(/g,
     QUOTES: /['"`]/g
-  }
+  },
+  SPACE: '\n        '
 };
 
 const toString = subject => subject.join('\n');

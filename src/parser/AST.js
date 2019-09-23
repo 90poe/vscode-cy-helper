@@ -3,7 +3,7 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const minimatch = require('minimatch');
 const { readFilesFromDir } = require('../helper/utils');
-const { CUCUMBER_KEYWORDS, regexp } = require('../helper/constants');
+const { CUCUMBER_KEYWORDS, SPACE, regexp } = require('../helper/constants');
 const { parseArguments } = require('./parseArguments');
 
 /**
@@ -89,7 +89,7 @@ const cypressCommandLocation = (folder, targetCommand) => {
 const typeDefinitions = (
   files,
   excludes,
-  options = { includeLocationData: false }
+  options = { includeLocationData: false, includeAnnotations: false }
 ) => {
   let commandsFound = [];
   const suitableFiles = files.filter(({ path }) =>
@@ -111,8 +111,23 @@ const typeDefinitions = (
               }
             : commandName
         );
+
+        let annotation = '';
+        if (options.includeAnnotations) {
+          const commentBlock = _.chain(command)
+            .get('leadingComments', [null])
+            .last()
+            .value();
+          const comments = commentBlock ? _.get(commentBlock, 'value') : null;
+          annotation = comments
+            ? `/*${comments.split('\n').join(SPACE)}*/${SPACE}`
+            : null;
+        }
+
         const argsArray = parseArguments(command.expression.arguments);
-        return `${commandName}(${argsArray.join(', ')}): Chainable<any>`;
+        return `${annotation || ''}${commandName}(${argsArray.join(
+          ', '
+        )}): Chainable<any>`;
       });
       return typeDefBody;
     }

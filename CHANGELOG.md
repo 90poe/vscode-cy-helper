@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.8] - 2019-09-23
+### Added
+ - possibility to add annotations for custom command type definitions
+### Changed
+ - codebase refactoring
+
 ## [0.2.7] - 2019-09-19
 ### Added
  - license
