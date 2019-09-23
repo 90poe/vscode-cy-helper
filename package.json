@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.2.7",
+	"version": "0.2.8",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -134,6 +134,11 @@
 					"items": {
 						"type": "string"
 					}
+				},
+				"cypressHelper.includeAnnotationForCommands":{
+					"type": "boolean",
+					"default": false,
+					"description": "Include comments before custom command to type definition file"
 				},
 				"cypressHelper.menuItems": {
 					"type": "object",

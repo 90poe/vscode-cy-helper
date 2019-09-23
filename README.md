@@ -9,6 +9,7 @@ Cypress extension for vs code
 | `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
 | `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
 | `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
+| `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
 | `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"OpenSingleTest": true,`<br/> `"OpenSpecFile": true,` <br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 
 ## Available commands or menu items

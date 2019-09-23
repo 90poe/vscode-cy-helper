@@ -5,11 +5,12 @@ const vscode = new VS();
 const { typeDefinitions, customCommandsAvailable } = require('./parser/AST');
 const { readFilesFromDir } = require('./helper/utils');
 const root = vscode.root();
-const { message } = require('./helper/constants');
+const { message, SPACE } = require('./helper/constants');
 const {
   customCommandsFolder,
   typeDefinitionFile,
-  typeDefinitionExcludePatterns
+  typeDefinitionExcludePatterns,
+  includeAnnotationForCommands
 } = vscode.config();
 
 /**
@@ -17,7 +18,7 @@ const {
  */
 const wrapTemplate = commands => `declare namespace Cypress {
     interface Chainable<Subject> {
-        ${commands.join('\n        ')}
+        ${commands.join(SPACE)}
   }
 }`;
 
@@ -66,7 +67,8 @@ exports.generateCustomCommandTypes = () => {
   const customCommandFiles = readFilesFromDir(folder);
   let { commandsFound, typeDefs } = typeDefinitions(
     customCommandFiles,
-    excludes
+    excludes,
+    { includeAnnotations: includeAnnotationForCommands }
   );
 
   const availableTypeDefinitions = customCommandsAvailable(typeDefFile);
