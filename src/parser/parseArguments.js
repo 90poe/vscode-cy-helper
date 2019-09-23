@@ -1,3 +1,5 @@
+const _ = require('lodash');
+
 /**
  *  - Parse arguments of custom command
  *  - Cypress.Commands.Add('command', () => {})

@@ -1,6 +1,6 @@
-const { window, Position } = require('vscode');
+const VS = require('./helper/vscodeWrapper');
+const vscode = new VS();
 const { openSpecFile } = require('./openSpecFile');
-const { show, editDocument } = require('./helper/utils');
 const {
   message,
   FOCUS_TAG,
@@ -11,7 +11,7 @@ const {
 } = require('./helper/constants');
 
 exports.openSingleTest = () => {
-  const editor = window.activeTextEditor;
+  const editor = vscode.activeTextEditor();
   const cucumberPreprocessorUsed = editor.document.languageId === 'feature';
 
   const line = editor.document.lineAt(editor.selection.active.line);
@@ -35,7 +35,7 @@ exports.openSingleTest = () => {
       return lineNumber >= scenarioIndex && lineNumber <= nextLine;
     }
   );
-  !selectedScenarioIndex && show('err', message.NO_TEST);
+  !selectedScenarioIndex && vscode.show('err', message.NO_TEST);
 
   if (cucumberPreprocessorUsed) {
     // for gherkin set tag @focus on previous line to execute one test
@@ -43,7 +43,10 @@ exports.openSingleTest = () => {
       selectedScenarioIndex - 1
     );
     if (!previousLineText.includes(FOCUS_TAG)) {
-      editDocument(new Position(selectedScenarioIndex - 1, 0), FOCUS_TAG);
+      vscode.editDocument(
+        vscode.Position(selectedScenarioIndex - 1, 0),
+        FOCUS_TAG
+      );
     }
   } else {
     // for javascript mocha syntax it.only() is required
@@ -52,10 +55,10 @@ exports.openSingleTest = () => {
     const indexOfTest = text.indexOf(TEST_BLOCK);
     const indexOfOnly = text.indexOf(TEST_ONLY_BLOCK);
 
-    !indexOfTest && !indexOfOnly && show('err', message.NO_TEST);
+    !indexOfTest && !indexOfOnly && vscode.show('err', message.NO_TEST);
 
     const newText = text.replace(TEST_BLOCK, `it${ONLY_BLOCK}(`);
-    editDocument(range, newText);
+    vscode.editDocument(range, newText);
   }
   openSpecFile();
 };

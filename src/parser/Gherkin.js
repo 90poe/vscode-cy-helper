@@ -2,8 +2,11 @@ const fs = require('fs-extra');
 const _ = require('lodash');
 const Gherkin = require('gherkin');
 const GherkinParser = new Gherkin.Parser();
+const VS = require('../helper/vscodeWrapper');
+const vscode = new VS();
 const { parseStepDefinitions, findCucumberCustomTypes } = require('./AST');
-const { readFilesFromDir, root } = require('../helper/utils');
+const { readFilesFromDir } = require('../helper/utils');
+const root = vscode.root();
 
 /**
  *  Find where cucumber step definitions are stored
