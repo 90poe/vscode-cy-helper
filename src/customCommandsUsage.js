@@ -1,14 +1,13 @@
 const fs = require('fs-extra');
+const _ = require('lodash');
+const VS = require('./helper/vscodeWrapper');
+const vscode = new VS();
 const { typeDefinitions } = require('./parser/AST');
-const {
-  showQuickPickMenu,
-  readFilesFromDir,
-  config,
-  root
-} = require('./helper/utils');
+const { readFilesFromDir } = require('./helper/utils');
 const { message, regexp } = require('./helper/constants');
 const { detectCustomCommand } = require('./openCustomCommand');
-const { customCommandsFolder } = config;
+const { customCommandsFolder } = vscode.config();
+const root = vscode.root();
 
 const findCustomCommands = workspaceFiles => {
   const { commandsFound } = typeDefinitions(workspaceFiles, [], {
@@ -38,7 +37,7 @@ const findUnusedCustomCommands = () => {
     );
   }
 
-  showQuickPickMenu(uniqueCommands, {
+  vscode.showQuickPickMenu(uniqueCommands, {
     mapperFunction: c => {
       return {
         label: c.name,
@@ -77,7 +76,7 @@ const findCustomCommandReferences = () => {
     });
   }).filter(_.identity);
 
-  showQuickPickMenu(references, {
+  vscode.showQuickPickMenu(references, {
     mapperFunction: c => {
       return {
         label: `${c.path.replace(root, '')}:${c.loc.start.line}`,

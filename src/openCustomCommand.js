@@ -1,14 +1,10 @@
-const { window } = require('vscode');
 const _ = require('lodash');
+const VS = require('./helper/vscodeWrapper');
+const vscode = new VS();
 const { cypressCommandLocation } = require('./parser/AST');
-const {
-  openDocumentAtPosition,
-  show,
-  config,
-  root
-} = require('./helper/utils');
 const { message, regexp, CYPRESS_COMMAND_ADD } = require('./helper/constants');
-const { customCommandsFolder } = config;
+const { customCommandsFolder } = vscode.config();
+const root = vscode.root();
 
 /**
  * check if target index is inside ranges
@@ -42,7 +38,7 @@ const findClosestRange = (indexedMatches, target) => {
  * or usage: `.command()`
  */
 const detectCustomCommand = () => {
-  const editor = window.activeTextEditor;
+  const editor = vscode.activeTextEditor();
   let commandName;
 
   if (editor.selection.start.character === editor.selection.end.character) {
@@ -63,7 +59,7 @@ const detectCustomCommand = () => {
     }
 
     const match = line.match(pattern);
-    !match && show('err', message.NO_COMMAND);
+    !match && vscode.show('err', message.NO_COMMAND);
 
     const matches = _.flatMap(match, () => pattern.exec(line).pop());
     const selectionIndex = editor.selection.start.character;
@@ -81,7 +77,7 @@ const detectCustomCommand = () => {
       findOverlap(indexedMatches, selectionIndex) ||
       findClosestRange(indexedMatches, selectionIndex);
 
-    !closest && show('err', message.NO_COMMAND);
+    !closest && vscode.show('err', message.NO_COMMAND);
     commandName = closest.match.trim();
   } else {
     commandName = editor.document.getText(editor.selection);
@@ -98,9 +94,9 @@ const openCustomCommand = () => {
   const commandName = detectCustomCommand();
   const { file, loc } =
     cypressCommandLocation(`${root}/${customCommandsFolder}`, commandName) ||
-    show('err', message.NO_COMMAND);
-  !file && show('err', message.NO_COMMAND);
-  openDocumentAtPosition(file, loc);
+    vscode.show('err', message.NO_COMMAND);
+  !file && vscode.show('err', message.NO_COMMAND);
+  vscode.openDocumentAtPosition(file, loc);
 };
 
 module.exports = {

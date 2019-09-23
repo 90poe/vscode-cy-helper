@@ -1,19 +1,19 @@
-const { window } = require('vscode');
 const _ = require('lodash');
+const VS = require('./helper/vscodeWrapper');
+const vscode = new VS();
 const {
   composeUsageReport,
   parseFeatures,
   calculateUsage,
   stepDefinitionPath
 } = require('./parser/Gherkin');
-const { showQuickPickMenu, show } = require('./helper/utils');
 const { message, regexp } = require('./helper/constants');
 
 const findUnusedCucumberSteps = () => {
   const usages = composeUsageReport();
   const unused = usages.filter(u => u.matches === 0);
 
-  showQuickPickMenu(unused, {
+  vscode.showQuickPickMenu(unused, {
     mapperFunction: c => {
       return {
         label: c.step,
@@ -29,7 +29,7 @@ const findUnusedCucumberSteps = () => {
 };
 
 const findCucumberStepUsage = () => {
-  const editor = window.activeTextEditor;
+  const editor = vscode.activeTextEditor();
   const path = editor.document.fileName;
 
   const { text: line, range } = editor.document.lineAt(
@@ -39,7 +39,7 @@ const findCucumberStepUsage = () => {
   const stepDefinitionPattern = regexp.STEP_DEFINITION;
   const stepLiteralMatch = line.replace('/', '|').match(stepDefinitionPattern);
 
-  !stepLiteralMatch && show('warn', message.NO_STEP);
+  !stepLiteralMatch && vscode.show('warn', message.NO_STEP);
 
   const stepLiteral = stepLiteralMatch[0].replace(regexp.QUOTES, '');
   const stepDefinition = [
@@ -55,7 +55,7 @@ const findCucumberStepUsage = () => {
   const stats = calculateUsage(features, stepDefinition);
   const usages = _.get(stats, '0.usage') || [];
 
-  showQuickPickMenu(usages, {
+  vscode.showQuickPickMenu(usages, {
     mapperFunction: c => {
       return {
         label: c.step,

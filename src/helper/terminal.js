@@ -1,5 +1,6 @@
-const { window } = require('vscode');
-const { editDocument } = require('./utils');
+const _ = require('lodash');
+const VS = require('./vscodeWrapper.js');
+const vscode = new VS();
 const { TERMINAL_NAME, FOCUS_TAG, ONLY_BLOCK } = require('./constants');
 
 let _activeTerminal = null;
@@ -10,7 +11,7 @@ const removeTags = terminal => {
       disposeTerminal();
     }
 
-    const editor = window.activeTextEditor;
+    const editor = vscode.activeTextEditor();
     const fullText = editor.document.getText().split('\n');
 
     const testIndexes = fullText
@@ -32,12 +33,12 @@ const removeTags = terminal => {
       return range;
     });
 
-    editDocument(testLocation, newTexts);
+    vscode.editDocument(testLocation, newTexts);
   }
 };
 
 const createTerminal = () => {
-  _activeTerminal = window.createTerminal(TERMINAL_NAME);
+  _activeTerminal = vscode.createTerminal(TERMINAL_NAME);
   return _activeTerminal;
 };
 
