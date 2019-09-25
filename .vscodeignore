@@ -3,3 +3,4 @@ assets/**.gif
 **/.eslintrc.json
 .vscode-test
 test
+test-resources

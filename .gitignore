@@ -3,3 +3,4 @@ node_modules
 .scannerwork
 sonar-project.properties
 .vscode-test
+test-resources

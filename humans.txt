@@ -14,4 +14,4 @@ oleksandr        @Shelex     maintainer
 /* Thanks */
 Thanks to 90poe for giving birth to this project and allowing it to be open sourced.
 
-Also, thanks to all contributors and users (assuming there are more) of connectctl.
+Also, thanks to all contributors and users (assuming there are more) of vscode-cy-helper.
