@@ -1,5 +1,8 @@
 # vscode-cy-helper
-Cypress extension for vs code
+Cypress extension for vs code  
+
+![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/Shelex.vscode-cy-helper?label=Installs)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 
 ## Configuration
 
@@ -62,4 +65,3 @@ From menu select `Cypress: Get step definition references`
 ## License
 
 Copyright 2019 90poe.  This project is licensed under the Apache 2.0 License.  
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
