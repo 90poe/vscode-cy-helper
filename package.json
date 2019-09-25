@@ -135,7 +135,7 @@
 						"type": "string"
 					}
 				},
-				"cypressHelper.includeAnnotationForCommands":{
+				"cypressHelper.includeAnnotationForCommands": {
 					"type": "boolean",
 					"default": false,
 					"description": "Include comments before custom command to type definition file"
