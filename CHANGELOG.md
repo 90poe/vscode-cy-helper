@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.9] - 2019-10-24
+### Fixed
+- failed extension activation when step definition folder not exist
+
 ## [0.2.8] - 2019-09-23
 ### Added
  - possibility to add annotations for custom command type definitions
