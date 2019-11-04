@@ -1,11 +1,10 @@
-const fs = require('fs-extra');
 const _ = require('lodash');
 const Gherkin = require('gherkin');
 const GherkinParser = new Gherkin.Parser();
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
 const { parseStepDefinitions, findCucumberCustomTypes } = require('./AST');
-const { readFilesFromDir } = require('../helper/utils');
+const { readFilesFromDir, readFile } = require('../helper/utils');
 const root = vscode.root();
 
 /**
@@ -20,7 +19,7 @@ const getCucumberStepsPath = () => {
 
   let cucumberConfig;
   packages.find(p => {
-    const content = JSON.parse(fs.readFileSync(p.path));
+    const content = JSON.parse(readFile(p.path) || '{}');
     cucumberConfig = _.get(content, 'cypress-cucumber-preprocessor');
     return cucumberConfig;
   });
@@ -95,9 +94,7 @@ const parseFeatures = () =>
       extension: '.feature'
     }),
     file => {
-      const { feature } = GherkinParser.parse(
-        fs.readFileSync(file.path, 'utf-8')
-      );
+      const { feature } = GherkinParser.parse(readFile(file.path));
       return _.flatMap(feature.children, child =>
         child.steps.map(step => ({
           step: step.text.replace(/\\/g, ''),

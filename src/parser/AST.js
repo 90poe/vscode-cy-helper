@@ -1,8 +1,7 @@
 const Parser = require('@babel/parser');
-const fs = require('fs-extra');
 const _ = require('lodash');
 const minimatch = require('minimatch');
-const { readFilesFromDir } = require('../helper/utils');
+const { readFilesFromDir, readFile } = require('../helper/utils');
 const { CUCUMBER_KEYWORDS, SPACE, regexp } = require('../helper/constants');
 const { parseArguments } = require('./parseArguments');
 
@@ -12,7 +11,7 @@ const { parseArguments } = require('./parseArguments');
 const parseJS = filepath => {
   try {
     return (
-      Parser.parse(fs.readFileSync(filepath, 'utf-8'), {
+      Parser.parse(readFile(filepath) || '', {
         sourceType: 'module'
       }) || null
     );
@@ -40,7 +39,7 @@ const findCypressCommandAddStatements = body => {
  */
 const customCommandsAvailable = file => {
   try {
-    const fileContent = fs.readFileSync(file, 'utf-8');
+    const fileContent = readFile(file) || '';
     const commands = fileContent
       .split('\n')
       .map(row => regexp.TS_DEFINITION.exec(row));
@@ -202,18 +201,20 @@ const findCucumberCustomTypes = path => {
 const parseStepDefinitions = stepDefinitionPath =>
   _.flatMap(readFilesFromDir(stepDefinitionPath), file => {
     const AST = parseJS(file.path);
-    return findCucumberStepDefinitions(AST.program.body).map(step => {
-      const stepValue =
-        _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
-          ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
-          : _.get(step, 'expression.arguments.0.value');
-      return {
-        [stepValue]: {
-          path: file.path,
-          loc: step.expression.arguments[0].loc.start
-        }
-      };
-    });
+    if (AST) {
+      return findCucumberStepDefinitions(AST.program.body).map(step => {
+        const stepValue =
+          _.get(step, 'expression.arguments.0.type') === 'TemplateLiteral'
+            ? _.get(step, 'expression.arguments.0.quasis.0.value.cooked')
+            : _.get(step, 'expression.arguments.0.value');
+        return {
+          [stepValue]: {
+            path: file.path,
+            loc: step.expression.arguments[0].loc.start
+          }
+        };
+      });
+    }
   }).filter(_.identity);
 
 module.exports = {

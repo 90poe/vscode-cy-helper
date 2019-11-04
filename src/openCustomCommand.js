@@ -78,7 +78,10 @@ const detectCustomCommand = () => {
       findClosestRange(indexedMatches, selectionIndex);
 
     !closest && vscode.show('err', message.NO_COMMAND);
-    commandName = closest.match.trim();
+    commandName = closest.match
+      .split('.')
+      .pop()
+      .trim();
   } else {
     commandName = editor.document.getText(editor.selection);
   }

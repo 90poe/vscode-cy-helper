@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2019-11-04
+### Added
+- basic file watcher to reduce fs operations amount and increase performance
+### Fixed
+- sometimes custom command was not recognized when there are several on single line
+- catch error when reading non existing file
+
 ## [0.2.9] - 2019-10-24
 ### Fixed
 - failed extension activation when step definition folder not exist

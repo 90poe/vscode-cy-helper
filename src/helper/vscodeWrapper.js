@@ -1,5 +1,6 @@
 const vscode = require('vscode');
 const _ = require('lodash');
+const klawSync = require('klaw-sync');
 const { message } = require('./constants');
 
 class VS {
@@ -131,6 +132,23 @@ class VS {
       .then(() => {
         editor.document.save();
       });
+  }
+  /**
+   * Read files recursively from workspace root
+   * @param {string} folder
+   */
+  workspaceFiles() {
+    try {
+      const files =
+        klawSync(this.root(), {
+          traverseAll: true,
+          nodir: true,
+          filter: ({ path }) => !path.includes('node_modules')
+        }) || [];
+      return files;
+    } catch (er) {
+      return [];
+    }
   }
 }
 

@@ -12,6 +12,7 @@ const {
   findCucumberStepUsage
 } = require('./cucumberStepsUsage');
 const { removeTags } = require('./helper/terminal');
+const { updateWorkspaceFiles } = require('./helper/utils');
 
 const activate = context => {
   context.subscriptions.push(
@@ -46,6 +47,9 @@ const activate = context => {
     )
   );
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));
+  vscode.workspace.onDidSaveTextDocument(document =>
+    updateWorkspaceFiles(document.fileName)
+  );
 };
 exports.activate = activate;
 

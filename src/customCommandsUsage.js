@@ -1,9 +1,8 @@
-const fs = require('fs-extra');
 const _ = require('lodash');
 const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
 const { typeDefinitions } = require('./parser/AST');
-const { readFilesFromDir } = require('./helper/utils');
+const { readFilesFromDir, readFile } = require('./helper/utils');
 const { message, regexp } = require('./helper/constants');
 const { detectCustomCommand } = require('./openCustomCommand');
 const { customCommandsFolder } = vscode.config();
@@ -31,7 +30,7 @@ const findUnusedCustomCommands = () => {
   let uniqueCommands = findCustomCommands(workspaceFiles);
 
   for (const file of workspaceFiles) {
-    const content = fs.readFileSync(file.path, 'utf-8');
+    const content = readFile(file.path) || '';
     uniqueCommands = uniqueCommands.filter(
       command => new RegExp(`\\.${command.name}\\(`, 'g').exec(content) === null
     );
@@ -58,8 +57,8 @@ const findCustomCommandReferences = () => {
   const workspaceFiles = readFilesFromDir(root);
 
   const references = _.flatMap(workspaceFiles, file => {
-    const content = fs.readFileSync(file.path, 'utf-8').split('\n');
-    return content.map((row, index) => {
+    const content = readFile(file.path) || '';
+    return content.split('\n').map((row, index) => {
       const hasCommand = commandPattern.exec(row);
       if (hasCommand) {
         const column = row.indexOf(commandName);
