@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const path = require('path');
 const Gherkin = require('gherkin');
 const GherkinParser = new Gherkin.Parser();
 const VS = require('../helper/vscodeWrapper');
@@ -24,11 +25,11 @@ const getCucumberStepsPath = () => {
     return cucumberConfig;
   });
 
-  const path = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
+  const cucumberPath = _.get(cucumberConfig, 'nonGlobalStepDefinitions')
     ? 'cypress/integration'
     : _.get(cucumberConfig, 'step_definitions') ||
       'cypress/support/step_definitions';
-  return path;
+  return path.normalize(cucumberPath);
 };
 
 const stepDefinitionPath = getCucumberStepsPath();
@@ -52,7 +53,9 @@ const cucumberTypes = [
   }
 ];
 
-const customTypes = findCucumberCustomTypes(`${root}/${stepDefinitionPath}`);
+const customTypes = findCucumberCustomTypes(
+  path.normalize(`${root}/${stepDefinitionPath}`)
+);
 
 const allTypes = [...cucumberTypes, ...customTypes];
 
@@ -157,7 +160,7 @@ const calculateUsage = (features, stepDefinitions) =>
  */
 const composeUsageReport = () => {
   const stepDefinitionsParsed = parseStepDefinitions(
-    `${root}/${stepDefinitionPath}`
+    path.normalize(`${root}/${stepDefinitionPath}`)
   );
   const stepsFromFeatures = parseFeatures();
   return calculateUsage(stepsFromFeatures, stepDefinitionsParsed);

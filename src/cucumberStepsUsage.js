@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const path = require('path');
 const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
 const {
@@ -17,9 +18,9 @@ const findUnusedCucumberSteps = () => {
     mapperFunction: c => {
       return {
         label: c.step,
-        detail: `${c.path.split(stepDefinitionPath)[1].replace('.js', '')}:${
-          c.loc.line
-        }`,
+        detail: `${c.path
+          .split(path.normalize(stepDefinitionPath))[1]
+          .replace('.js', '')}:${c.loc.line}`,
         data: c
       };
     },
@@ -30,7 +31,7 @@ const findUnusedCucumberSteps = () => {
 
 const findCucumberStepUsage = () => {
   const editor = vscode.activeTextEditor();
-  const path = editor.document.fileName;
+  const { fileName } = editor.document;
 
   const { text: line, range } = editor.document.lineAt(
     editor.selection.active.line
@@ -45,7 +46,7 @@ const findCucumberStepUsage = () => {
   const stepDefinition = [
     {
       [stepLiteral]: {
-        path: path,
+        path: fileName,
         loc: range.start
       }
     }
@@ -59,7 +60,7 @@ const findCucumberStepUsage = () => {
     mapperFunction: c => {
       return {
         label: c.step,
-        detail: `${c.path.split('/cypress/')[1]}:${c.loc.line}`,
+        detail: `${c.path.split(path.normalize('/cypress/'))[1]}:${c.loc.line}`,
         data: c
       };
     },
