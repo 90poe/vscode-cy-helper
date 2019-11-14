@@ -1,8 +1,7 @@
 # vscode-cy-helper
 Cypress extension for vs code  
 
-![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/Shelex.vscode-cy-helper?label=Installs)
-[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
+[![Gitter](https://badges.gitter.im/vscode-cy-helper/community.svg)](https://gitter.im/vscode-cy-helper/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/Shelex.vscode-cy-helper?label=Installs)
 
 ## Configuration
 
