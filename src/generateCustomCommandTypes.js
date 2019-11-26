@@ -89,7 +89,7 @@ exports.generateCustomCommandTypes = () => {
     if (typeDefs.length) {
       vscode.show('info', message.NO_COMMAND_DUPLICATES);
     } else {
-      vscode.show('warn', message.NO_STEP);
+      vscode.show('warn', message.NO_COMMAND);
     }
   } else {
     const duplicates = _.uniq(

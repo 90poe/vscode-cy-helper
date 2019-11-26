@@ -1,4 +1,5 @@
 const vscode = require('vscode');
+const path = require('path');
 const _ = require('lodash');
 const klawSync = require('klaw-sync');
 const { message } = require('./constants');
@@ -138,15 +139,20 @@ class VS {
    * @param {string} folder
    */
   workspaceFiles() {
+    const excludeFn = item => {
+      const basename = path.basename(item.path);
+      return basename !== 'node_modules';
+    };
     try {
       const files =
         klawSync(this.root(), {
-          traverseAll: true,
+          traverseAll: false,
           nodir: true,
-          filter: ({ path }) => !path.includes('node_modules')
+          filter: excludeFn
         }) || [];
       return files;
     } catch (er) {
+      this.show('error', er.message);
       return [];
     }
   }
