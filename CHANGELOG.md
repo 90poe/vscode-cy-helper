@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.2] - 2019-11-27
+### Fixed
+- issue with some globally installed dependencies causing failure to read workspace files.
+- message in case no type definitions found for custom commands
+### Added
+- badge to readme with link to gitter chat
+
 ## [0.3.1] - 2019-11-11
 ### Fixed
 - filePaths for cucumber commands on windows.
@@ -23,35 +30,35 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.2.8] - 2019-09-23
 ### Added
- - possibility to add annotations for custom command type definitions
+- possibility to add annotations for custom command type definitions
 ### Changed
- - codebase refactoring
+- codebase refactoring
 
 ## [0.2.7] - 2019-09-19
 ### Added
- - license
+- license
 
 ## [0.2.6] - 2019-09-16
 ### Added
- - menu items are now configurable
- - slight performance tweaks
+- menu items are now configurable
+- slight performance tweaks
 
 ## [0.2.5] - 2019-09-13
 ### Changed
- - codebase improvements
+- codebase improvements
 
 ## [0.2.4] - 2019-09-09
 ### Added
- - extension logo and description
+- extension logo and description
 
 ## [0.2.3] - 2019-09-09
 ### Fixed
- - issue with parsing function argument with `undefined` or `null` default value
+- issue with parsing function argument with `undefined` or `null` default value
  recognized as object
 
 ## [0.2.2] - 2019-09-06
 ### Changed
- - codebase improvements
+- codebase improvements
 
 ## [0.2.1] - 2019-09-04
 ### Added
@@ -63,7 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.9] - 2019-09-04
 ### Changed
- - codebase improvements
+- codebase improvements
 
 ## [0.1.8] - 2019-09-04
 ### Changed
@@ -101,7 +108,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.1.0] - 2019-08-27
 ### Changed
- - codebase improvements 
+- codebase improvements 
 
 ## [0.0.9] - 2019-08-23
 ### Added
@@ -130,11 +137,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.3] - 2019-08-22
 ### Changed
- - codebase improvements
+- codebase improvements
 
 ## [0.0.2] - 2019-08-21
 ### Changed
- - codebase improvements
+- codebase improvements
 
 ## [0.0.1] - 2019-08-21
 ### Added
