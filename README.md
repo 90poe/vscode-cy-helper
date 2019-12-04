@@ -22,6 +22,7 @@ Cypress extension for vs code
 * [Find not used cucumber step definitions](#5-find-not-used-cucumber-step-definitions)
 * [Find custom command references](#6-find-cypress-custom-commands-references)
 * [Find cucumber step references](#7-find-cucumber-step-definition-references)
+* [Fixture autocompletion](#8-fixtures-autocompletion)
 
 ## Usage
 ### 1. Open cypress custom command definition
@@ -60,6 +61,13 @@ From menu select `Cypress: Get custom command references`
 From menu select `Cypress: Get step definition references`
 
 ![](./assets/stepDefinitionReference.gif)
+
+### 8. Fixtures autocompletion
+Typing `cy.fixture(` opens VS Code Completion interface with possible files and subfolders  
+to select needed fixture file  
+thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea
+  
+![](./assets/fixtureCompletion.gif)
 
 ## License
 

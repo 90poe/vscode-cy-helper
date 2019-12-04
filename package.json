@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.3.2",
+	"version": "0.3.3",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -28,7 +28,8 @@
 		"onCommand:cypressHelper.findUnusedCustomCommands",
 		"onCommand:cypressHelper.findUnusedCucumberSteps",
 		"onCommand:cypressHelper.findCucumberStepUsage",
-		"onCommand:cypressHelper.findCustomCommandReferences"
+		"onCommand:cypressHelper.findCustomCommandReferences",
+		"onLanguage:javascript"
 	],
 	"publisher": "Shelex",
 	"contributes": {

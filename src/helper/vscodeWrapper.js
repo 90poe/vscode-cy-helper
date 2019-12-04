@@ -6,10 +6,11 @@ const { message } = require('./constants');
 
 class VS {
   constructor() {
-    const { window, workspace, Position, Selection } = vscode;
+    const { window, workspace, Position, Selection, Range } = vscode;
     this._window = window;
     this._workspace = workspace;
     this._Position = Position;
+    this._Range = Range;
     this._Selection = Selection;
   }
 
@@ -29,8 +30,12 @@ class VS {
     return this._workspace.getConfiguration().cypressHelper;
   }
 
-  Position(coordinates) {
-    return new this._Position(coordinates);
+  Position(coordinates, characters) {
+    return new this._Position(coordinates, characters);
+  }
+
+  Range(start, end) {
+    return new this._Range(start, end);
   }
 
   showQuickPick(items) {

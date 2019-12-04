@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.3] - 2019-12-04
+### Added
+- `cy.fixture` autocompletion
+
 ## [0.3.2] - 2019-11-27
 ### Fixed
 - issue with some globally installed dependencies causing failure to read workspace files.

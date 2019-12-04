@@ -13,8 +13,10 @@ const {
 } = require('./cucumberStepsUsage');
 const { removeTags } = require('./helper/terminal');
 const { updateWorkspaceFiles } = require('./helper/utils');
+const FixtureProvider = require('./fixtureProvider');
 
 const activate = context => {
+  let fixtureCompletionProvider = new FixtureProvider();
   context.subscriptions.push(
     vscode.commands.registerCommand('cypressHelper.openSpecFile', openSpecFile),
     vscode.commands.registerCommand(
@@ -44,7 +46,18 @@ const activate = context => {
     vscode.commands.registerCommand(
       'cypressHelper.findCustomCommandReferences',
       findCustomCommandReferences
-    )
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      [
+        { scheme: 'file', language: 'javascript' },
+        { scheme: 'file', language: 'typescript' }
+      ],
+      fixtureCompletionProvider,
+      ['('],
+      ['/'],
+      ['\\']
+    ),
+    fixtureCompletionProvider
   );
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));
   vscode.workspace.onDidSaveTextDocument(document =>
