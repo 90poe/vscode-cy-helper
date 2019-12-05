@@ -12,7 +12,17 @@ class FixtureProvider {
 
     // break if fixture autocomplete is not needed
     if (
-      !fixtureAutocompletionCommands.some(command => text.includes(command))
+      !fixtureAutocompletionCommands.some(command => {
+        const commandPattern = `.${command}`;
+        return (
+          text.includes(commandPattern) &&
+          // verify that cursor position is after command that require autocomplete
+          // but before next chainer
+          text
+            .substring(text.indexOf(commandPattern), position.character)
+            .split('.').length === 2 // [empty string before `.` or `cy`, command string]
+        );
+      })
     ) {
       return undefined;
     }

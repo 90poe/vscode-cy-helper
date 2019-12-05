@@ -54,8 +54,28 @@ const readFile = path =>
     fs.readFileSync(sanitizePath(path), 'utf-8')) ||
   null;
 
+/**
+ * Prompts user to reload editor window in order for configuration change to take effect.
+ */
+function promptToReloadWindow() {
+  const action = 'Reload';
+  vscode
+    .show(
+      'info',
+      `Please reload window in order for changes in extension "Cypress Helper" configuration to take effect.`,
+      false,
+      action
+    )
+    .then(selectedAction => {
+      if (selectedAction === action) {
+        vscode.execute('workbench.action.reloadWindow');
+      }
+    });
+}
+
 module.exports = {
   readFilesFromDir,
   updateWorkspaceFiles,
-  readFile
+  readFile,
+  promptToReloadWindow
 };

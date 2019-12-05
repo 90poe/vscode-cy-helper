@@ -6,12 +6,17 @@ const { message } = require('./constants');
 
 class VS {
   constructor() {
-    const { window, workspace, Position, Selection, Range } = vscode;
+    const { window, workspace, Position, Selection, Range, commands } = vscode;
     this._window = window;
     this._workspace = workspace;
     this._Position = Position;
     this._Range = Range;
     this._Selection = Selection;
+    this._commands = commands;
+  }
+
+  execute(command) {
+    return this._commands.executeCommand(command);
   }
 
   createTerminal(name) {
@@ -73,15 +78,19 @@ class VS {
    * @param {string} notification - message
    * @param {boolean} isModal - show window with confirmation
    */
-  show(level, notification, isModal = false) {
+  show(level, notification, isModal = false, ...items) {
     const levels = ['Information', 'Warning', 'Error'];
     const method =
       levels.find(
         l => level.charAt(0).toLowerCase() === l.charAt(0).toLowerCase()
       ) || levels[0];
-    this._window[`show${method}Message`](notification, {
-      modal: isModal
-    });
+    return this._window[`show${method}Message`](
+      notification,
+      {
+        modal: isModal
+      },
+      ...items
+    );
   }
 
   /**

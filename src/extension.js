@@ -12,7 +12,10 @@ const {
   findCucumberStepUsage
 } = require('./cucumberStepsUsage');
 const { removeTags } = require('./helper/terminal');
-const { updateWorkspaceFiles } = require('./helper/utils');
+const {
+  updateWorkspaceFiles,
+  promptToReloadWindow
+} = require('./helper/utils');
 const FixtureProvider = require('./fixtureProvider');
 
 const activate = context => {
@@ -63,6 +66,7 @@ const activate = context => {
   vscode.workspace.onDidSaveTextDocument(document =>
     updateWorkspaceFiles(document.fileName)
   );
+  vscode.workspace.onDidChangeConfiguration(promptToReloadWindow);
 };
 exports.activate = activate;
 

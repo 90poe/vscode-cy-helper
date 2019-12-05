@@ -15,7 +15,7 @@ Cypress extension for vs code
 | `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"OpenSingleTest": true,`<br/> `"OpenSpecFile": true,` <br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
 
-## Available commands or menu items
+## Available functionality
 * [Go to cypress custom command definition](#1-open-cypress-custom-command-definition)
 * [Open Cypress](#2-open-cypress-window)
 * [Generate type definition for custom commands](#3-generate-type-definitions-for-cypress-custom-commands)
@@ -66,7 +66,8 @@ From menu select `Cypress: Get step definition references`
 ### 8. Fixtures autocompletion
 Typing `cy.fixture(` opens VS Code Completion interface with possible files and subfolders  
 to select needed fixture file  
-thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea
+thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea  
+To add your own commands that require fixture autocomplete for arguments - check configuration `cypressHelper.fixtureAutocompletionCommands`  
   
 ![](./assets/fixtureCompletion.gif)
 

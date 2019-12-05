@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.5] - 2019-12-05
+### Added
+- prompt to reload vscode when configuration changed
+### Fixed
+- fixture autocomplete when several commands chained on same line
+
 ## [0.3.4] - 2019-12-05
 ### Added
 - ability to configure cypress commands that require fixture autocomplete
