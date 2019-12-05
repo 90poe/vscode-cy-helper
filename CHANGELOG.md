@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.4] - 2019-12-05
+### Added
+- ability to configure cypress commands that require fixture autocomplete
+### Fixed
+- activation of fixture autocompletion for `.ts` files
+
 ## [0.3.3] - 2019-12-04
 ### Added
 - `cy.fixture` autocompletion

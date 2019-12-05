@@ -2,6 +2,7 @@ const _ = require('lodash');
 const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
 const { readFilesFromDir } = require('./helper/utils');
+const { fixtureAutocompletionCommands } = vscode.config();
 
 class FixtureProvider {
   provideCompletionItems(document, position, token, context) {
@@ -10,7 +11,9 @@ class FixtureProvider {
     const text = document.getText(range);
 
     // break if fixture autocomplete is not needed
-    if (!text.includes('.fixture')) {
+    if (
+      !fixtureAutocompletionCommands.some(command => text.includes(command))
+    ) {
       return undefined;
     }
 

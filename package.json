@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.3.3",
+	"version": "0.3.4",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -29,7 +29,8 @@
 		"onCommand:cypressHelper.findUnusedCucumberSteps",
 		"onCommand:cypressHelper.findCucumberStepUsage",
 		"onCommand:cypressHelper.findCustomCommandReferences",
-		"onLanguage:javascript"
+		"onLanguage:javascript",
+		"onLanguage:typescript"
 	],
 	"publisher": "Shelex",
 	"contributes": {
@@ -180,6 +181,15 @@
 								"default": true
 							}
 						}
+					}
+				},
+				"cypressHelper.fixtureAutocompletionCommands": {
+					"type": "array",
+					"default": [
+						"fixture"
+					],
+					"items": {
+						"type": "string"
 					}
 				}
 			}
