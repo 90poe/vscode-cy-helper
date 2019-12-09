@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.6] - 2019-12-09
+### Added
+- Definition provider for custom commands (native `Go to Definition`, `Peek Definition` items)
+- References provider for custom commands (native `Find All References`, `Peek References` items)
+- References provider for step definitions
+- Configuration to disable Command References provider in case type definition file in workspace
+- More information in README.
+### Fixed
+- opened blank file when no command definition found
+
 ## [0.3.5] - 2019-12-05
 ### Added
 - prompt to reload vscode when configuration changed

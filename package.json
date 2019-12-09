@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.3.5",
+	"version": "0.3.6",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -188,9 +188,15 @@
 					"default": [
 						"fixture"
 					],
+					"description": "Commands that should have fixture path autocompletion",
 					"items": {
 						"type": "string"
 					}
+				},
+				"cypressHelper.enableCommandReferenceProvider": {
+					"type": "boolean",
+					"default": true,
+					"description": "In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false`"
 				}
 			}
 		}

@@ -59,7 +59,9 @@ const detectCustomCommand = () => {
     }
 
     const match = line.match(pattern);
-    !match && vscode.show('err', message.NO_COMMAND);
+    if (!match) {
+      return undefined;
+    }
 
     const matches = _.flatMap(match, () => pattern.exec(line).pop());
     const selectionIndex = editor.selection.start.character;
@@ -77,7 +79,10 @@ const detectCustomCommand = () => {
       findOverlap(indexedMatches, selectionIndex) ||
       findClosestRange(indexedMatches, selectionIndex);
 
-    !closest && vscode.show('err', message.NO_COMMAND);
+    if (!closest) {
+      return undefined;
+    }
+
     commandName = closest.match
       .split('.')
       .pop()
@@ -95,6 +100,7 @@ const detectCustomCommand = () => {
  */
 const openCustomCommand = () => {
   const commandName = detectCustomCommand();
+  !commandName && vscode.show('err', message.NO_COMMAND);
   const { file, loc } =
     cypressCommandLocation(`${root}/${customCommandsFolder}`, commandName) ||
     vscode.show('err', message.NO_COMMAND);

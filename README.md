@@ -14,60 +14,85 @@ Cypress extension for vs code
 | `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
 | `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"OpenSingleTest": true,`<br/> `"OpenSpecFile": true,` <br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
+| `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
+
 
 ## Available functionality
-* [Go to cypress custom command definition](#1-open-cypress-custom-command-definition)
-* [Open Cypress](#2-open-cypress-window)
-* [Generate type definition for custom commands](#3-generate-type-definitions-for-cypress-custom-commands)
-* [Find not used custom commands](#4-find-not-used-cypress-custom-commands)
-* [Find not used cucumber step definitions](#5-find-not-used-cucumber-step-definitions)
-* [Find custom command references](#6-find-cypress-custom-commands-references)
-* [Find cucumber step references](#7-find-cucumber-step-definition-references)
-* [Fixture autocompletion](#8-fixtures-autocompletion)
+### Custom commands
+* [Go to definition](#1-open-cypress-custom-command-definition)
+* [References](#2-find-cypress-custom-commands-references)
+* [Find unused commands](#3-find-not-used-cypress-custom-commands)
+* [Generate type definitions file for custom commands](#4-generate-type-definitions-for-cypress-custom-commands)
+### Step definitions (cucumber)
+* [References](#5-find-cucumber-step-definition-references)
+* [Find unused steps](#6-find-not-used-cucumber-step-definitions)
+### Other
+* [Open cypress window](#7-open-cypress-window)
+* [Fixture path autocompletion](#8-fixtures-autocompletion)
 
 ## Usage
 ### 1. Open cypress custom command definition
-Click on cypress custom command, and from menu select `Cypress: Go to custom command definition`
+In case you want to be instantly redirected to definition file - click on custom command, and from editor menu select `Cypress: Go to custom command definition`  
+You can use native `Go to Definition` and `Peek Definition` - but usually it offers several results, so you should pick one by yourself.  
+If you are using just native editor menu items - you can disable `Cypress: Go to custom command definition` in configuration `cypressHelper.menuItems` by setting `"GoToCustomCommand": false`  
+How it works:  
+- Text from current line with cursor is taken, trying to find closest command call in line;
+- Checking files in `cypressHelper.customCommandsFolder` (`cypress/support` by default).
+- In case file with `Cypress.Commands.add(%%detected_command%%)` is found - redirect.
 
 ![](./assets/goToCommand.gif)
 
-### 2. Open Cypress window
-* for opening file - select in menu `Cypress: Open spec file`  
-* for marking some tests with `only` tags - select in menu `Cypress: Open single test`  
-Tags will be deleted after closing terminal instance
+### 2. Find Cypress custom commands references
+From editor menu select `Cypress: Get custom command references` to choose from quick-pick menu or you can use native `Find All References` and `Peek References` to use left-panel tab.  
+You can disable editor `Cypress: Get custom command references` item with configuration `cypressHelper.menuItems` and `"FindCustomCommandReferences": false`.  
+In case you have custom command `.ts` definition file in your workspace - native methods will return duplicated results, so you can turn off extension references provider with configuration `cypressHelper.enableCommandReferenceProvider: false`.  
 
-![](./assets/openSingleTest.gif)
+![](./assets/customCommandReference.gif)
 
-### 3. Generate type definitions for Cypress custom commands
-From menu select `Cypress: Generate custom command types`
-
-![](./assets/generateTypes.gif)
-
-### 4. Find unused Cypress custom commands
-From command palette select command `Cypress: Find not used custom commands`  
+### 3. Find unused Cypress custom commands
+From command palette (⌘P) select `Cypress: Find not used custom commands`  
 
 ![](./assets/findUnusedCustomCommands.gif)
 
-### 5. Find unused Cucumber step definitions
+### 4. Generate type definitions for Cypress custom commands
+From menu select `Cypress: Generate custom command types`  
+How it works:
+- checks configuration `customCommandsFolder`, `typeDefinitionFile`, `typeDefinitionExcludePatterns`, `includeAnnotationForCommands`  
+- get files from `customCommandsFolder`, excepting `typeDefinitionExcludePatterns`  
+- in case custom command definitions found - trying to parse argument types, setting `any` by default  
+- get `typeDefinitionFile` content to check how much commands changed to display message
+- check for command names duplication (2 commands with same name will cause inappropriate behaviour)
+- write file with type definitions for commands to `typeDefinitionFile`, in case `includeAnnotationForCommands: true` also includes comments above commans.  
+- show message about duplicates, added and deleted commands.
+
+![](./assets/generateTypes.gif)
+
+### 5. Find Cucumber step definition references
+From menu select `Cypress: Get step definition references` to choose from quick-pick menu or you can use native `Find All References` and `Peek References` to use left-panel tab.  
+
+![](./assets/stepDefinitionReference.gif)
+
+### 6. Find unused Cucumber step definitions
 From command palette select command `Cypress: Find not used Cucumber step definitions`  
 
 ![](./assets/findUnusedStepDefinitions.gif)
 
-### 6. Find Cypress custom commands references
-From menu select `Cypress: Get custom command references`
+### 7. Open Cypress window
+* for opening file - select in menu `Cypress: Open spec file`  
+* for marking some tests with `only` tags - select in menu `Cypress: Open single test`  
+#### How it works:   
+- get `cypressHelper.commandForOpen`;
+- open terminal with name `CypressOpen`;
+- in case `single` test selected - set `@focus` for cucumber scenarios or `.only` for mocha syntax tests;
+- send command `%%commandForOpen%% --config testFiles=%%spec%%` to terminal, where `%%spec%%` is opened test file path;  
+- after terminal `CypressOpen` is closed - deletes from opened test file all `@focus` or `.only` tags
 
-![](./assets/customCommandReference.gif)
-
-### 7. Find Cucumber step definition references
-From menu select `Cypress: Get step definition references`
-
-![](./assets/stepDefinitionReference.gif)
+![](./assets/openSingleTest.gif)
 
 ### 8. Fixtures autocompletion
-Typing `cy.fixture(` opens VS Code Completion interface with possible files and subfolders  
-to select needed fixture file  
-thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea  
+Typing `cy.fixture(` opens VS Code Completion interface with possible files and subfolders to select needed fixture file  
 To add your own commands that require fixture autocomplete for arguments - check configuration `cypressHelper.fixtureAutocompletionCommands`  
+Thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea  
   
 ![](./assets/fixtureCompletion.gif)
 

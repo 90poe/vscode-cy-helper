@@ -5,7 +5,7 @@ const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const {
   findUnusedCustomCommands,
-  findCustomCommandReferences
+  showCustomCommandReferences
 } = require('./customCommandsUsage');
 const {
   findUnusedCucumberSteps,
@@ -16,10 +16,17 @@ const {
   updateWorkspaceFiles,
   promptToReloadWindow
 } = require('./helper/utils');
-const FixtureProvider = require('./fixtureProvider');
+const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
+const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
+const CommandReferencesProvider = require('./providers/CommandReferencesProvider');
+const StepReferencesProvider = require('./providers/StepReferencesProvider');
+
+const languageActivationSchema = [
+  { scheme: 'file', language: 'javascript' },
+  { scheme: 'file', language: 'typescript' }
+];
 
 const activate = context => {
-  let fixtureCompletionProvider = new FixtureProvider();
   context.subscriptions.push(
     vscode.commands.registerCommand('cypressHelper.openSpecFile', openSpecFile),
     vscode.commands.registerCommand(
@@ -48,19 +55,27 @@ const activate = context => {
     ),
     vscode.commands.registerCommand(
       'cypressHelper.findCustomCommandReferences',
-      findCustomCommandReferences
+      showCustomCommandReferences
     ),
     vscode.languages.registerCompletionItemProvider(
-      [
-        { scheme: 'file', language: 'javascript' },
-        { scheme: 'file', language: 'typescript' }
-      ],
-      fixtureCompletionProvider,
+      languageActivationSchema,
+      new FixtureCompletionProvider(),
       ['('],
       ['/'],
       ['\\']
     ),
-    fixtureCompletionProvider
+    vscode.languages.registerDefinitionProvider(
+      languageActivationSchema,
+      new CommandDefinitionProvider()
+    ),
+    vscode.languages.registerReferenceProvider(
+      languageActivationSchema,
+      new CommandReferencesProvider()
+    ),
+    vscode.languages.registerReferenceProvider(
+      languageActivationSchema,
+      new StepReferencesProvider()
+    )
   );
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));
   vscode.workspace.onDidSaveTextDocument(document =>
