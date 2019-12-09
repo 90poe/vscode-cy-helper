@@ -6,13 +6,24 @@ const { message } = require('./constants');
 
 class VS {
   constructor() {
-    const { window, workspace, Position, Selection, Range, commands } = vscode;
+    const {
+      window,
+      workspace,
+      Position,
+      Selection,
+      Range,
+      commands,
+      Uri,
+      Location
+    } = vscode;
     this._window = window;
     this._workspace = workspace;
     this._Position = Position;
     this._Range = Range;
     this._Selection = Selection;
     this._commands = commands;
+    this._URI = Uri;
+    this._Location = Location;
   }
 
   execute(command) {
@@ -25,6 +36,14 @@ class VS {
 
   activeTextEditor() {
     return this._window.activeTextEditor;
+  }
+
+  parseUri(path) {
+    return this._URI.parse(path);
+  }
+
+  location(uri, pos) {
+    return new this._Location(uri, pos);
   }
 
   root() {
@@ -63,13 +82,15 @@ class VS {
    * @param {*} position
    */
   openDocumentAtPosition(path, position) {
-    this.openDocument(path).then(doc => {
-      const { line, column } = position;
-      const p = new this._Position(line - 1, column);
-      const s = new this._Selection(p, p);
-      doc.selection = s;
-      doc.revealRange(s, 1);
-    });
+    if (path) {
+      this.openDocument(path).then(doc => {
+        const { line, column } = position;
+        const p = new this._Position(line - 1, column);
+        const s = new this._Selection(p, p);
+        doc.selection = s;
+        doc.revealRange(s, 1);
+      });
+    }
   }
 
   /**

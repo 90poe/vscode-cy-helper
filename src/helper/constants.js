@@ -2,7 +2,7 @@ module.exports = {
   FOCUS_TAG: '@focus',
   TEST_BLOCK: 'it(',
   ONLY_BLOCK: '.only',
-  TERMINAL_NAME: 'CypressRun',
+  TERMINAL_NAME: 'CypressOpen',
   TEST_ONLY_BLOCK: 'it.only(',
   SCENARIO: 'Scenario',
   CYPRESS_COMMAND_ADD: 'Cypress.Commands.add',

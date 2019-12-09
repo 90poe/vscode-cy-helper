@@ -1,10 +1,10 @@
 const _ = require('lodash');
-const VS = require('./helper/vscodeWrapper');
+const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
-const { readFilesFromDir } = require('./helper/utils');
+const { readFilesFromDir } = require('../helper/utils');
 const { fixtureAutocompletionCommands } = vscode.config();
 
-class FixtureProvider {
+class FixtureCompletionProvider {
   provideCompletionItems(document, position, token, context) {
     const start = vscode.Position(position.line, 0);
     const range = vscode.Range(start, position);
@@ -73,4 +73,4 @@ class FixtureProvider {
   }
 }
 
-module.exports = FixtureProvider;
+module.exports = FixtureCompletionProvider;

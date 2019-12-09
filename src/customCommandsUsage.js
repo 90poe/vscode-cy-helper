@@ -51,7 +51,11 @@ const findUnusedCustomCommands = () => {
   });
 };
 
-const findCustomCommandReferences = () => {
+/**
+ * Detect custom command references
+ * returns command name and references array
+ */
+const customCommandReferences = () => {
   const commandName = detectCustomCommand().replace(regexp.QUOTES, '');
   const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
   const workspaceFiles = readFilesFromDir(root);
@@ -75,6 +79,14 @@ const findCustomCommandReferences = () => {
     });
   }).filter(_.identity);
 
+  return {
+    commandName: commandName,
+    references: references
+  };
+};
+
+const showCustomCommandReferences = () => {
+  const { commandName, references } = customCommandReferences();
   vscode.showQuickPickMenu(references, {
     mapperFunction: c => {
       return {
@@ -89,5 +101,6 @@ const findCustomCommandReferences = () => {
 
 module.exports = {
   findUnusedCustomCommands,
-  findCustomCommandReferences
+  showCustomCommandReferences,
+  customCommandReferences
 };
