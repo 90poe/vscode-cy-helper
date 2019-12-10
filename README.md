@@ -62,7 +62,7 @@ How it works:
 - in case custom command definitions found - trying to parse argument types, setting `any` by default  
 - get `typeDefinitionFile` content to check how much commands changed to display message
 - check for command names duplication (2 commands with same name will cause inappropriate behaviour)
-- write file with type definitions for commands to `typeDefinitionFile`, in case `includeAnnotationForCommands: true` also includes comments above commans.  
+- write file with type definitions for commands to `typeDefinitionFile`, in case `includeAnnotationForCommands: true` also includes comment above commands. __Please note__ that comment should be in [JSDoc](https://code.visualstudio.com/docs/languages/javascript#_jsdoc-support) format (`/**`), in other case only last comment is added.    
 - show message about duplicates, added and deleted commands.
 
 ![](./assets/generateTypes.gif)
