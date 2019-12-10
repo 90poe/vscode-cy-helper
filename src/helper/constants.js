@@ -12,6 +12,8 @@ module.exports = {
     NO_TEST: 'Test not found',
     NO_STEP: 'Step definition not found',
     NO_COMMAND_DUPLICATES: 'Command duplicates not found',
+    TSCONFIG_GENERATED: 'default tsconfig.json file created',
+    TSCONFIG_EXIST: 'tsconfig.json file already exist',
 
     INVALID_SYNTAX: subject =>
       `Incorrect command syntax:\n${toString(subject)}`,
@@ -48,7 +50,20 @@ module.exports = {
     COMMAND_USAGE: /\.(.*?)\(/g,
     QUOTES: /['"`]/g
   },
-  SPACE: '\n        '
+  SPACE: '\n        ',
+  TSCONFIG_DEFAULT_DATA: `{
+  "compilerOptions": {
+    "allowJs": true,
+    "baseUrl": "../node_modules",
+    "types": [
+      "cypress"
+    ],
+    "noEmit": true
+  },
+  "include": [
+    "**/*.*"
+  ]
+}`
 };
 
 const toString = subject => subject.join('\n');

@@ -3,6 +3,7 @@ const { openSpecFile } = require('./openSpecFile');
 const { openSingleTest } = require('./openSingleTest');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
+const { createDefaultTsConfig } = require('./createDefaultTsConfig');
 const {
   findUnusedCustomCommands,
   showCustomCommandReferences
@@ -56,6 +57,10 @@ const activate = context => {
     vscode.commands.registerCommand(
       'cypressHelper.findCustomCommandReferences',
       showCustomCommandReferences
+    ),
+    vscode.commands.registerCommand(
+      'cypressHelper.createDefaultTsConfig',
+      createDefaultTsConfig
     ),
     vscode.languages.registerCompletionItemProvider(
       languageActivationSchema,

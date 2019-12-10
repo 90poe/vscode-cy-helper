@@ -7,6 +7,10 @@ const { readFilesFromDir } = require('./helper/utils');
 const root = vscode.root();
 const { message, SPACE } = require('./helper/constants');
 const {
+  checkTsConfigExist,
+  writeTsConfig
+} = require('./createDefaultTsConfig');
+const {
   customCommandsFolder,
   typeDefinitionFile,
   typeDefinitionExcludePatterns,
@@ -109,4 +113,20 @@ exports.generateCustomCommandTypes = () => {
   added.length && vscode.show('info', message.NEW_COMMANDS(added), true);
   removed.length &&
     vscode.show('info', message.REMOVED_COMMANDS(removed), true);
+  const hasTsConfig = checkTsConfigExist(root);
+  if (!hasTsConfig) {
+    vscode
+      .show(
+        'info',
+        `No tsconfig.json file detected, do you want to create?`,
+        false,
+        'No',
+        'Yes'
+      )
+      .then(selectedAction => {
+        if (selectedAction === 'Yes') {
+          writeTsConfig(root);
+        }
+      });
+  }
 };

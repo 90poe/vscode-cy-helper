@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.7] - 2019-12-10
+### Added
+- Command to create tsconfig.json (addressing [issue#12](https://github.com/90poe/vscode-cy-helper/issues/12))
+- Prompt to create tsconfig.json if not found after generating type definitions
+
 ## [0.3.6] - 2019-12-09
 ### Added
 - Definition provider for custom commands (native `Go to Definition`, `Peek Definition` items)
