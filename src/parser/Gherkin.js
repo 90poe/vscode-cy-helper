@@ -20,7 +20,7 @@ const getCucumberStepsPath = () => {
 
   let cucumberConfig;
   packages.find(p => {
-    const content = JSON.parse(readFile(p.path) || '{}');
+    const content = JSON.parse(readFile(p) || '{}');
     cucumberConfig = _.get(content, 'cypress-cucumber-preprocessor');
     return cucumberConfig;
   });
@@ -97,12 +97,12 @@ const parseFeatures = () =>
       extension: '.feature'
     }),
     file => {
-      const { feature } = GherkinParser.parse(readFile(file.path));
+      const { feature } = GherkinParser.parse(readFile(file));
       return _.flatMap(feature.children, child =>
         child.steps.map(step => ({
           step: step.text.replace(/\\/g, ''),
           loc: step.location,
-          path: file.path
+          path: file
         }))
       );
     }

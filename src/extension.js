@@ -13,10 +13,7 @@ const {
   findCucumberStepUsage
 } = require('./cucumberStepsUsage');
 const { removeTags } = require('./helper/terminal');
-const {
-  updateWorkspaceFiles,
-  promptToReloadWindow
-} = require('./helper/utils');
+const { promptToReloadWindow } = require('./helper/utils');
 const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
 const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
 const CommandReferencesProvider = require('./providers/CommandReferencesProvider');
@@ -83,9 +80,6 @@ const activate = context => {
     )
   );
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));
-  vscode.workspace.onDidSaveTextDocument(document =>
-    updateWorkspaceFiles(document.fileName)
-  );
   vscode.workspace.onDidChangeConfiguration(promptToReloadWindow);
 };
 exports.activate = activate;

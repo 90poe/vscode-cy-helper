@@ -4,14 +4,16 @@ const { cucumberStepReferences } = require('../cucumberStepsUsage');
 
 class CommandReferencesProvider {
   provideReferences() {
-    const { usages: references } = cucumberStepReferences();
-    const locationList = references.map(reference =>
-      vscode.location(
-        vscode.parseUri(reference.path),
-        vscode.Position(reference.loc.line - 1, reference.loc.column)
-      )
-    );
-    return locationList;
+    const steps = cucumberStepReferences();
+    if (steps.usages) {
+      const locationList = steps.usages.map(reference =>
+        vscode.location(
+          vscode.parseUri(reference.path),
+          vscode.Position(reference.loc.line - 1, reference.loc.column)
+        )
+      );
+      return locationList;
+    }
   }
 }
 

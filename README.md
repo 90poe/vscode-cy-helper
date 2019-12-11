@@ -29,6 +29,7 @@ Cypress extension for vs code
 ### Other
 * [Open cypress window](#7-open-cypress-window)
 * [Fixture path autocompletion](#8-fixtures-autocompletion)
+* [Create default tsconfig file](#9-create-default-tsconfig-file)
 
 ## Usage
 ### 1. Open cypress custom command definition
@@ -63,6 +64,7 @@ How it works:
 - get `typeDefinitionFile` content to check how much commands changed to display message
 - check for command names duplication (2 commands with same name will cause inappropriate behaviour)
 - write file with type definitions for commands to `typeDefinitionFile`, in case `includeAnnotationForCommands: true` also includes comment above commands. __Please note__ that comment should be in [JSDoc](https://code.visualstudio.com/docs/languages/javascript#_jsdoc-support) format (`/**`), in other case only last comment is added.    
+- in case workspace has no `tsconfig.json` file, prompt to create it will be shown.
 - show message about duplicates, added and deleted commands.
 
 ![](./assets/generateTypes.gif)
@@ -95,6 +97,11 @@ To add your own commands that require fixture autocomplete for arguments - check
 Thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea  
   
 ![](./assets/fixtureCompletion.gif)
+
+### 9. Create default tsconfig file
+From command palette select command `Cypress: Create default tsconfig.json file`  
+
+tsconfig could also be created when `Cypress: Generate custom command types` is used. 
 
 ## License
 

@@ -1,7 +1,5 @@
 const vscode = require('vscode');
-const path = require('path');
 const _ = require('lodash');
-const klawSync = require('klaw-sync');
 const { message } = require('./constants');
 
 class VS {
@@ -141,12 +139,15 @@ class VS {
         description: opts.header
       });
 
-      this.showQuickPick(quickPickList).then(({ data }) =>
-        this.openDocumentAtPosition(
-          data.path,
-          _.get(data, 'loc.start') || data.loc
-        )
-      );
+      this.showQuickPick(quickPickList).then(pick => {
+        if (pick) {
+          const { data } = pick;
+          this.openDocumentAtPosition(
+            data.path,
+            _.get(data, 'loc.start') || data.loc
+          );
+        }
+      });
     } else {
       this.show('Info', opts.notFoundMessage);
     }
@@ -168,28 +169,6 @@ class VS {
       .then(() => {
         editor.document.save();
       });
-  }
-  /**
-   * Read files recursively from workspace root
-   * @param {string} folder
-   */
-  workspaceFiles() {
-    const excludeFn = item => {
-      const basename = path.basename(item.path);
-      return basename !== 'node_modules';
-    };
-    try {
-      const files =
-        klawSync(this.root(), {
-          traverseAll: false,
-          nodir: true,
-          filter: excludeFn
-        }) || [];
-      return files;
-    } catch (er) {
-      this.show('error', er.message);
-      return [];
-    }
   }
 }
 

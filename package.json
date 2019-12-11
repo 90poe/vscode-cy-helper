@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.3.7",
+	"version": "0.3.8",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -209,7 +209,6 @@
 	"devDependencies": {
 		"@types/fs-extra": "^8.0.0",
 		"@types/glob": "^7.1.1",
-		"@types/klaw-sync": "^6.0.0",
 		"@types/lodash": "^4.14.138",
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^10.12.21",
@@ -217,16 +216,15 @@
 		"eslint": "^5.13.0",
 		"eslint-config-prettier": "^6.1.0",
 		"eslint-plugin-prettier": "^3.1.0",
-		"glob": "^7.1.4",
 		"mocha": "^6.2.0",
 		"prettier": "^1.18.2",
 		"vscode-test": "^1.2.0"
 	},
 	"dependencies": {
 		"@babel/parser": "^7.5.5",
+		"fast-glob": "^3.1.1",
 		"fs-extra": "^8.1.0",
 		"gherkin": "5.1.0",
-		"klaw-sync": "^6.0.0",
 		"lodash": "^4.17.15",
 		"minimatch": "^3.0.4"
 	}

@@ -62,7 +62,7 @@ const customCommandsAvailable = file => {
  */
 const cypressCommandLocation = (folder, targetCommand) => {
   const location = readFilesFromDir(folder)
-    .map(({ path }) => {
+    .map(path => {
       const AST = parseJS(path);
       if (AST) {
         const commands = findCypressCommandAddStatements(AST.program.body);
@@ -91,12 +91,12 @@ const typeDefinitions = (
   options = { includeLocationData: false, includeAnnotations: false }
 ) => {
   let commandsFound = [];
-  const suitableFiles = files.filter(({ path }) =>
+  const suitableFiles = files.filter(path =>
     excludes.every(s => !minimatch(path, s))
   );
 
   const typeDefs = _.flatMap(suitableFiles, file => {
-    const AST = parseJS(file.path);
+    const AST = parseJS(file);
     if (AST) {
       const commands = findCypressCommandAddStatements(AST.program.body);
       const typeDefBody = commands.map(command => {
@@ -105,7 +105,7 @@ const typeDefinitions = (
           options.includeLocationData
             ? {
                 name: commandName,
-                path: file.path,
+                path: file,
                 loc: loc
               }
             : commandName
@@ -175,7 +175,7 @@ const findCucumberTypeDefinition = body => {
 const findCucumberCustomTypes = path => {
   let cucumberTypes = [];
   readFilesFromDir(path).find(file => {
-    const AST = parseJS(file.path);
+    const AST = parseJS(file);
     if (AST) {
       cucumberTypes = findCucumberTypeDefinition(AST.program.body).map(type => {
         const { properties } = type.expression.arguments[0];
@@ -200,7 +200,7 @@ const findCucumberCustomTypes = path => {
 
 const parseStepDefinitions = stepDefinitionPath =>
   _.flatMap(readFilesFromDir(stepDefinitionPath), file => {
-    const AST = parseJS(file.path);
+    const AST = parseJS(file);
     if (AST) {
       return findCucumberStepDefinitions(AST.program.body).map(step => {
         const stepValue =
@@ -209,7 +209,7 @@ const parseStepDefinitions = stepDefinitionPath =>
             : _.get(step, 'expression.arguments.0.value');
         return {
           [stepValue]: {
-            path: file.path,
+            path: file,
             loc: step.expression.arguments[0].loc.start
           }
         };

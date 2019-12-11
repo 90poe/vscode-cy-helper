@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.8] - 2019-12-11
+### Changed
+- switch from klaw-sync to fast-glob to read fs
+
 ## [0.3.7] - 2019-12-10
 ### Added
 - Command to create tsconfig.json (addressing [issue#12](https://github.com/90poe/vscode-cy-helper/issues/12))

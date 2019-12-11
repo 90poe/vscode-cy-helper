@@ -8,18 +8,17 @@ const { detectCustomCommand } = require('../openCustomCommand');
 class CommandDefinitionProvider {
   provideDefinition() {
     const commandName = detectCustomCommand();
-    if (!commandName) {
-      return undefined;
+    if (commandName) {
+      const location = cypressCommandLocation(
+        `${root}/${customCommandsFolder}`,
+        commandName
+      );
+      if (location && location.file) {
+        const { file, loc } = location;
+        const targetPosition = vscode.Position(loc.line - 1, loc.column);
+        return vscode.location(vscode.parseUri(file), targetPosition);
+      }
     }
-    const { file, loc } = cypressCommandLocation(
-      `${root}/${customCommandsFolder}`,
-      commandName
-    );
-    if (!file) {
-      return undefined;
-    }
-    const targetPosition = vscode.Position(loc.line - 1, loc.column);
-    return vscode.location(vscode.parseUri(file), targetPosition);
   }
 }
 

@@ -31,45 +31,49 @@ class FixtureCompletionProvider {
     const firstAutocompletion = context.triggerCharacter === '(';
     const baseFolder = firstAutocompletion
       ? 'fixtures'
-      : _.last(text.slice(0, -1).split(/"|'|`/));
+      : `fixtures/**/${_.last(text.slice(0, -1).split(/"|'|`/))}`;
     if (!baseFolder) {
       return undefined;
     }
 
     // get fs path for fixtures
     const fixtures =
-      readFilesFromDir('fixtures', {
+      readFilesFromDir(`${vscode.root()}/**/${baseFolder}`, {
         extension: '',
         name: ''
       }) || [];
 
-    // find files and folders that are right inside of base folder
-    const files = fixtures
-      .map(fixture => {
-        const folders = fixture.path.split('/');
-        const baseFolderIndex = folders.indexOf(_.last(baseFolder.split('/')));
-        return folders[baseFolderIndex + 1];
-      })
-      .filter(f => f !== '');
+    if (fixtures) {
+      // find files and folders that are right inside of base folder
+      const files = fixtures
+        .map(fixture => {
+          const folders = fixture.split('/');
+          const baseFolderIndex = folders.indexOf(
+            _.last(baseFolder.split('/'))
+          );
+          return baseFolderIndex === -1 ? null : folders[baseFolderIndex + 1];
+        })
+        .filter(_.identity);
 
-    // prepare completion items list
-    const fixtureResults = _.uniq(files).reduce((completions, file) => {
-      /**
-       * FILE: 16
-       * FOLDER: 18
-       */
-      const type = file.includes('.') ? 16 : 18;
-      const insertText = type === 16 ? file.replace('.json', '') : file;
-      completions.push({
-        label: file,
-        kind: type,
-        insertText: firstAutocompletion ? `"${insertText}"` : insertText
-      });
-      return completions;
-    }, []);
-    return {
-      items: fixtureResults
-    };
+      // prepare completion items list
+      const fixtureResults = _.uniq(files).reduce((completions, file) => {
+        /**
+         * FILE: 16
+         * FOLDER: 18
+         */
+        const type = file.includes('.') ? 16 : 18;
+        const insertText = type === 16 ? file.replace('.json', '') : file;
+        completions.push({
+          label: file,
+          kind: type,
+          insertText: firstAutocompletion ? `"${insertText}"` : insertText
+        });
+        return completions;
+      }, []);
+      return {
+        items: fixtureResults
+      };
+    }
   }
 }
 

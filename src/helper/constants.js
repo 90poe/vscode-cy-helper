@@ -41,7 +41,7 @@ module.exports = {
 
     REFERENCE_STEPS_FOUND: (quantity, target) =>
       `Found ${quantity} usages of step: "${target}":`,
-    REFERECE_STEPS_NOT_FOUND: target => `Not found usage for step: "${target}"`
+    REFERENCE_STEPS_NOT_FOUND: target => `Not found usage for step: "${target}"`
   },
   regexp: {
     TS_DEFINITION: /^ +(.*)\(.*: Chainable<any>$/m,

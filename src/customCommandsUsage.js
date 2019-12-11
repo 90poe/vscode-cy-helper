@@ -30,7 +30,7 @@ const findUnusedCustomCommands = () => {
   let uniqueCommands = findCustomCommands(workspaceFiles);
 
   for (const file of workspaceFiles) {
-    const content = readFile(file.path) || '';
+    const content = readFile(file) || '';
     uniqueCommands = uniqueCommands.filter(
       command => new RegExp(`\\.${command.name}\\(`, 'g').exec(content) === null
     );
@@ -56,47 +56,55 @@ const findUnusedCustomCommands = () => {
  * returns command name and references array
  */
 const customCommandReferences = () => {
-  const commandName = detectCustomCommand().replace(regexp.QUOTES, '');
-  const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
-  const workspaceFiles = readFilesFromDir(root);
+  const command = detectCustomCommand();
+  if (command) {
+    const commandName = command.replace(regexp.QUOTES, '');
+    const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');
+    const workspaceFiles = readFilesFromDir(root);
 
-  const references = _.flatMap(workspaceFiles, file => {
-    const content = readFile(file.path) || '';
-    return content.split('\n').map((row, index) => {
-      const hasCommand = commandPattern.exec(row);
-      if (hasCommand) {
-        const column = row.indexOf(commandName);
-        return {
-          path: file.path,
-          loc: {
-            start: {
-              line: index + 1,
-              column: column
+    const references = _.flatMap(workspaceFiles, file => {
+      const content = readFile(file) || '';
+      return content.split('\n').map((row, index) => {
+        const hasCommand = commandPattern.exec(row);
+        if (hasCommand) {
+          const column = row.indexOf(commandName);
+          return {
+            path: file,
+            loc: {
+              start: {
+                line: index + 1,
+                column: column
+              }
             }
-          }
-        };
-      }
-    });
-  }).filter(_.identity);
+          };
+        }
+      });
+    }).filter(_.identity);
 
-  return {
-    commandName: commandName,
-    references: references
-  };
+    return {
+      commandName: commandName,
+      references: references
+    };
+  }
 };
 
 const showCustomCommandReferences = () => {
-  const { commandName, references } = customCommandReferences();
-  vscode.showQuickPickMenu(references, {
-    mapperFunction: c => {
-      return {
-        label: `${c.path.replace(root, '')}:${c.loc.start.line}`,
-        data: c
-      };
-    },
-    header: message.REFERENCE_COMMAND_FOUND(references.length, commandName),
-    notFoundMessage: message.REFERENCE_NOT_FOUND(commandName)
-  });
+  const usage = customCommandReferences();
+  if (usage) {
+    const { commandName, references } = usage;
+    vscode.showQuickPickMenu(references, {
+      mapperFunction: c => {
+        return {
+          label: `${c.path.replace(root, '')}:${c.loc.start.line}`,
+          data: c
+        };
+      },
+      header: message.REFERENCE_COMMAND_FOUND(references.length, commandName),
+      notFoundMessage: message.REFERENCE_NOT_FOUND(commandName)
+    });
+  } else {
+    vscode.show('err', message.REFERENCE_NOT_FOUND());
+  }
 };
 
 module.exports = {

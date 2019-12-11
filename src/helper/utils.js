@@ -1,13 +1,8 @@
 const fs = require('fs-extra');
 const _ = require('lodash');
-const minimatch = require('minimatch');
+const glob = require('fast-glob');
 const VS = require('./vscodeWrapper');
 const vscode = new VS();
-
-/**
- * Initially get all workspace files
- */
-let indexedFiles = vscode.workspaceFiles();
 
 /**
  * clear path from odd slashes
@@ -18,32 +13,33 @@ const sanitizePath = path =>
   path
     .split('/')
     .filter(_.identity)
-    .join('/');
-
-/**
- * Check if we should trigger scanning workspace files
- * when `onDidSaveTextDocument` event comes
- * update `indexedFiles` variable when new file added
- * @param {string} savedFileName
- */
-const updateWorkspaceFiles = savedFileName => {
-  const indexedPaths = indexedFiles.map(f => f.path);
-  if (!indexedPaths.includes(savedFileName)) {
-    indexedFiles = vscode.workspaceFiles();
-  }
-};
+    .join('/')
+    .replace(/\\/g, '/');
 
 /**
  * Read files recursively from directory
  * @param {string} folder
  * @param {object} opts
  */
-const readFilesFromDir = (folder, opts = { extension: '.js', name: '' }) =>
-  indexedFiles.filter(
-    ({ path }) =>
-      minimatch(path, `**/${sanitizePath(folder)}/**/*`) &&
-      path.endsWith(`${opts.name || ''}${opts.extension || ''}`)
-  );
+const readFilesFromDir = (
+  folder,
+  opts = { extension: '.js', name: undefined }
+) => {
+  try {
+    const pattern = `${sanitizePath(folder)}/**/${opts.name ||
+      '*'}${opts.extension || ''}`;
+    const files = glob.sync(pattern, {
+      onlyFiles: true,
+      absolute: true,
+      suppressErrors: true,
+      ignore: '**/node_modules/**'
+    });
+    return files.filter(f => f.includes('.'));
+  } catch (er) {
+    vscode.show('error', er.message);
+    return [];
+  }
+};
 
 /**
  * Read file content
@@ -75,7 +71,6 @@ function promptToReloadWindow() {
 
 module.exports = {
   readFilesFromDir,
-  updateWorkspaceFiles,
   readFile,
   promptToReloadWindow
 };
