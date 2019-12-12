@@ -14,6 +14,7 @@ Cypress extension for vs code
 | `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
 | `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"OpenSingleTest": true,`<br/> `"OpenSpecFile": true,` <br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
+| `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
 | `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
 
 
@@ -94,6 +95,7 @@ From command palette select command `Cypress: Find not used Cucumber step defini
 ### 8. Fixtures autocompletion
 Typing `cy.fixture(` opens VS Code Completion interface with possible files and subfolders to select needed fixture file  
 To add your own commands that require fixture autocomplete for arguments - check configuration `cypressHelper.fixtureAutocompletionCommands`  
+If you are using cucumber and fixtures as parameters in your scenarios, you can enable autocomplete by setting `cypressHelper.cucumberFixtureAutocompleteOnQuotes: true`  
 Thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellisense) for original fixture autocomplete idea  
   
 ![](./assets/fixtureCompletion.gif)
