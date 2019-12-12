@@ -2,14 +2,17 @@ const _ = require('lodash');
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
 const { readFilesFromDir } = require('../helper/utils');
-const { fixtureAutocompletionCommands } = vscode.config();
+const {
+  fixtureAutocompletionCommands,
+  cucumberFixtureAutocompleteOnQuotes
+} = vscode.config();
 
 class FixtureCompletionProvider {
   provideCompletionItems(document, position, token, context) {
     const start = vscode.Position(position.line, 0);
     const range = vscode.Range(start, position);
     const text = document.getText(range);
-
+    const featureFile = document.languageId === 'feature';
     // break if fixture autocomplete is not needed
     if (
       !fixtureAutocompletionCommands.some(command => {
@@ -22,13 +25,16 @@ class FixtureCompletionProvider {
             .substring(text.indexOf(commandPattern), position.character)
             .split('.').length === 2 // [empty string before `.` or `cy`, command string]
         );
-      })
+      }) &&
+      // When configuration for cucumber fixture autocomplete on quotes disabled:
+      !(cucumberFixtureAutocompleteOnQuotes && featureFile)
     ) {
       return undefined;
     }
 
     // in case of triggering autocomplete for subfolders - detect last folder from already used
-    const firstAutocompletion = context.triggerCharacter === '(';
+    const firstAutocompletion =
+      context.triggerCharacter === '(' || context.triggerCharacter === '"';
     const baseFolder = firstAutocompletion
       ? 'fixtures'
       : `fixtures/**/${_.last(text.slice(0, -1).split(/"|'|`/))}`;
@@ -66,7 +72,8 @@ class FixtureCompletionProvider {
         completions.push({
           label: file,
           kind: type,
-          insertText: firstAutocompletion ? `"${insertText}"` : insertText
+          insertText:
+            firstAutocompletion && !featureFile ? `"${insertText}"` : insertText
         });
         return completions;
       }, []);

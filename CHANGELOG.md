@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.9] - 2019-12-12
+### Added
+- fixture autocomplete for feature files on `"` character
+
 ## [0.3.8] - 2019-12-11
 ### Changed
 - switch from klaw-sync to fast-glob to read fs

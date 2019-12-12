@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.3.8",
+	"version": "0.3.9",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -31,7 +31,8 @@
 		"onCommand:cypressHelper.findCustomCommandReferences",
 		"onCommand:cypressHelper.createDefaultTsConfig",
 		"onLanguage:javascript",
-		"onLanguage:typescript"
+		"onLanguage:typescript",
+		"onLanguage:feature"
 	],
 	"publisher": "Shelex",
 	"contributes": {
@@ -202,6 +203,11 @@
 					"type": "boolean",
 					"default": true,
 					"description": "In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false`"
+				},
+				"cypressHelper.cucumberFixtureAutocompleteOnQuotes": {
+					"type": "boolean",
+					"default": false,
+					"description": "Enable fixture autocompletion on quotes (\") in feature files"
 				}
 			}
 		}

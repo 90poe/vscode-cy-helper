@@ -60,11 +60,16 @@ const activate = context => {
       createDefaultTsConfig
     ),
     vscode.languages.registerCompletionItemProvider(
-      languageActivationSchema,
+      [
+        { scheme: 'file', language: 'javascript' },
+        { scheme: 'file', language: 'typescript' },
+        { scheme: 'file', language: 'feature' }
+      ],
       new FixtureCompletionProvider(),
       ['('],
       ['/'],
-      ['\\']
+      ['\\'],
+      ['"']
     ),
     vscode.languages.registerDefinitionProvider(
       languageActivationSchema,
