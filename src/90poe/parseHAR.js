@@ -1,10 +1,10 @@
-const VS = require('./helper/vscodeWrapper');
+const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
-const { readFile, readFilesFromDir } = require('./helper/utils');
+const { readFile, readFilesFromDir } = require('../helper/utils');
 const path = require('path');
 const _ = require('lodash');
 const fs = require('fs-extra');
-const { message } = require('./helper/constants');
+const { message } = require('../helper/constants');
 
 /**
  * 90poe internal command

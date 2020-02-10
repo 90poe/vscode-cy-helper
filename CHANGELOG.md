@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.4.1] - 2019-12-12
+### Fixed
+ - autocomplete triggering for VS Code 1.42.0
+### Changed
+ - moved 90poe internal commands to separate directory
+
+## [0.4.0] - 2019-12-12
+### Added
+ - 90poe internal command to convert HAR file into fixtures
+ - 90poe internal command to execute json schema generator binary
+
 ## [0.3.9] - 2019-12-12
 ### Added
 - fixture autocomplete for feature files on `"` character
