@@ -12,8 +12,8 @@ const {
   findUnusedCucumberSteps,
   findCucumberStepUsage
 } = require('./cucumberStepsUsage');
-const { parseHAR } = require('./parseHAR');
-const { openJsonSchemaGenerator } = require('./openJsonSchemaGenerator');
+const { parseHAR } = require('./90poe/parseHAR');
+const { openJsonSchemaGenerator } = require('./90poe/openJsonSchemaGenerator');
 const { removeTags } = require('./helper/terminal');
 const { promptToReloadWindow } = require('./helper/utils');
 const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
@@ -74,10 +74,10 @@ const activate = context => {
         { scheme: 'file', language: 'feature' }
       ],
       new FixtureCompletionProvider(),
-      ['('],
-      ['/'],
-      ['\\'],
-      ['"']
+      '(',
+      '/',
+      '\\',
+      '"'
     ),
     vscode.languages.registerDefinitionProvider(
       languageActivationSchema,

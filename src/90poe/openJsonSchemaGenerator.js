@@ -1,4 +1,4 @@
-const { getTerminal } = require('./helper/terminal');
+const { getTerminal } = require('../helper/terminal');
 
 /**
  * 90poe internal command
