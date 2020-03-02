@@ -37,7 +37,7 @@ class VS {
   }
 
   parseUri(path) {
-    return this._URI.parse(path);
+    return this._URI.file(path);
   }
 
   location(uri, pos) {
