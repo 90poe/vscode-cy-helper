@@ -6,13 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [0.4.1] - 2019-12-12
+## [0.4.2] - 2020-02-03
+### Fixed
+ - addressing [Custom command folder setting not working?](https://github.com/90poe/vscode-cy-helper/issues/16)
+
+## [0.4.1] - 2020-10-02
 ### Fixed
  - autocomplete triggering for VS Code 1.42.0
 ### Changed
  - moved 90poe internal commands to separate directory
 
-## [0.4.0] - 2019-12-12
+## [0.4.0] - 2020-04-02
 ### Added
  - 90poe internal command to convert HAR file into fixtures
  - 90poe internal command to execute json schema generator binary
