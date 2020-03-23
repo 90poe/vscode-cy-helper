@@ -17,6 +17,7 @@ const { openJsonSchemaGenerator } = require('./90poe/openJsonSchemaGenerator');
 const { removeTags } = require('./helper/terminal');
 const { promptToReloadWindow } = require('./helper/utils');
 const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
+const GQLMockCompletionProvider = require('./90poe/gqlMockCompletionProvider');
 const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
 const CommandReferencesProvider = require('./providers/CommandReferencesProvider');
 const StepReferencesProvider = require('./providers/StepReferencesProvider');
@@ -78,6 +79,16 @@ const activate = context => {
       '/',
       '\\',
       '"'
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      [
+        { scheme: 'file', language: 'javascript' },
+        { scheme: 'file', language: 'typescript' }
+      ],
+      new GQLMockCompletionProvider(),
+      '(',
+      '/',
+      '\\'
     ),
     vscode.languages.registerDefinitionProvider(
       languageActivationSchema,

@@ -10,11 +10,7 @@ const vscode = new VS();
  */
 
 const sanitizePath = path =>
-  path
-    .split('/')
-    .filter(_.identity)
-    .join('/')
-    .replace(/\\/g, '/');
+  path.split('/').filter(_.identity).join('/').replace(/\\/g, '/');
 
 /**
  * Read files recursively from directory
@@ -26,8 +22,9 @@ const readFilesFromDir = (
   opts = { extension: '.js', name: undefined }
 ) => {
   try {
-    const pattern = `${sanitizePath(folder)}/**/${opts.name ||
-      '*'}${opts.extension || ''}`;
+    const pattern = `${sanitizePath(folder)}/**/${opts.name || '*'}${
+      opts.extension || ''
+    }`;
     const files = glob.sync(pattern, {
       onlyFiles: true,
       absolute: true,

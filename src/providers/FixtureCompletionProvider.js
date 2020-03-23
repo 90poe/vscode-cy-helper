@@ -1,7 +1,7 @@
 const _ = require('lodash');
+const { findFixtures } = require('../helper/findFixtures');
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
-const { readFilesFromDir } = require('../helper/utils');
 const {
   fixtureAutocompletionCommands,
   cucumberFixtureAutocompleteOnQuotes
@@ -35,34 +35,12 @@ class FixtureCompletionProvider {
     // in case of triggering autocomplete for subfolders - detect last folder from already used
     const firstAutocompletion =
       context.triggerCharacter === '(' || context.triggerCharacter === '"';
-    const baseFolder = firstAutocompletion
-      ? 'fixtures'
-      : `fixtures/**/${_.last(text.slice(0, -1).split(/"|'|`/))}`;
-    if (!baseFolder) {
-      return undefined;
-    }
 
-    // get fs path for fixtures
-    const fixtures =
-      readFilesFromDir(`${vscode.root()}/**/${baseFolder}`, {
-        extension: '',
-        name: ''
-      }) || [];
+    const fixtures = findFixtures(vscode.root(), text, context);
 
     if (fixtures) {
-      // find files and folders that are right inside of base folder
-      const files = fixtures
-        .map(fixture => {
-          const folders = fixture.split('/');
-          const baseFolderIndex = folders.indexOf(
-            _.last(baseFolder.split('/'))
-          );
-          return baseFolderIndex === -1 ? null : folders[baseFolderIndex + 1];
-        })
-        .filter(_.identity);
-
       // prepare completion items list
-      const fixtureResults = _.uniq(files).reduce((completions, file) => {
+      const fixtureResults = _.uniq(fixtures).reduce((completions, file) => {
         /**
          * FILE: 16
          * FOLDER: 18
