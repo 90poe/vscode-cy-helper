@@ -12,7 +12,7 @@ const findCustomCommands = workspaceFiles => {
   const { commandsFound } = typeDefinitions(workspaceFiles, [], {
     includeLocationData: true
   });
-  const uniqueCommands = commandsFound.map(found => {
+  return commandsFound.map(found => {
     const { path, loc } = commandsFound.find(
       command => command.name === found.name
     );
@@ -22,7 +22,6 @@ const findCustomCommands = workspaceFiles => {
       loc: loc
     };
   });
-  return uniqueCommands;
 };
 
 const findUnusedCustomCommands = () => {

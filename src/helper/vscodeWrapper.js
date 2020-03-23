@@ -12,7 +12,8 @@ class VS {
       Range,
       commands,
       Uri,
-      Location
+      Location,
+      TextEdit
     } = vscode;
     this._window = window;
     this._workspace = workspace;
@@ -22,6 +23,7 @@ class VS {
     this._commands = commands;
     this._URI = Uri;
     this._Location = Location;
+    this._TextEdit = TextEdit;
   }
 
   execute(command) {
@@ -47,7 +49,19 @@ class VS {
   root() {
     return this._workspace.workspaceFolders[0].uri.fsPath;
   }
-
+  /**
+   * @typedef config
+   * @property {string} commandForOpen
+   * @property {string} customCommandsFolder
+   * @property {string} typeDefinitionFile
+   * @property {array} typeDefinitionExcludePatterns
+   * @property {boolean} includeAnnotationForCommands
+   * @property {object} menuItems
+   * @property {array} fixtureAutocompletionCommands
+   * @property {boolean} enableCommandReferenceProvider
+   * @property {boolean} cucumberFixtureAutocompleteOnQuotes
+   * @returns {config}
+   */
   config() {
     return this._workspace.getConfiguration().cypressHelper;
   }
@@ -155,8 +169,8 @@ class VS {
 
   /**
    * Edit document at position
-   * @param {*} position
-   * @param {*} newText
+   * @param {Position} position
+   * @param {string} newText
    */
   editDocument(position, newText) {
     const editor = this.activeTextEditor();
@@ -169,6 +183,16 @@ class VS {
       .then(() => {
         editor.document.save();
       });
+  }
+
+  /**
+   * replace text in document
+   * used in completion providers
+   * @param {Range} range
+   * @param {string} newText
+   */
+  replaceText(range, newText) {
+    return this._TextEdit.replace(range, newText);
   }
 }
 
