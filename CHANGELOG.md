@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.0] - 2020-04-08
+
+### Added
+ - cucumber tags autocompletion
+ - option for [cypress-allure-plugin](https://www.npmjs.com/package/@shelex/cypress-allure-plugin) cucumber tags autocompletion
+ 
+### Fixed
+ - fixture autocomplete for gherkin files only on `"` character
+ - prompt to reload vs code only when cypressHelper configuration affected
+
 ## [0.4.3] - 2020-03-23
 ### Changed
  - bump dependencies

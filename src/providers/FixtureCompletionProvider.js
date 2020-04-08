@@ -27,7 +27,11 @@ class FixtureCompletionProvider {
         );
       }) &&
       // When configuration for cucumber fixture autocomplete on quotes disabled:
-      !(cucumberFixtureAutocompleteOnQuotes && featureFile)
+      !(
+        cucumberFixtureAutocompleteOnQuotes &&
+        featureFile &&
+        !text.trim().startsWith('@')
+      )
     ) {
       return undefined;
     }

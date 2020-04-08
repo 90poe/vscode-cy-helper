@@ -50,20 +50,23 @@ const readFile = path =>
 /**
  * Prompts user to reload editor window in order for configuration change to take effect.
  */
-function promptToReloadWindow() {
-  const action = 'Reload';
-  vscode
-    .show(
-      'info',
-      `Please reload window in order for changes in extension "Cypress Helper" configuration to take effect.`,
-      false,
-      action
-    )
-    .then(selectedAction => {
-      if (selectedAction === action) {
-        vscode.execute('workbench.action.reloadWindow');
-      }
-    });
+function promptToReloadWindow(event) {
+  const shouldReload = event.affectsConfiguration('cypressHelper');
+  if (shouldReload) {
+    const action = 'Reload';
+    vscode
+      .show(
+        'info',
+        `Please reload window in order for changes in extension "Cypress Helper" configuration to take effect.`,
+        false,
+        action
+      )
+      .then(selectedAction => {
+        if (selectedAction === action) {
+          vscode.execute('workbench.action.reloadWindow');
+        }
+      });
+  }
 }
 
 module.exports = {

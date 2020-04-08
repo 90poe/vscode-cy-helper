@@ -16,6 +16,7 @@ Cypress extension for vs code
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
 | `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
 | `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
+| `cypressHelper.cucumberTagsAutocomplete` | Set `enable: true` for cucumber feature autocomplete on `@`. Array of tags could be specified. Option to add [cypress-allure-plugin](https://www.npmjs.com/package/@shelex/cypress-allure-plugin) tags.  | `{`<br/>`"enable": false,`<br/>`"tags": ["focus"],`<br/>`"allurePlugin": false`<br/>`}` |   
 
 
 ## Available functionality
@@ -30,7 +31,8 @@ Cypress extension for vs code
 ### Other
 * [Open cypress window](#7-open-cypress-window)
 * [Fixture path autocompletion](#8-fixtures-autocompletion)
-* [Create default tsconfig file](#9-create-default-tsconfig-file)
+* [Cucumber tags autocompletion](#9-cucumber-tag-autocompletion)
+* [Create default tsconfig file](#10-create-default-tsconfig-file)
 
 ## Usage
 ### 1. Open cypress custom command definition
@@ -100,7 +102,13 @@ Thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellis
   
 ![](./assets/fixtureCompletion.gif)
 
-### 9. Create default tsconfig file
+### 9 Cucumber tags autocompletion
+Typing `@` in `.feature` file shows autocompletion with tags from configuration `cypressHelper.cucumberTagsAutocomplete.tags` - with `focus` by default. In case you have [cypress-allure-plugin](https://www.npmjs.com/package/@shelex/cypress-allure-plugin) just set `cypressHelper.cucumberTagsAutocomplete.allurePlugin` and list of allure tags will be available.
+
+![](./assets/cucumberCompletion.gif)
+
+
+### 10. Create default tsconfig file
 From command palette select command `Cypress: Create default tsconfig.json file`  
 
 tsconfig could also be created when `Cypress: Generate custom command types` is used. 
