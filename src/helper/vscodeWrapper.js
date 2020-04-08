@@ -58,6 +58,7 @@ class VS {
    * @property {boolean} includeAnnotationForCommands
    * @property {object} menuItems
    * @property {array} fixtureAutocompletionCommands
+   * @property {object} cucumberTagsAutocomplete
    * @property {boolean} enableCommandReferenceProvider
    * @property {boolean} cucumberFixtureAutocompleteOnQuotes
    * @returns {config}

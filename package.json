@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.4.3",
+	"version": "0.5.0",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -143,7 +143,7 @@
 				"cypressHelper.commandForOpen": {
 					"type": "string",
 					"default": "cypress open",
-					"description": "Specify command used for opening cypress"
+					"description": "Specify command used for opening cypress GUI"
 				},
 				"cypressHelper.customCommandsFolder": {
 					"type": "string",
@@ -233,6 +233,35 @@
 					"type": "boolean",
 					"default": false,
 					"description": "Enable fixture autocompletion on quotes (\") in feature files"
+				},
+				"cypressHelper.cucumberTagsAutocomplete": {
+					"type": "object",
+					"default": {
+						"enable": false,
+						"allurePlugin": false,
+						"tags": ["focus"]
+					},
+					"description": "configure cucumber tags autocomplete in feature files",
+					"properties": {
+						"enable": {
+							"type": "boolean",
+							"default": false,
+							"description": "enable cucumber tags autocomplete"
+						},
+						"allurePlugin": {
+							"type": "boolean",
+							"default": false,
+							"description": "enable autocompletion for allure-plugin tags"
+						},
+						"tags": {
+							"type":"array",
+							"default": ["focus"],
+							"description": "list of tags available for autocomplete",
+							"items": {
+								"type": "string"
+							}
+						}
+					}
 				}
 			}
 		}

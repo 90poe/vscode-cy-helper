@@ -17,6 +17,7 @@ const { openJsonSchemaGenerator } = require('./90poe/openJsonSchemaGenerator');
 const { removeTags } = require('./helper/terminal');
 const { promptToReloadWindow } = require('./helper/utils');
 const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
+const CucumberTagsProvider = require('./providers/CucumberTagsProvider');
 const GQLMockCompletionProvider = require('./90poe/gqlMockCompletionProvider');
 const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
 const CommandReferencesProvider = require('./providers/CommandReferencesProvider');
@@ -81,10 +82,12 @@ const activate = context => {
       '"'
     ),
     vscode.languages.registerCompletionItemProvider(
-      [
-        { scheme: 'file', language: 'javascript' },
-        { scheme: 'file', language: 'typescript' }
-      ],
+      [{ scheme: 'file', language: 'feature' }],
+      new CucumberTagsProvider(),
+      '@'
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      languageActivationSchema,
       new GQLMockCompletionProvider(),
       '(',
       '/',
@@ -104,7 +107,9 @@ const activate = context => {
     )
   );
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));
-  vscode.workspace.onDidChangeConfiguration(promptToReloadWindow);
+  vscode.workspace.onDidChangeConfiguration(event =>
+    promptToReloadWindow(event)
+  );
 };
 exports.activate = activate;
 

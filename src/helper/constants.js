@@ -53,6 +53,18 @@ module.exports = {
     COMMAND_USAGE: /\.(.*?)\(/g,
     QUOTES: /['"`]/g
   },
+  allureLabels: [
+    'suite',
+    'subSuite',
+    'epic',
+    'feature',
+    'story',
+    'severity',
+    'owner',
+    'package',
+    'issue',
+    'tms'
+  ],
   SPACE: '\n        ',
   TSCONFIG_DEFAULT_DATA: `{
   "compilerOptions": {
