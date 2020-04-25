@@ -17,6 +17,7 @@ const { openJsonSchemaGenerator } = require('./90poe/openJsonSchemaGenerator');
 const { removeTags } = require('./helper/terminal');
 const { promptToReloadWindow } = require('./helper/utils');
 const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
+const FixtureDefinitionProvider = require('./providers/FixtureDefinitionProvider');
 const CucumberTagsProvider = require('./providers/CucumberTagsProvider');
 const GQLMockCompletionProvider = require('./90poe/gqlMockCompletionProvider');
 const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
@@ -96,6 +97,14 @@ const activate = context => {
     vscode.languages.registerDefinitionProvider(
       languageActivationSchema,
       new CommandDefinitionProvider()
+    ),
+    vscode.languages.registerDefinitionProvider(
+      [
+        { scheme: 'file', language: 'javascript' },
+        { scheme: 'file', language: 'typescript' },
+        { scheme: 'file', language: 'feature' }
+      ],
+      new FixtureDefinitionProvider()
     ),
     vscode.languages.registerReferenceProvider(
       languageActivationSchema,

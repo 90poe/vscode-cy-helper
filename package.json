@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.5.0",
+	"version": "0.5.1",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -239,7 +239,9 @@
 					"default": {
 						"enable": false,
 						"allurePlugin": false,
-						"tags": ["focus"]
+						"tags": [
+							"focus"
+						]
 					},
 					"description": "configure cucumber tags autocomplete in feature files",
 					"properties": {
@@ -254,8 +256,10 @@
 							"description": "enable autocompletion for allure-plugin tags"
 						},
 						"tags": {
-							"type":"array",
-							"default": ["focus"],
+							"type": "array",
+							"default": [
+								"focus"
+							],
 							"description": "list of tags available for autocomplete",
 							"items": {
 								"type": "string"
@@ -282,6 +286,7 @@
 	},
 	"dependencies": {
 		"@babel/parser": "^7.9.3",
+		"@babel/traverse": "^7.9.5",
 		"fast-glob": "^3.2.2",
 		"fs-extra": "^9.0.0",
 		"gherkin": "5.1.0",

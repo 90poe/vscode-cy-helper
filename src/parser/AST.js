@@ -43,13 +43,9 @@ const customCommandsAvailable = file => {
     const commands = fileContent
       .split('\n')
       .map(row => regexp.TS_DEFINITION.exec(row));
-    return commands.filter(_.identity).map(item =>
-      item
-        .pop()
-        .split('(')
-        .shift()
-        .trim()
-    );
+    return commands
+      .filter(_.identity)
+      .map(item => item.pop().split('(').shift().trim());
   } catch (e) {
     return [];
   }
