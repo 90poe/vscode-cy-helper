@@ -31,8 +31,11 @@ Cypress extension for vs code
 ### Other
 * [Open cypress window](#7-open-cypress-window)
 * [Fixture path autocompletion](#8-fixtures-autocompletion)
-* [Cucumber tags autocompletion](#9-cucumber-tag-autocompletion)
-* [Create default tsconfig file](#10-create-default-tsconfig-file)
+* [Fixture path go to definition](#9-fixtures-definition)
+* [Alias autocompletion](#10-alias-autocompletion)
+* [Alias go to definition](#11-alias-definition)
+* [Cucumber tags autocompletion](#12-cucumber-tag-autocompletion)
+* [Create default tsconfig file](#13-create-default-tsconfig-file)
 
 ## Usage
 ### 1. Open cypress custom command definition
@@ -102,13 +105,33 @@ Thanks to [Josef Biehler](https://github.com/gabbersepp/cypress-fixture-intellis
   
 ![](./assets/fixtureCompletion.gif)
 
-### 9 Cucumber tags autocompletion
+### 9. Fixtures definition
+Go to definition and Peek definition options for feature files.  
+Works in cucumber feature files in scenario or examples table also.  
+Currently default fixtures path `cypress/fixtures` supported only.  
+
+![](./assets/fixtureDefinition.gif)
+
+### 10. Alias autocompletion
+
+Autocompletion for aliases. Aliases will be selected from files in current folder.
+
+![](./assets/aliasCompletion.gif)
+
+### 11. Alias definition
+
+Go to definition and Peek definition options available for aliases.  
+Aliases created in same folder files are supported only.  
+
+![](./assets/aliasDefinition.gif)
+
+### 12 Cucumber tags autocompletion
 Typing `@` in `.feature` file shows autocompletion with tags from configuration `cypressHelper.cucumberTagsAutocomplete.tags` - with `focus` by default. In case you have [cypress-allure-plugin](https://www.npmjs.com/package/@shelex/cypress-allure-plugin) just set `cypressHelper.cucumberTagsAutocomplete.allurePlugin` and list of allure tags will be available.
 
 ![](./assets/cucumberCompletion.gif)
 
 
-### 10. Create default tsconfig file
+### 13. Create default tsconfig file
 From command palette select command `Cypress: Create default tsconfig.json file`  
 
 tsconfig could also be created when `Cypress: Generate custom command types` is used. 

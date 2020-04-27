@@ -6,11 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.5.2] - 2020-04-27
+
+### Added
+ - autocomplete for aliases in same folder
+ - go to definition for aliases in same folder
+
+### Changed
+ - impoved definition provider for fixture file paths
+
 ## [0.5.1] - 2020-04-26
 
 ### Added
 
- - Go to definition for fixture files
+ - go to definition for fixture files
 
 ## [0.5.0] - 2020-04-08
 

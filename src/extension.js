@@ -18,6 +18,10 @@ const { removeTags } = require('./helper/terminal');
 const { promptToReloadWindow } = require('./helper/utils');
 const FixtureCompletionProvider = require('./providers/FixtureCompletionProvider');
 const FixtureDefinitionProvider = require('./providers/FixtureDefinitionProvider');
+const AliasCompletionProvider = require('./providers/AliasCompletionProvider');
+const {
+  AliasDefinitionProvider
+} = require('./providers/AliasDefinitionProvider');
 const CucumberTagsProvider = require('./providers/CucumberTagsProvider');
 const GQLMockCompletionProvider = require('./90poe/gqlMockCompletionProvider');
 const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
@@ -81,6 +85,15 @@ const activate = context => {
       '/',
       '\\',
       '"'
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      languageActivationSchema,
+      new AliasCompletionProvider(),
+      '@'
+    ),
+    vscode.languages.registerDefinitionProvider(
+      languageActivationSchema,
+      new AliasDefinitionProvider()
     ),
     vscode.languages.registerCompletionItemProvider(
       [{ scheme: 'file', language: 'feature' }],

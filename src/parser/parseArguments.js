@@ -54,8 +54,14 @@ const parseFnParams = functionParameters =>
  */
 const parseRightPartOfArgument = right =>
   match(right)
-    .when(() => right.type === 'ObjectExpression', () => 'object')
-    .when(() => right.type === 'ArrayExpression', () => 'any[]')
+    .when(
+      () => right.type === 'ObjectExpression',
+      () => 'object'
+    )
+    .when(
+      () => right.type === 'ArrayExpression',
+      () => 'any[]'
+    )
     .default(() =>
       _.has(right, 'value') && !_.isNil(right.value)
         ? `${typeof right.value}`

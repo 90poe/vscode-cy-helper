@@ -4,12 +4,12 @@ const traverse = require('@babel/traverse');
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
 const { parseJS } = require('../parser/AST');
-const { readFile, readFilesFromDir } = require('../helper/utils');
+const { readFile } = require('../helper/utils');
 const root = vscode.root();
 const { fixtureAutocompletionCommands } = vscode.config();
 
-const matchInQuotes = new RegExp('\\"(.*?)\\"');
-const matchInExamples = new RegExp('\\|(.*?)\\|');
+const matchInQuotes = new RegExp(/\"(.*?)\"|\'(.*?)\'/);
+const matchInExamples = new RegExp(/\|(.*?)\|/);
 
 const traverseForFixture = (file, position) => {
   let fixtureValue;
@@ -44,20 +44,34 @@ const traverseForFixture = (file, position) => {
 const parseFixtureFromGherkinFile = (file, position) => {
   const content = readFile(file).split('\n');
   const line = content[position.line];
-  const matches = line.includes('|')
+  if (position.line === 0) {
+    return;
+  }
+  let isExamples;
+  for (let i = position.line - 1; i > 0; i--) {
+    const previousLine = content[i].trim();
+    if (previousLine.startsWith('Examples')) {
+      isExamples = true;
+      break;
+    }
+    if (previousLine.startsWith('Scenario')) {
+      isExamples = false;
+      break;
+    }
+  }
+  const matches = isExamples
     ? matchInExamples.exec(line)
     : matchInQuotes.exec(line);
   if (!matches.length) {
     return;
   }
-  const fixtures = readFilesFromDir(path.join(root, 'cypress', 'fixtures'), {
-    extension: '*',
-    name: '*'
-  }).map(f => f.split('fixtures').pop().replace(/^\//, ''));
-  const match = matches
-    .map(m => m.replace(/\"|\'|\s/g, ''))
-    .find(match => fixtures.some(f => f.startsWith(match)));
-  return match;
+  const fixtureName = _.chain(matches)
+    .filter(_.identity)
+    .map(m => m.replace(/\"|\'|\||\s/g, ''))
+    .uniq()
+    .pop()
+    .value();
+  return fixtureName;
 };
 
 class FixtureDefinitionProvider {
