@@ -19,7 +19,7 @@ const sanitizePath = path =>
  */
 const readFilesFromDir = (
   folder,
-  opts = { extension: '.js', name: undefined }
+  opts = { extension: '.[j|t]s', name: undefined }
 ) => {
   try {
     const pattern = `${sanitizePath(folder)}/**/${opts.name || '*'}${

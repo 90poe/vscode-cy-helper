@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.0] - 2020-05-10
+
+### Added
+ - support for typescript files
+ - better handling of cucumber step definitions with regex
+
 ## [0.5.2] - 2020-04-27
 
 ### Added

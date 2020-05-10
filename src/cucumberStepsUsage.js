@@ -20,7 +20,7 @@ const findUnusedCucumberSteps = () => {
         label: c.step,
         detail: `${c.path
           .split(path.normalize(stepDefinitionPath))[1]
-          .replace('.js', '')}:${c.loc.line}`,
+          .replace(/\.js|\.ts/, '')}:${c.loc.line}`,
         data: c
       };
     },
@@ -38,7 +38,10 @@ const cucumberStepReferences = () => {
   );
 
   const stepDefinitionPattern = regexp.STEP_DEFINITION;
-  const stepLiteralMatch = line.replace('/', '|').match(stepDefinitionPattern);
+  const isRegexStep = line.includes(`(/^`) && line.includes('$/');
+  const stepLiteralMatch = isRegexStep
+    ? line.match(stepDefinitionPattern)
+    : line.replace('/', '|').match(stepDefinitionPattern);
 
   if (!stepLiteralMatch) {
     return undefined;

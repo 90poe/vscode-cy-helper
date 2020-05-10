@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.5.2",
+	"version": "0.6.0",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -106,12 +106,12 @@
 			],
 			"editor/context": [
 				{
-					"when": "resourceLangId =~ /(feature|javascript)/ && config.cypressHelper.menuItems.OpenSpecFile",
+					"when": "resourceLangId =~ /(feature|javascript|typescript)/ && config.cypressHelper.menuItems.OpenSpecFile",
 					"command": "cypressHelper.openSpecFile",
 					"group": "Cypress"
 				},
 				{
-					"when": "resourceLangId =~ /(feature|javascript)/ && config.cypressHelper.menuItems.OpenSingleTest",
+					"when": "resourceLangId =~ /(feature|javascript|typescript)/ && config.cypressHelper.menuItems.OpenSingleTest",
 					"command": "cypressHelper.openSingleTest",
 					"group": "Cypress"
 				},
@@ -121,12 +121,12 @@
 					"group": "navigation"
 				},
 				{
-					"when": "resourceLangId == 'javascript' && config.cypressHelper.menuItems.FindStepDefinitionReferences",
+					"when": "resourceLangId =~ /(javascript|typescript)/ && config.cypressHelper.menuItems.FindStepDefinitionReferences",
 					"command": "cypressHelper.findCucumberStepUsage",
 					"group": "navigation@2"
 				},
 				{
-					"when": "resourceLangId == 'javascript' && config.cypressHelper.menuItems.FindCustomCommandReferences",
+					"when": "resourceLangId =~ /(javascript|typescript)/  && config.cypressHelper.menuItems.FindCustomCommandReferences",
 					"command": "cypressHelper.findCustomCommandReferences",
 					"group": "navigation@2"
 				},
@@ -157,9 +157,7 @@
 				},
 				"cypressHelper.typeDefinitionExcludePatterns": {
 					"type": "array",
-					"default": [
-						"**/*.ts"
-					],
+					"default": [],
 					"description": "Specify glob patterns to exclude some custom commands search",
 					"items": {
 						"type": "string"

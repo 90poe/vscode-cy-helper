@@ -12,7 +12,8 @@ const parseJS = filepath => {
   try {
     return (
       Parser.parse(readFile(filepath) || '', {
-        sourceType: 'module'
+        sourceType: 'module',
+        plugins: ['typescript']
       }) || null
     );
   } catch (e) {

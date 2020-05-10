@@ -44,13 +44,7 @@ const writeTypeDefinition = (typeDefFile, typeDefs) => {
  */
 const cleanTypes = (incorrect, definitions) => {
   return definitions.filter(
-    d =>
-      !incorrect.includes(
-        d
-          .split('(')
-          .shift()
-          .trim()
-      )
+    d => !incorrect.includes(d.split('(').shift().trim())
   );
 };
 

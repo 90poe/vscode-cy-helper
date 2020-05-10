@@ -1,5 +1,5 @@
 const _ = require('lodash');
-const VS = require('./vscodeWrapper.js');
+const VS = require('./vscodeWrapper');
 const vscode = new VS();
 const { TERMINAL_NAME, FOCUS_TAG, ONLY_BLOCK } = require('./constants');
 

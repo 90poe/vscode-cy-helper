@@ -33,6 +33,15 @@ const parseFnParams = functionParameters =>
   functionParameters.map(param =>
     match(param)
       .when(
+        () => _.has(param, 'typeAnnotation'),
+        () =>
+          `${param.name} : ${
+            _.get(param, 'typeAnnotation.typeAnnotation.typeName.name') ||
+            tsBasicType(_.get(param, 'typeAnnotation.typeAnnotation')) ||
+            'any'
+          }`
+      )
+      .when(
         () => param.type === 'AssignmentPattern',
         () => {
           const leftPart = `${param.left.name}?: `;
@@ -87,6 +96,32 @@ const match = x => ({
   when: (pred, fn) => (pred(x) ? matched(fn(x)) : match(x)),
   default: fn => fn(x)
 });
+
+const tsBasicType = annotation => {
+  const basic = {
+    TSAnyKeyword: 'any',
+    tSBooleanKeyword: 'boolean',
+    TSBigIntKeyword: 'bigint',
+    TSNullKeyword: 'null',
+    TSNumberKeyword: 'number',
+    TSObjectKeyword: 'object',
+    TSStringKeyword: 'string',
+    TSUndefinedKeyword: 'undefined',
+    TSUnknownKeyword: 'any'
+  };
+  const isArray = annotation.type === 'TSArrayType';
+  const isTuple = annotation.type === 'TSTupleType';
+  return isArray || isTuple
+    ? `${
+        basic[
+          _.get(
+            annotation,
+            isTuple ? 'elementTypes.0.type' : 'elementType.type'
+          )
+        ]
+      }[]`
+    : basic[annotation.type];
+};
 
 module.exports = {
   parseArguments
