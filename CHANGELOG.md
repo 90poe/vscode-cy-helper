@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.1] - 2020-05-22
+
+### Added
+ - github action for extension publish
+
+### Changed
+ - extension logo, based on [comment](https://github.com/cypress-io/cypress-documentation/pull/2721#issuecomment-630977645) from Cypress team representative.
+
 ## [0.6.0] - 2020-05-10
 
 ### Added
