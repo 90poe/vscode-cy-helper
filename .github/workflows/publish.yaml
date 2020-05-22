@@ -1,17 +1,16 @@
 on:
-    push:
-      branches:
-        - master
+  push:
+    branches:
+      - master
 name: Deploy Extension
 jobs:
-    build-and-publish:
-        runs-on: ubuntu-latest
-        name: Publish
-        steps:
-            - uses: actions/checkout@v2
-            - run: npm install
-            - uses: lannonbr/vsce-action@master
-              with:
-                args: "publish -p $VSCE_TOKEN"
-              env:
-                VSCE_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: npm install
+      - uses: lannonbr/vsce-action@master
+        with:
+          args: "publish -p $VSCE_TOKEN"
+        env:
+          VSCE_TOKEN: ${{ secrets.PUBLISHER_TOKEN }}
