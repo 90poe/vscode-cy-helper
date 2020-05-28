@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const path = require('path');
 const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
 const { cypressCommandLocation } = require('./parser/AST');
@@ -83,10 +84,7 @@ const detectCustomCommand = () => {
       return undefined;
     }
 
-    commandName = closest.match
-      .split('.')
-      .pop()
-      .trim();
+    commandName = closest.match.split('.').pop().trim();
   } else {
     commandName = editor.document.getText(editor.selection);
   }
@@ -102,8 +100,10 @@ const openCustomCommand = () => {
   const commandName = detectCustomCommand();
   !commandName && vscode.show('err', message.NO_COMMAND);
   const { file, loc } =
-    cypressCommandLocation(`${root}/${customCommandsFolder}`, commandName) ||
-    vscode.show('err', message.NO_COMMAND);
+    cypressCommandLocation(
+      path.join(root, customCommandsFolder),
+      commandName
+    ) || vscode.show('err', message.NO_COMMAND);
   !file && vscode.show('err', message.NO_COMMAND);
   vscode.openDocumentAtPosition(file, loc);
 };

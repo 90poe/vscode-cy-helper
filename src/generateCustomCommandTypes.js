@@ -1,4 +1,5 @@
 const _ = require('lodash');
+const path = require('path');
 const fs = require('fs-extra');
 const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
@@ -58,9 +59,9 @@ const cleanCommands = (incorrect, available) => {
 };
 
 exports.generateCustomCommandTypes = () => {
-  const folder = `${root}/${customCommandsFolder}`;
+  const folder = path.join(root, customCommandsFolder);
   const excludes = typeDefinitionExcludePatterns;
-  const typeDefFile = `${root}/${typeDefinitionFile}`;
+  const typeDefFile = path.join(root, typeDefinitionFile);
 
   const customCommandFiles = readFilesFromDir(folder);
   let { commandsFound, typeDefs } = typeDefinitions(

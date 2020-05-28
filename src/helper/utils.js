@@ -1,16 +1,9 @@
+const path = require('path');
 const fs = require('fs-extra');
 const _ = require('lodash');
 const glob = require('fast-glob');
 const VS = require('./vscodeWrapper');
 const vscode = new VS();
-
-/**
- * clear path from odd slashes
- * @param {string} path
- */
-
-const sanitizePath = path =>
-  path.split('/').filter(_.identity).join('/').replace(/\\/g, '/');
 
 /**
  * Read files recursively from directory
@@ -22,7 +15,7 @@ const readFilesFromDir = (
   opts = { extension: '.[j|t]s', name: undefined }
 ) => {
   try {
-    const pattern = `${sanitizePath(folder)}/**/${opts.name || '*'}${
+    const pattern = `${path.resolve(folder)}/**/${opts.name || '*'}${
       opts.extension || ''
     }`;
     const files = glob.sync(pattern, {
@@ -42,9 +35,9 @@ const readFilesFromDir = (
  * Read file content
  * @param {string} path
  */
-const readFile = path =>
-  (fs.pathExistsSync(sanitizePath(path)) &&
-    fs.readFileSync(sanitizePath(path), 'utf-8')) ||
+const readFile = filepath =>
+  (fs.pathExistsSync(path.resolve(filepath)) &&
+    fs.readFileSync(path.resolve(filepath), 'utf-8')) ||
   null;
 
 /**
