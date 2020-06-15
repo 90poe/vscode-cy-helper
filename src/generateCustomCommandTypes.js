@@ -59,9 +59,9 @@ const cleanCommands = (incorrect, available) => {
 };
 
 exports.generateCustomCommandTypes = () => {
-  const folder = path.join(root, customCommandsFolder);
+  const folder = path.join(root, path.normalize(customCommandsFolder));
   const excludes = typeDefinitionExcludePatterns;
-  const typeDefFile = path.join(root, typeDefinitionFile);
+  const typeDefFile = path.join(root, path.normalize(typeDefinitionFile));
 
   const customCommandFiles = readFilesFromDir(folder);
   let { commandsFound, typeDefs } = typeDefinitions(

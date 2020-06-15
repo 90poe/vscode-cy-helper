@@ -61,7 +61,7 @@ const detectCustomCommand = () => {
 
     const match = line.match(pattern);
     if (!match) {
-      return undefined;
+      throw `not found matches in "${line}"`;
     }
 
     const matches = _.flatMap(match, () => pattern.exec(line).pop());
@@ -81,10 +81,10 @@ const detectCustomCommand = () => {
       findClosestRange(indexedMatches, selectionIndex);
 
     if (!closest) {
-      return undefined;
+      throw `not found closest command in "${line}" at index ${selectionIndex}`;
     }
 
-    commandName = closest.match.split('.').pop().trim();
+    commandName = closest.match.split('.').pop().trim().replace(/['"`]/g, '');
   } else {
     commandName = editor.document.getText(editor.selection);
   }
@@ -97,14 +97,21 @@ const detectCustomCommand = () => {
  *  - open document with cursor on command definition
  */
 const openCustomCommand = () => {
-  const commandName = detectCustomCommand();
-  !commandName && vscode.show('err', message.NO_COMMAND);
-  const { file, loc } =
-    cypressCommandLocation(
-      path.join(root, customCommandsFolder),
-      commandName
-    ) || vscode.show('err', message.NO_COMMAND);
-  !file && vscode.show('err', message.NO_COMMAND);
+  let commandName;
+  try {
+    commandName = detectCustomCommand();
+  } catch (err) {
+    vscode.show('err', message.NO_COMMAND_DETECTED(err));
+    return;
+  }
+  const commandsFolder = path.join(root, path.normalize(customCommandsFolder));
+  const location = cypressCommandLocation(commandsFolder, commandName);
+  !location &&
+    vscode.show(
+      'err',
+      message.NO_COMMAND_LOCATION(commandName, commandsFolder)
+    );
+  const { file, loc } = location;
   vscode.openDocumentAtPosition(file, loc);
 };
 

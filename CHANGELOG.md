@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.3] - 2020-06-15
+
+### Added
+ - better error messages for custom commands detection and definition
+
+### Fixed
+ - handling of configuration paths to have same config working for different OS
+
 ## [0.6.2] - 2020-05-29
 
 ### Fixed

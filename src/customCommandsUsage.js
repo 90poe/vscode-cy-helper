@@ -1,3 +1,4 @@
+const path = require('path');
 const _ = require('lodash');
 const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
@@ -41,7 +42,9 @@ const findUnusedCustomCommands = () => {
         label: c.name,
         detail: `${c.path
           .replace(root, '')
-          .replace(`${customCommandsFolder}/`, '')}:${c.loc.start.line}`,
+          .replace(`${customCommandsFolder}${path.sep}`, '')}:${
+          c.loc.start.line
+        }`,
         data: c
       };
     },

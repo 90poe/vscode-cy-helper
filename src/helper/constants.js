@@ -9,6 +9,9 @@ module.exports = {
   CUCUMBER_KEYWORDS: ['given', 'when', 'then', 'Given', 'When', 'Then'],
   message: {
     NO_COMMAND: 'Custom command not found',
+    NO_COMMAND_DETECTED: err => `Custom command not detected: ${err}`,
+    NO_COMMAND_LOCATION: (command, location) =>
+      `Definition location for command "${command}" not found at "${location}"`,
     NO_TEST: 'Test not found',
     NO_STEP: 'Step definition not found',
     NO_COMMAND_DUPLICATES: 'Command duplicates not found',

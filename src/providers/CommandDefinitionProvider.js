@@ -1,3 +1,4 @@
+const path = require('path');
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
 const { cypressCommandLocation } = require('../parser/AST');
@@ -9,10 +10,11 @@ class CommandDefinitionProvider {
   provideDefinition() {
     const commandName = detectCustomCommand();
     if (commandName) {
-      const location = cypressCommandLocation(
-        `${root}/${customCommandsFolder}`,
-        commandName
+      const commandsLocation = path.join(
+        root,
+        path.normalize(customCommandsFolder)
       );
+      const location = cypressCommandLocation(commandsLocation, commandName);
       if (location && location.file) {
         const { file, loc } = location;
         const targetPosition = vscode.Position(loc.line - 1, loc.column);
