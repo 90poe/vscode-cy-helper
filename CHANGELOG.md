@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.6.4] - 2020-06-15
+
+### Fixed
+ - glob pattern should always use forward-slashes, fixes issue with OS Windows
+
 ## [0.6.3] - 2020-06-15
 
 ### Added

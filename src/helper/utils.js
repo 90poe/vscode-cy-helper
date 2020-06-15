@@ -15,9 +15,9 @@ const readFilesFromDir = (
   opts = { extension: '.[j|t]s', name: undefined }
 ) => {
   try {
-    const pattern = `${path.resolve(folder)}/**/${opts.name || '*'}${
-      opts.extension || ''
-    }`;
+    const pattern = `${path.normalize(folder).replace(/\\/g, '/')}/**/${
+      opts.name || '*'
+    }${opts.extension || ''}`;
     const files = glob.sync(pattern, {
       onlyFiles: true,
       absolute: true,
