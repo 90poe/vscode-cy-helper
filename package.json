@@ -15,7 +15,7 @@
 	"private": true,
 	"icon": "assets/icon.png",
 	"engines": {
-		"vscode": "^1.43.0"
+		"vscode": "^1.48.0"
 	},
 	"categories": [
 		"Other"
