@@ -13,7 +13,8 @@ class VS {
       commands,
       Uri,
       Location,
-      TextEdit
+      TextEdit,
+      CodeLens
     } = vscode;
     this._window = window;
     this._workspace = workspace;
@@ -24,6 +25,7 @@ class VS {
     this._URI = Uri;
     this._Location = Location;
     this._TextEdit = TextEdit;
+    this._CodeLens = CodeLens;
   }
 
   execute(command) {
@@ -194,6 +196,15 @@ class VS {
    */
   replaceText(range, newText) {
     return this._TextEdit.replace(range, newText);
+  }
+
+  /**
+   * Create CodeLens for specified range
+   * @param {Range} range
+   * @param {Command} command
+   */
+  codeLens(range, command) {
+    return new this._CodeLens(range, command);
   }
 }
 

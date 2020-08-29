@@ -1,5 +1,5 @@
 module.exports = {
-  FOCUS_TAG: '@focus',
+  FOCUS_TAG: '@focus ',
   TEST_BLOCK: 'it(',
   ONLY_BLOCK: '.only',
   TERMINAL_NAME: 'CypressOpen',

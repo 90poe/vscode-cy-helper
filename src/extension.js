@@ -1,6 +1,6 @@
 const vscode = require('vscode');
 const { openSpecFile } = require('./openSpecFile');
-const { openSingleTest } = require('./openSingleTest');
+const { setOnlyTag, clearOnlyTag } = require('./testWithOnlyTags');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const { createDefaultTsConfig } = require('./createDefaultTsConfig');
@@ -27,19 +27,23 @@ const GQLMockCompletionProvider = require('./90poe/gqlMockCompletionProvider');
 const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider');
 const CommandReferencesProvider = require('./providers/CommandReferencesProvider');
 const StepReferencesProvider = require('./providers/StepReferencesProvider');
+const CodeLensForRunProvider = require('./providers/CodeLensForRunProvider');
 
-const languageActivationSchema = [
+const JsAndTsActivationSchema = [
   { scheme: 'file', language: 'javascript' },
   { scheme: 'file', language: 'typescript' }
+];
+
+const allLanguagesSchema = [
+  ...JsAndTsActivationSchema,
+  { scheme: 'file', language: 'feature' }
 ];
 
 const activate = context => {
   context.subscriptions.push(
     vscode.commands.registerCommand('cypressHelper.openSpecFile', openSpecFile),
-    vscode.commands.registerCommand(
-      'cypressHelper.openSingleTest',
-      openSingleTest
-    ),
+    vscode.commands.registerCommand('cypressHelper.setOnlyTag', setOnlyTag),
+    vscode.commands.registerCommand('cypressHelper.clearOnlyTag', clearOnlyTag),
     vscode.commands.registerCommand(
       'cypressHelper.openCustomCommand',
       openCustomCommand
@@ -75,11 +79,7 @@ const activate = context => {
       openJsonSchemaGenerator(file)
     ),
     vscode.languages.registerCompletionItemProvider(
-      [
-        { scheme: 'file', language: 'javascript' },
-        { scheme: 'file', language: 'typescript' },
-        { scheme: 'file', language: 'feature' }
-      ],
+      allLanguagesSchema,
       new FixtureCompletionProvider(),
       '(',
       '/',
@@ -87,12 +87,12 @@ const activate = context => {
       '"'
     ),
     vscode.languages.registerCompletionItemProvider(
-      languageActivationSchema,
+      JsAndTsActivationSchema,
       new AliasCompletionProvider(),
       '@'
     ),
     vscode.languages.registerDefinitionProvider(
-      languageActivationSchema,
+      JsAndTsActivationSchema,
       new AliasDefinitionProvider()
     ),
     vscode.languages.registerCompletionItemProvider(
@@ -101,31 +101,31 @@ const activate = context => {
       '@'
     ),
     vscode.languages.registerCompletionItemProvider(
-      languageActivationSchema,
+      JsAndTsActivationSchema,
       new GQLMockCompletionProvider(),
       '(',
       '/',
       '\\'
     ),
     vscode.languages.registerDefinitionProvider(
-      languageActivationSchema,
+      JsAndTsActivationSchema,
       new CommandDefinitionProvider()
     ),
     vscode.languages.registerDefinitionProvider(
-      [
-        { scheme: 'file', language: 'javascript' },
-        { scheme: 'file', language: 'typescript' },
-        { scheme: 'file', language: 'feature' }
-      ],
+      allLanguagesSchema,
       new FixtureDefinitionProvider()
     ),
     vscode.languages.registerReferenceProvider(
-      languageActivationSchema,
+      JsAndTsActivationSchema,
       new CommandReferencesProvider()
     ),
     vscode.languages.registerReferenceProvider(
-      languageActivationSchema,
+      JsAndTsActivationSchema,
       new StepReferencesProvider()
+    ),
+    vscode.languages.registerCodeLensProvider(
+      allLanguagesSchema,
+      new CodeLensForRunProvider()
     )
   );
   vscode.window.onDidCloseTerminal(terminal => removeTags(terminal));

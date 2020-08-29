@@ -12,7 +12,7 @@ Cypress extension for vs code
 | `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
 | `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
 | `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
-| `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"OpenSingleTest": true,`<br/> `"OpenSpecFile": true,` <br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
+| `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
 | `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
 | `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
@@ -86,16 +86,17 @@ From command palette select command `Cypress: Find not used Cucumber step defini
 ![](./assets/findUnusedStepDefinitions.gif)
 
 ### 7. Open Cypress window
-* for opening file - select in menu `Cypress: Open spec file`  
-* for marking some tests with `only` tags - select in menu `Cypress: Open single test`  
+* For opening Cypress with current file - click CodeLens "Open Cypress" (button above test). 
+Please note that it will execute command from `cypressHelper.commandForOpen` configuration.
+* For marking some tests with `only`/`@focus` tag, or removing - click corresponding CodeLens. Also, you can just close terminal `CypressOpen` to remove all `only` tags from your file.  
+* In case this functionality is not needed for your case, it could be disabled by setting configuration `cypressHelper.menuItems.OpenCypress` to `false`  
 #### How it works:   
 - get `cypressHelper.commandForOpen`;
 - open terminal with name `CypressOpen`;
-- in case `single` test selected - set `@focus` for cucumber scenarios or `.only` for mocha syntax tests;
 - send command `%%commandForOpen%% --config testFiles=%%spec%%` to terminal, where `%%spec%%` is opened test file path;  
-- after terminal `CypressOpen` is closed - deletes from opened test file all `@focus` or `.only` tags
+- after terminal `CypressOpen` is closed - deletes from opened test file all `@focus` or `.only` tags;  
 
-![](./assets/openSingleTest.gif)
+![](./assets/openCypress.gif)
 
 ### 8. Fixtures autocompletion
 Typing `cy.fixture(` opens VS Code Completion interface with possible files and subfolders to select needed fixture file  

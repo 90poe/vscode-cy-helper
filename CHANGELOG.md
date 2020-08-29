@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.7.0] - 2020-08-30
+### Changed
+ - menu items `Cypress: Open Spec File` and `Cypress: Open Single Test` replaced with CodeLenses right in test files
+
 ## [0.6.4] - 2020-06-15
 
 ### Fixed
