@@ -17,7 +17,7 @@ const removeTags = terminal => {
     const testIndexes = fullText
       .map((line, index) => {
         if (
-          line.trim().startsWith(FOCUS_TAG) ||
+          line.trim().startsWith(FOCUS_TAG.trim()) ||
           line.trim().includes(ONLY_BLOCK)
         ) {
           return index;
