@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.0] - 2020-08-31
+### Added
+ - option to trigger custom command types generation on save event  
+
 ## [0.7.1] - 2020-08-30
 ### Fixed
  - clearing `@focus` tags on terminal closing

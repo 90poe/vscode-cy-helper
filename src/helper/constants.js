@@ -24,9 +24,9 @@ module.exports = {
       `Duplicated commands:\n${toString(subject)}`,
 
     GENERATED_TYPES: 'Type definitions generated and saved',
-    NEW_COMMANDS: commands => `Added command types:\n${toString(commands)}`,
+    NEW_COMMANDS: commands => `Added command types: ${commands.join(', ')}`,
     REMOVED_COMMANDS: commands =>
-      `Removed command types:\n${toString(commands)}`,
+      `Removed command types: ${commands.join(', ')}`,
 
     DEFAULT_NO_ITEMS_QUICKMENU: 'Items for quick pick menu not found',
 

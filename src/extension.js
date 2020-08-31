@@ -4,6 +4,7 @@ const { setOnlyTag, clearOnlyTag } = require('./testWithOnlyTags');
 const { openCustomCommand } = require('./openCustomCommand');
 const { generateCustomCommandTypes } = require('./generateCustomCommandTypes');
 const { createDefaultTsConfig } = require('./createDefaultTsConfig');
+const { regenerateTypes } = require('./generateTypesOnSave');
 const {
   findUnusedCustomCommands,
   showCustomCommandReferences
@@ -132,6 +133,7 @@ const activate = context => {
   vscode.workspace.onDidChangeConfiguration(event =>
     promptToReloadWindow(event)
   );
+  vscode.workspace.onDidSaveTextDocument(document => regenerateTypes(document));
 };
 exports.activate = activate;
 

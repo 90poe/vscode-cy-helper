@@ -31,11 +31,14 @@ const wrapTemplate = commands => `declare namespace Cypress {
  * write gathered type definitions to file
  * @param {string} typeDefFile
  * @param {string[]} typeDefs
+ * @param {boolean} onSave
  */
-const writeTypeDefinition = (typeDefFile, typeDefs) => {
+const writeTypeDefinition = (typeDefFile, typeDefs, onSave) => {
   fs.outputFileSync(typeDefFile, wrapTemplate(typeDefs), 'utf-8');
-  vscode.show('info', message.GENERATED_TYPES);
-  vscode.openDocument(typeDefFile);
+  if (!onSave) {
+    vscode.show('info', message.GENERATED_TYPES);
+    vscode.openDocument(typeDefFile);
+  }
 };
 
 /**
@@ -58,7 +61,7 @@ const cleanCommands = (incorrect, available) => {
   return available.filter(a => !incorrect.includes(a));
 };
 
-exports.generateCustomCommandTypes = () => {
+exports.generateCustomCommandTypes = (doc, onSave = false) => {
   const folder = path.join(root, path.normalize(customCommandsFolder));
   const excludes = typeDefinitionExcludePatterns;
   const typeDefFile = path.join(root, path.normalize(typeDefinitionFile));
@@ -83,12 +86,14 @@ exports.generateCustomCommandTypes = () => {
   }
 
   if (commandsFound.length === uniqueCommands.length) {
-    writeTypeDefinition(typeDefFile, typeDefs);
+    writeTypeDefinition(typeDefFile, typeDefs, onSave);
 
-    if (typeDefs.length) {
-      vscode.show('info', message.NO_COMMAND_DUPLICATES);
-    } else {
-      vscode.show('warn', message.NO_COMMAND);
+    if (!onSave) {
+      if (typeDefs.length) {
+        vscode.show('info', message.NO_COMMAND_DUPLICATES);
+      } else {
+        vscode.show('warn', message.NO_COMMAND);
+      }
     }
   } else {
     const duplicates = _.uniq(
@@ -99,15 +104,14 @@ exports.generateCustomCommandTypes = () => {
     typeDefs = cleanTypes(duplicates, typeDefs);
     commandsFound = cleanCommands(duplicates, commandsFound);
 
-    writeTypeDefinition(typeDefFile, typeDefs);
+    writeTypeDefinition(typeDefFile, typeDefs, onSave);
   }
 
   const added = _.difference(commandsFound, availableTypeDefinitions);
   const removed = _.difference(availableTypeDefinitions, commandsFound);
 
-  added.length && vscode.show('info', message.NEW_COMMANDS(added), true);
-  removed.length &&
-    vscode.show('info', message.REMOVED_COMMANDS(removed), true);
+  added.length && vscode.show('info', message.NEW_COMMANDS(added));
+  removed.length && vscode.show('info', message.REMOVED_COMMANDS(removed));
   const hasTsConfig = checkTsConfigExist(root);
   if (!hasTsConfig) {
     vscode

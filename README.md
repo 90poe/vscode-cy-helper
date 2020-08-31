@@ -12,6 +12,7 @@ Cypress extension for vs code
 | `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
 | `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
 | `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
+| `cypressHelper.typeDefinitionOnSave` | generate type definitions file for custom commands on save | false |    
 | `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
 | `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
@@ -62,7 +63,7 @@ From command palette (⌘P) select `Cypress: Find not used custom commands`
 ![](./assets/findUnusedCustomCommands.gif)
 
 ### 4. Generate type definitions for Cypress custom commands
-From menu select `Cypress: Generate custom command types`  
+Context menu item `Cypress: Generate custom command types` or can also be configured to generate types on save, with `cypressHelper.typeDefinitionOnSave`  
 How it works:
 - checks configuration `customCommandsFolder`, `typeDefinitionFile`, `typeDefinitionExcludePatterns`, `includeAnnotationForCommands`  
 - get files from `customCommandsFolder`, excepting `typeDefinitionExcludePatterns`  

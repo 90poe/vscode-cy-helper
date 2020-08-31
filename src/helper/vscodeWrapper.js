@@ -28,8 +28,8 @@ class VS {
     this._CodeLens = CodeLens;
   }
 
-  execute(command) {
-    return this._commands.executeCommand(command);
+  execute(command, ...args) {
+    return this._commands.executeCommand(command, ...args);
   }
 
   createTerminal(name) {
@@ -58,6 +58,7 @@ class VS {
    * @property {string} typeDefinitionFile
    * @property {array} typeDefinitionExcludePatterns
    * @property {boolean} includeAnnotationForCommands
+   * @property {boolean} typeDefinitionOnSave
    * @property {object} menuItems
    * @property {array} fixtureAutocompletionCommands
    * @property {object} cucumberTagsAutocomplete
