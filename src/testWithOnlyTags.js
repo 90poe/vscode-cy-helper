@@ -2,6 +2,7 @@ const VS = require('./helper/vscodeWrapper');
 const vscode = new VS();
 const {
   FOCUS_TAG,
+  FOCUS_TAG_FORMATTED,
   ONLY_BLOCK,
   message,
   TEST_BLOCK,
@@ -40,8 +41,17 @@ const clearOnlyTag = (scenarioIndex, isCucumber) => {
   const { text, range } = editor.document.lineAt(
     isCucumber ? scenarioIndex - 1 : scenarioIndex
   );
-  const newText = text.replace(FOCUS_TAG, '').replace(ONLY_BLOCK, '');
-  vscode.editDocument(range, newText);
+
+  const newText = text
+    .replace(FOCUS_TAG, '')
+    .replace(FOCUS_TAG_FORMATTED, '')
+    .replace(ONLY_BLOCK, '');
+  newText.trim() === ''
+    ? vscode.editDocument(
+        vscode.Range(vscode.Position(range.start.line, 0), range.end),
+        ''
+      )
+    : vscode.editDocument(range, newText);
 };
 
 module.exports = {
