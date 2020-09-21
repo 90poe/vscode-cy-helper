@@ -3,6 +3,7 @@ const vscode = new VS();
 const {
   TEST_BLOCK,
   TEST_ONLY_BLOCK,
+  FOCUS_TAG_FORMATTED,
   SCENARIO
 } = require('../helper/constants');
 
@@ -30,6 +31,10 @@ class CodeLensForRunProvider {
       .reduce((lenses, row) => {
         const rowIndex = text.indexOf(row);
         const { range } = document.lineAt(rowIndex);
+        const useClearTagLense =
+          cucumberPreprocessorUsed && rowIndex > 0
+            ? text[rowIndex - 1].trim().startsWith(FOCUS_TAG_FORMATTED)
+            : row.trim().startsWith(TEST_ONLY_BLOCK);
         lenses.push(
           vscode.codeLens(range, {
             title: 'Open Cypress',
@@ -39,23 +44,24 @@ class CodeLensForRunProvider {
             arguments: [document.fileName]
           })
         );
-        lenses.push(
-          vscode.codeLens(range, {
-            title: `Set ${tag}`,
-            tooltip:
-              'open single test with command configured in CypressHelper.commandForOpen',
-            command: 'cypressHelper.setOnlyTag',
-            arguments: [rowIndex, cucumberPreprocessorUsed]
-          })
-        );
-        lenses.push(
-          vscode.codeLens(range, {
-            title: `Clear ${tag}`,
-            tooltip: `clear ${tag}`,
-            command: 'cypressHelper.clearOnlyTag',
-            arguments: [rowIndex, cucumberPreprocessorUsed]
-          })
-        );
+        useClearTagLense
+          ? lenses.push(
+              vscode.codeLens(range, {
+                title: `Clear ${tag}`,
+                tooltip: `clear ${tag}`,
+                command: 'cypressHelper.clearOnlyTag',
+                arguments: [rowIndex, cucumberPreprocessorUsed]
+              })
+            )
+          : lenses.push(
+              vscode.codeLens(range, {
+                title: `Set ${tag}`,
+                tooltip:
+                  'open single test with command configured in CypressHelper.commandForOpen',
+                command: 'cypressHelper.setOnlyTag',
+                arguments: [rowIndex, cucumberPreprocessorUsed]
+              })
+            );
         return lenses;
       }, []);
   }

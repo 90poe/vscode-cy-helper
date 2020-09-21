@@ -35,7 +35,7 @@ const parseFnParams = functionParameters =>
       .when(
         () => _.has(param, 'typeAnnotation'),
         () =>
-          `${param.name} : ${
+          `${param.optional ? `${param.name}?` : param.name} : ${
             _.get(param, 'typeAnnotation.typeAnnotation.typeName.name') ||
             tsBasicType(_.get(param, 'typeAnnotation.typeAnnotation')) ||
             'any'

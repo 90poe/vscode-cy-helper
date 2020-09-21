@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.2] - 2020-09-21
+### Fixed
+ - check optional flag when parsing typescript arguments, address #27
+### Changed
+ - show only one codelense (set or clear tag) for each test
+
 ## [0.8.1] - 2020-09-04
 ### Fixed
  - clearing tags for feature file when auto-formatting enabled
