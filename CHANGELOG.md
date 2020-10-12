@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.8.3] - 2020-10-12
+### Added
+ - 90poe internal: option to generate json schemas via binary for all new fixtures parsed from HAR
+
 ## [0.8.2] - 2020-09-21
 ### Fixed
  - check optional flag when parsing typescript arguments, address #27

@@ -5,6 +5,7 @@ const path = require('path');
 const _ = require('lodash');
 const fs = require('fs-extra');
 const { message } = require('../helper/constants');
+const { openJsonSchemaGenerator } = require('./openJsonSchemaGenerator');
 
 /**
  * 90poe internal command
@@ -51,6 +52,7 @@ exports.parseHAR = file => {
   const uniqRequests = _.uniqBy(requests, r => r.operationName);
   const matches = [];
   const updates = [];
+  const newFixturePaths = [];
   // check which fixtures should be updated based on graphql query
   fixtures.forEach(fixturePath => {
     const text = readFile(fixturePath);
@@ -94,6 +96,7 @@ exports.parseHAR = file => {
     );
     newFixtures.forEach(fixture => {
       const newPath = path.join(currentFolder, `${fixture.operationName}.json`);
+      newFixturePaths.push({ fsPath: newPath });
       writeFixture(newPath, fixture);
     });
     vscode.show(
@@ -101,7 +104,24 @@ exports.parseHAR = file => {
       message.FIXTURES_CREATED(newFixtures.map(f => `${f.operationName}`)),
       true
     );
+
+    vscode
+      .show(
+        'info',
+        `Do you want to create schemas for all new fixtures?`,
+        false,
+        'No',
+        'Yes'
+      )
+      .then(selectedAction => {
+        if (selectedAction === 'Yes') {
+          newFixturePaths.forEach(path => {
+            openJsonSchemaGenerator(path);
+          });
+        }
+      });
   }
+
   vscode
     .show(
       'info',
