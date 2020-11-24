@@ -3,23 +3,6 @@ Cypress extension for vs code
 
 [![Gitter](https://badges.gitter.im/vscode-cy-helper/community.svg)](https://gitter.im/vscode-cy-helper/community?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0) ![Visual Studio Marketplace Installs](https://img.shields.io/visual-studio-marketplace/i/Shelex.vscode-cy-helper?label=Installs)
 
-## Configuration
-
-| setting                              | description                           | default           |    
-|:--------------------------------------|:---------------------------------------|:-------------------|        
-| `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
-| `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
-| `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
-| `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
-| `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
-| `cypressHelper.typeDefinitionOnSave` | generate type definitions file for custom commands on save | false |    
-| `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
-| `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
-| `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
-| `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
-| `cypressHelper.cucumberTagsAutocomplete` | Set `enable: true` for cucumber feature autocomplete on `@`. Array of tags could be specified. Option to add [cypress-allure-plugin](https://www.npmjs.com/package/@shelex/cypress-allure-plugin) tags.  | `{`<br/>`"enable": false,`<br/>`"tags": ["focus"],`<br/>`"allurePlugin": false`<br/>`}` |   
-
-
 ## Available functionality
 ### Custom commands
 * [Go to definition](#1-open-cypress-custom-command-definition)
@@ -37,6 +20,25 @@ Cypress extension for vs code
 * [Alias go to definition](#11-alias-definition)
 * [Cucumber tags autocompletion](#12-cucumber-tag-autocompletion)
 * [Create default tsconfig file](#13-create-default-tsconfig-file)
+
+
+## Configuration
+
+| setting                              | description                           | default           |    
+|:--------------------------------------|:---------------------------------------|:-------------------|        
+| `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
+| `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
+| `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
+| `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
+| `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
+| `cypressHelper.typeDefinitionOnSave` | generate type definitions file for custom commands on save | false |    
+| `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
+| `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
+| `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
+| `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
+| `cypressHelper.cucumberTagsAutocomplete` | Set `enable: true` for cucumber feature autocomplete on `@`. Array of tags could be specified. Option to add [cypress-allure-plugin](https://www.npmjs.com/package/@shelex/cypress-allure-plugin) tags.  | `{`<br/>`"enable": false,`<br/>`"tags": ["focus"],`<br/>`"allurePlugin": false`<br/>`}` |   
+| `cypressHelper.reuseTerminalInstance` | By default executes `commandForOpen` in same terminal instance. To spawn new instance for each cypress opening set it to `false` | true | 
+
 
 ## Usage
 ### 1. Open cypress custom command definition

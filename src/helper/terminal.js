@@ -2,6 +2,7 @@ const _ = require('lodash');
 const VS = require('./vscodeWrapper');
 const vscode = new VS();
 const { TERMINAL_NAME, FOCUS_TAG, ONLY_BLOCK } = require('./constants');
+const reuseTerminal = vscode.config().reuseTerminalInstance;
 
 let _activeTerminal = null;
 
@@ -49,6 +50,9 @@ const disposeTerminal = () => {
 };
 
 const getTerminal = () => {
+  if (!reuseTerminal) {
+    _activeTerminal && disposeTerminal();
+  }
   if (!_activeTerminal) {
     createTerminal();
   }
