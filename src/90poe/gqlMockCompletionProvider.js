@@ -49,7 +49,7 @@ class GQLMockCompletionProvider {
         (completions, file) => {
           const { absolute, relative } = file;
           const operationName = relative.includes('.json')
-            ? parseFixture(absolute)
+            ? operationNameFromFixture(absolute)
             : null;
 
           /**
@@ -100,7 +100,7 @@ class GQLMockCompletionProvider {
   }
 }
 
-const parseFixture = path => {
+const operationNameFromFixture = path => {
   const content = readFile(path);
   try {
     const parsed = JSON.parse(content);

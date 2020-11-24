@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "0.8.3",
+	"version": "0.9.0",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -248,6 +248,11 @@
 							}
 						}
 					}
+				},
+				"cypressHelper.reuseTerminalInstance": {
+					"type": "boolean",
+					"default": true,
+					"description": "Use same terminal instance for opening/running cypress. Set to `false` if you need to restart cypress."
 				}
 			}
 		}

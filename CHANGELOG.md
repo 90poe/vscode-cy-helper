@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.9.0] - 2020-11-24
+### Added
+ - configuration option to allow user respawn terminal on each Cypress open
+
 ## [0.8.3] - 2020-10-12
 ### Added
  - 90poe internal: option to generate json schemas via binary for all new fixtures parsed from HAR

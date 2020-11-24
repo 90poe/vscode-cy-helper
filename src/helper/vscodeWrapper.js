@@ -64,6 +64,7 @@ class VS {
    * @property {object} cucumberTagsAutocomplete
    * @property {boolean} enableCommandReferenceProvider
    * @property {boolean} cucumberFixtureAutocompleteOnQuotes
+   * @property {boolean} reuseTerminalInstance
    * @returns {config}
    */
   config() {
