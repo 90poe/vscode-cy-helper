@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 2020-12-02
+### Fixed
+ - #32, for fixture definition check if resulting file exists
+
 ## [1.0.0] - 2020-11-24
 ### Added
  - github action updated with deployment to Open VSX registry

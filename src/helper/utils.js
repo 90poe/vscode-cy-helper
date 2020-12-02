@@ -32,8 +32,14 @@ const readFilesFromDir = (
 };
 
 /**
+ * Check if given path existing
+ * @param {string} filepath
+ */
+const fileExist = filepath => fs.pathExistsSync(filepath);
+
+/**
  * Read file content
- * @param {string} path
+ * @param {string} filepath
  */
 const readFile = filepath =>
   (fs.pathExistsSync(path.resolve(filepath)) &&
@@ -65,5 +71,6 @@ function promptToReloadWindow(event) {
 module.exports = {
   readFilesFromDir,
   readFile,
+  fileExist,
   promptToReloadWindow
 };

@@ -4,7 +4,7 @@ const traverse = require('@babel/traverse');
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
 const { parseJS } = require('../parser/AST');
-const { readFile } = require('../helper/utils');
+const { readFile, fileExist } = require('../helper/utils');
 const root = vscode.root();
 const { fixtureAutocompletionCommands } = vscode.config();
 
@@ -83,8 +83,10 @@ class FixtureDefinitionProvider {
     if (fixtureName) {
       let filePath = path.join(root, 'cypress', 'fixtures', fixtureName);
       !path.extname(filePath) && (filePath += '.json');
-      const targetPosition = vscode.Position(0, 0);
-      return vscode.location(vscode.parseUri(filePath), targetPosition);
+      if (fileExist(filePath)) {
+        const targetPosition = vscode.Position(0, 0);
+        return vscode.location(vscode.parseUri(filePath), targetPosition);
+      }
     }
   }
 }
