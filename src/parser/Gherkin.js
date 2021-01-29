@@ -84,8 +84,7 @@ const prepareRegexpForLiteral = literal => {
     basicTypesLiteral = basicTypesLiteral.replace(replace, PATTERN(pattern));
   });
 
-  const stepDefinitionRegexp = new RegExp(basicTypesLiteral, 'g') || null;
-  return stepDefinitionRegexp;
+  return new RegExp(basicTypesLiteral, 'g') || null;
 };
 
 /**
@@ -118,9 +117,10 @@ const parseRegexp = literal => {
     try {
       return new RegExp(pureString);
     } catch (e) {
-      return null;
+      //swallow this exception, return nothing later
     }
   }
+  return null;
 };
 
 /**

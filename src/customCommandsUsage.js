@@ -38,13 +38,12 @@ const findUnusedCustomCommands = () => {
 
   vscode.showQuickPickMenu(uniqueCommands, {
     mapperFunction: c => {
+      const fileRelativePath = c.path
+        .replace(root, '')
+        .replace(`${customCommandsFolder}${path.sep}`, '');
       return {
         label: c.name,
-        detail: `${c.path
-          .replace(root, '')
-          .replace(`${customCommandsFolder}${path.sep}`, '')}:${
-          c.loc.start.line
-        }`,
+        detail: `${fileRelativePath}:${c.loc.start.line}`,
         data: c
       };
     },

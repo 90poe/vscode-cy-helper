@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.2] - 2020-01-29
+### Fixed
+ - #34, handle path with spaces when passing file to open cypress command
+### Added
+ - #30, option to run spec in cypress
+
 ## [1.0.1] - 2020-12-02
 ### Fixed
  - #32, for fixture definition check if resulting file exists

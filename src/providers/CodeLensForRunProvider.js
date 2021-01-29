@@ -11,7 +11,7 @@ const { menuItems } = vscode.config();
 
 class CodeLensForRunProvider {
   provideCodeLenses(document) {
-    if (!menuItems.OpenCypress) {
+    if (!menuItems.OpenCypress && !menuItems.RunCypress) {
       return;
     }
     this.codeLenses = [];
@@ -35,15 +35,26 @@ class CodeLensForRunProvider {
           cucumberPreprocessorUsed && rowIndex > 0
             ? text[rowIndex - 1].trim().startsWith(FOCUS_TAG_FORMATTED)
             : row.trim().startsWith(TEST_ONLY_BLOCK);
-        lenses.push(
-          vscode.codeLens(range, {
-            title: 'Open Cypress',
-            tooltip:
-              'open test file with command configured in CypressHelper.commandForOpen',
-            command: 'cypressHelper.openSpecFile',
-            arguments: [document.fileName]
-          })
-        );
+        menuItems.OpenCypress &&
+          lenses.push(
+            vscode.codeLens(range, {
+              title: 'Open Cypress',
+              tooltip:
+                'open test file with command configured in CypressHelper.commandForOpen',
+              command: 'cypressHelper.openSpecFile',
+              arguments: ['open', document.fileName]
+            })
+          );
+        menuItems.RunCypress &&
+          lenses.push(
+            vscode.codeLens(range, {
+              title: 'Run Cypress',
+              tooltip:
+                'run test file with command configured in CypressHelper.commandForRun',
+              command: 'cypressHelper.openSpecFile',
+              arguments: ['run', document.fileName]
+            })
+          );
         useClearTagLense
           ? lenses.push(
               vscode.codeLens(range, {

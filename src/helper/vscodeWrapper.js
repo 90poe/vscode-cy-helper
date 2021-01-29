@@ -54,6 +54,7 @@ class VS {
   /**
    * @typedef config
    * @property {string} commandForOpen
+   * @property {string} commandForRun
    * @property {string} customCommandsFolder
    * @property {string} typeDefinitionFile
    * @property {array} typeDefinitionExcludePatterns

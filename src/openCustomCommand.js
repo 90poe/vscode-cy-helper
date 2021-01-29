@@ -61,7 +61,7 @@ const detectCustomCommand = () => {
 
     const match = line.match(pattern);
     if (!match) {
-      throw `not found matches in "${line}"`;
+      throw new Error(`not found matches in "${line}"`);
     }
 
     const matches = _.flatMap(match, () => pattern.exec(line).pop());
@@ -81,7 +81,9 @@ const detectCustomCommand = () => {
       findClosestRange(indexedMatches, selectionIndex);
 
     if (!closest) {
-      throw `not found closest command in "${line}" at index ${selectionIndex}`;
+      throw new Error(
+        `not found closest command in "${line}" at index ${selectionIndex}`
+      );
     }
 
     commandName = closest.match.split('.').pop().trim().replace(/['"`]/g, '');
