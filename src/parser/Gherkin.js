@@ -80,7 +80,7 @@ const PATTERN = type => {
 const prepareRegexpForLiteral = literal => {
   let basicTypesLiteral = `^${literal.replace(/\//g, '|')}$`;
 
-  allTypeRegexp.map(({ pattern, replace }) => {
+  allTypeRegexp.forEach(({ pattern, replace }) => {
     basicTypesLiteral = basicTypesLiteral.replace(replace, PATTERN(pattern));
   });
 
