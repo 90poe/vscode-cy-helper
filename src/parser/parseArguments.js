@@ -34,12 +34,13 @@ const parseFnParams = functionParameters =>
     match(param)
       .when(
         () => _.has(param, 'typeAnnotation'),
-        () =>
-          `${param.optional ? `${param.name}?` : param.name} : ${
+        () => {
+          const typeAnnotation =
             _.get(param, 'typeAnnotation.typeAnnotation.typeName.name') ||
             tsBasicType(_.get(param, 'typeAnnotation.typeAnnotation')) ||
-            'any'
-          }`
+            'any';
+          return `${param.name}${param.optional && '?'} : ${typeAnnotation}`;
+        }
       )
       .when(
         () => param.type === 'AssignmentPattern',

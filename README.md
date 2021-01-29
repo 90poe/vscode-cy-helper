@@ -26,13 +26,14 @@ Cypress extension for vs code
 
 | setting                              | description                           | default           |    
 |:--------------------------------------|:---------------------------------------|:-------------------|        
-| `cypressHelper.commandForOpen`       | command used for opening cypress      | `cypress open`    |    
+| `cypressHelper.commandForOpen`       | command used for opening cypress      | `npx cypress open`    |    
+| `cypressHelper.commandForRun`       | command used for running cypress      | `npx cypress run`    |    
 | `cypressHelper.customCommandsFolder` | path to folder with custom commands   | `cypress/support` |    
 | `cypressHelper.typeDefinitionFile` | file to save generated custom commands   | `cypress/support/customCommands.d.ts`|    
 | `cypressHelper.typeDefinitionExcludePatterns` | array of glob patterns that should be excluded from types generation  | [`**/*.ts`] |
 | `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
 | `cypressHelper.typeDefinitionOnSave` | generate type definitions file for custom commands on save | false |    
-| `cypressHelper.menuItems` | display menu items for commands |  `{ `<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
+| `cypressHelper.menuItems` | display menu items or lenses for commands |  `{ `<br/>`"OpenCypress": true,`<br/>`"RunCypress": false,`<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
 | `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
 | `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   

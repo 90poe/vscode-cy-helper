@@ -87,7 +87,7 @@ const typeDefinitions = (
   excludes,
   options = { includeLocationData: false, includeAnnotations: false }
 ) => {
-  let commandsFound = [];
+  const commandsFound = [];
   const suitableFiles = files.filter(path =>
     excludes.every(s => !minimatch(path, s))
   );

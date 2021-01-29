@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "1.0.1",
+	"version": "1.0.2",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -130,8 +130,13 @@
 			"properties": {
 				"cypressHelper.commandForOpen": {
 					"type": "string",
-					"default": "cypress open",
+					"default": "npx cypress open",
 					"description": "Specify command used for opening cypress GUI"
+				},
+				"cypressHelper.commandForRun": {
+					"type": "string",
+					"default": "npx cypress run",
+					"description": "Specify command used for running cypress"
 				},
 				"cypressHelper.customCommandsFolder": {
 					"type": "string",
@@ -165,6 +170,7 @@
 					"type": "object",
 					"default": {
 						"OpenCypress": true,
+						"RunCypress": false,
 						"GenerateCustomCommandTypes": true,
 						"GoToCustomCommand": true,
 						"FindCustomCommandReferences": true,
@@ -177,6 +183,14 @@
 					"items": {
 						"type": "object",
 						"properties": {
+							"OpenCypress": {
+								"type": "boolean",
+								"default": true
+							},
+							"RunCypress": {
+								"type": "boolean",
+								"default": false
+							},
 							"GenerateCustomCommandTypes": {
 								"type": "boolean",
 								"default": true
