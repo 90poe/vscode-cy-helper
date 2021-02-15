@@ -1,6 +1,5 @@
 const path = require('path');
 const fs = require('fs-extra');
-const _ = require('lodash');
 const glob = require('fast-glob');
 const VS = require('./vscodeWrapper');
 const vscode = new VS();
