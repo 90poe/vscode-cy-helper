@@ -29,6 +29,7 @@ const CommandDefinitionProvider = require('./providers/CommandDefinitionProvider
 const CommandReferencesProvider = require('./providers/CommandReferencesProvider');
 const StepReferencesProvider = require('./providers/StepReferencesProvider');
 const CodeLensForRunProvider = require('./providers/CodeLensForRunProvider');
+const TypeKeypressEventsProvider = require('./providers/TypeKeypressEventsProvider');
 
 const JsAndTsActivationSchema = [
   { scheme: 'file', language: 'javascript' },
@@ -107,6 +108,11 @@ const activate = context => {
       '(',
       '/',
       '\\'
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      JsAndTsActivationSchema,
+      new TypeKeypressEventsProvider(),
+      '{'
     ),
     vscode.languages.registerDefinitionProvider(
       JsAndTsActivationSchema,
