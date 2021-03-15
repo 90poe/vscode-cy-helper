@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.1.0] - 2020-03-15
+### Added
+ - #39, autocompletion for cy.type keyPress sequences
 ## [1.0.3] - 2020-02-15
 ### Fixed
  - #34, capitalize absolute windows path when lowercase used

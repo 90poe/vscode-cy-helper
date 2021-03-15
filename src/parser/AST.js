@@ -22,6 +22,23 @@ const parseJS = filepath => {
 };
 
 /**
+ *
+ * AST tree by text
+ */
+const parseText = text => {
+  try {
+    return (
+      Parser.parse(text || '', {
+        sourceType: 'module',
+        plugins: ['typescript']
+      }) || null
+    );
+  } catch (e) {
+    return null;
+  }
+};
+
+/**
  * Check if statement is `Cypress.Commands.add`
  */
 const findCypressCommandAddStatements = body => {
@@ -216,6 +233,7 @@ const parseStepDefinitions = stepDefinitionPath =>
 
 module.exports = {
   parseJS,
+  parseText,
   cypressCommandLocation,
   typeDefinitions,
   parseStepDefinitions,
