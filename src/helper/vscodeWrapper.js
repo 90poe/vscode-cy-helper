@@ -14,13 +14,15 @@ class VS {
       Uri,
       Location,
       TextEdit,
-      CodeLens
+      CodeLens,
+      SnippetString
     } = vscode;
     this._window = window;
     this._workspace = workspace;
     this._Position = Position;
     this._Range = Range;
     this._Selection = Selection;
+    this._SnippetString = SnippetString;
     this._commands = commands;
     this._URI = Uri;
     this._Location = Location;
@@ -52,6 +54,17 @@ class VS {
     return this._workspace.workspaceFolders[0].uri.fsPath;
   }
   /**
+   *
+   * @typedef jqueryLocators
+   * @property {boolean} enabled
+   * @property {array} commandsForAutocompletion
+   * @property {array} includePatterns
+   * @property {array} excludePatterns
+   * @property {array} customAttributes
+   * @returns {jqueryLocators}
+   */
+
+  /**
    * @typedef config
    * @property {string} commandForOpen
    * @property {string} commandForRun
@@ -66,6 +79,7 @@ class VS {
    * @property {boolean} enableCommandReferenceProvider
    * @property {boolean} cucumberFixtureAutocompleteOnQuotes
    * @property {boolean} reuseTerminalInstance
+   * @property {jqueryLocators} jqueryLocators
    * @returns {config}
    */
   config() {
@@ -78,6 +92,10 @@ class VS {
 
   Range(start, end) {
     return new this._Range(start, end);
+  }
+
+  SnippetString(value) {
+    return new this._SnippetString(value);
   }
 
   showQuickPick(items) {
