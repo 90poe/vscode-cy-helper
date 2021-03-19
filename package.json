@@ -1,6 +1,6 @@
 {
 	"name": "vscode-cy-helper",
-	"version": "1.1.0",
+	"version": "1.2.0",
 	"displayName": "Cypress Helper",
 	"description": "Extension for cypress.io testing tool",
 	"main": "./src/extension",
@@ -142,6 +142,21 @@
 					"type": "string",
 					"default": "cypress/support",
 					"description": "Specify path to folder with custom commands"
+				},
+				"cypressHelper.jqueryLocators": {
+					"type": "object",
+					"default": {
+						"enabled": true,
+						"commandsForAutocompletion": [
+							"get",
+							"find",
+							"filter"
+						],
+						"includePatterns": [],
+						"excludePatterns": [],
+						"customAttributes": []
+					},
+					"description": "configure jquery locators autocomplete"
 				},
 				"cypressHelper.typeDefinitionFile": {
 					"type": "string",
@@ -288,7 +303,7 @@
 	"dependencies": {
 		"@babel/parser": "7.11.4",
 		"@babel/traverse": "7.11.0",
-		"fast-glob": "3.2.4",
+		"fast-glob": "3.2.5",
 		"fs-extra": "9.0.1",
 		"gherkin": "5.1.0",
 		"lodash": "4.17.20",

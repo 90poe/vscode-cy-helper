@@ -20,6 +20,8 @@ Cypress extension for vs code
 * [Alias go to definition](#11-alias-definition)
 * [Cucumber tags autocompletion](#12-cucumber-tag-autocompletion)
 * [Create default tsconfig file](#13-create-default-tsconfig-file)
+* [Keypress events snippets inside cy.type autocompletion](#14-keypress-events-snippets-inside-cy.type-autocompletion)
+* [jQuery locators autocompletion](#15-jquery-locators-autocompletion)
 
 
 ## Configuration
@@ -34,6 +36,7 @@ Cypress extension for vs code
 | `cypressHelper.includeAnnotationForCommands` | include comments before custom command to type definition file | false |    
 | `cypressHelper.typeDefinitionOnSave` | generate type definitions file for custom commands on save | false |    
 | `cypressHelper.menuItems` | display menu items or lenses for commands |  `{ `<br/>`"OpenCypress": true,`<br/>`"RunCypress": false,`<br/>`"GenerateCustomCommandTypes": true,`<br/>`"GoToCustomCommand": true,`<br/> `"FindCustomCommandReferences": true,`<br/>`"FindStepDefinitionReferences": true`<br/>`}` |    
+| `cypressHelper.jqueryLocators` | configuration for jquery locators autocomplete |  `{ `<br/>`"enabled": true,`<br/>`"commandsForAutocompletion": ["get", "find", "filter"],`<br/>`"includePatterns": [],`<br/>`"excludePatterns": [],`<br/> `"customAttributes": [],`<br/>`}` |    
 | `cypressHelper.fixtureAutocompletionCommands` | cypress commands that accept fixture path as argument to add fixture path autocompletion | `["fixture"]` |   
 | `cypressHelper.cucumberFixtureAutocompleteOnQuotes` | If you want fixture autocompletion in cucumber scenarios (using fixtures as parameters) you can enable it by setting `true` | false |   
 | `cypressHelper.enableCommandReferenceProvider` | In case you have type definitions, native Find all References will return duplicates for commands. To avoid it set this parameter to `false` | true |   
@@ -141,6 +144,26 @@ From command palette select command `Cypress: Create default tsconfig.json file`
 
 tsconfig could also be created when `Cypress: Generate custom command types` is used. 
 
+### 14. Keypress events snippets inside cy.type autocompletion
+Inside cy.type string or template literal argument just type `{` which will trigger autocomplete for [keypress event sequences](https://docs.cypress.io/api/commands/type.html#Arguments)
+  
+![](./assets/cyTypeAutocomplete.gif)
+
+### 15. jQuery locators autocompletion
+ - Configuration
+    * enabled - boolean, turn on\off autocompletion, default `true`.
+    * commandsForAutocompletion - array[string], cypress commands that should have autocompletion inside string\template literal arguments, default `["get", "find", "filter"]`
+    * includePatterns - array[string], glob patterns for folders where files should have autocompletion inside string\template literal, could be used inside page objects \ locator objects \ file with locator constants, example:`["**/support/locators/**"]`  ,default `[]`
+    * excludePatterns - array[string], glob patterns for folders that should be excluded from having autocompletion inside string\template literal, could be used to narrow down or specify folder matching criteris , example:`["**/support/locators/handler/**"]`  ,default `[]`
+    * customAttributes - array[string], used to add your attributes to list of autocompletions, example:`["data-cy", "test-data"]`  ,default `[]`
+
+ - Usage
+    * type `[` - list with attributes
+    * type `:` - list of jquery pseudo locators
+    * type `=` - list of matching strategies for attribute values
+    * type space - list of relative strategies to query elements (children, direct children, siblings, adjacent)  
+  
+![](./assets/jqueryLocators.gif)
 ## License
 
 Copyright 2019 90poe.  This project is licensed under the Apache 2.0 License.  

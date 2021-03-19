@@ -30,6 +30,7 @@ const CommandReferencesProvider = require('./providers/CommandReferencesProvider
 const StepReferencesProvider = require('./providers/StepReferencesProvider');
 const CodeLensForRunProvider = require('./providers/CodeLensForRunProvider');
 const TypeKeypressEventsProvider = require('./providers/TypeKeypressEventsProvider');
+const JqueryLocatorCompletionProvider = require('./providers/JqueryLocatorCompletionProvider');
 
 const JsAndTsActivationSchema = [
   { scheme: 'file', language: 'javascript' },
@@ -113,6 +114,14 @@ const activate = context => {
       JsAndTsActivationSchema,
       new TypeKeypressEventsProvider(),
       '{'
+    ),
+    vscode.languages.registerCompletionItemProvider(
+      JsAndTsActivationSchema,
+      new JqueryLocatorCompletionProvider(),
+      '[',
+      ':',
+      '=',
+      ' '
     ),
     vscode.languages.registerDefinitionProvider(
       JsAndTsActivationSchema,

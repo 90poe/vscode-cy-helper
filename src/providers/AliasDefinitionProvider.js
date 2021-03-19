@@ -4,19 +4,22 @@ const traverse = require('@babel/traverse');
 const VS = require('../helper/vscodeWrapper');
 const vscode = new VS();
 const { readFilesFromDir } = require('../helper/utils');
-const { parseJS } = require('../parser/AST');
+const { parseJS, parseText } = require('../parser/AST');
 
 const aliasPattern = new RegExp(/\([\"\'](@.*?)[\"\']\)/);
 
-const traverseForAlias = currentFile => {
-  const currentFolder = path.dirname(currentFile);
+const traverseForAlias = document => {
+  const currentFolder = path.dirname(document.fileName);
   const files = readFilesFromDir(currentFolder, {
     extension: `\.[jt]s`
-  });
+  }).filter(file => file !== document.fileName);
   const aliases = [];
 
-  files.forEach(file => {
-    const AST = parseJS(file);
+  // add current unsaved file changes to track unsaved aliases also
+  files.unshift(document.getText());
+
+  files.forEach((file, index) => {
+    const AST = index === 0 ? parseText(file) : parseJS(file);
     if (!AST) {
       return;
     }
@@ -46,7 +49,7 @@ class AliasDefinitionProvider {
     if (!matches) {
       return;
     }
-    const aliases = traverseForAlias(document.fileName);
+    const aliases = traverseForAlias(document);
     if (aliases.length) {
       const match = matches.pop().replace('@', '');
       const alias = aliases.find(a => a.name === match);

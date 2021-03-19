@@ -6,9 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.0] - 2020-03-19
+### Added
+ - #40, autocomplete for jquery locators
+
+### Changed
+ - previously alias autocomplete suggested only aliases from saved changes. now it also provides unsaved from current file.
+ - use snippets for allure tags autocompletion
+ - add AS_ID to allure tags
+
+### Fixed
+ - cy.type keypress events autocomplete usage in template literals
+
 ## [1.1.0] - 2020-03-15
 ### Added
  - #39, autocompletion for cy.type keyPress sequences
+
 ## [1.0.3] - 2020-02-15
 ### Fixed
  - #34, capitalize absolute windows path when lowercase used
