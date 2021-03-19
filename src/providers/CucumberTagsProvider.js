@@ -4,6 +4,13 @@ const { allureLabels } = require('../helper/constants');
 const { cucumberTagsAutocomplete } = vscode.config();
 const { enable, allurePlugin, tags } = cucumberTagsAutocomplete;
 
+const prepareSnippetForLabel = label => {
+  let snippet = ['tms', 'issue'].includes(label)
+    ? `${label}("\${1:name}","\${2:url}")`
+    : `${label}("\${1:value}")`;
+  return snippet;
+};
+
 class CucumberTagsProvider {
   provideCompletionItems() {
     // break if fixture autocomplete is not needed
@@ -27,9 +34,7 @@ class CucumberTagsProvider {
             ? `Insert link name and url`
             : `Insert value`,
           kind: 2,
-          insertText: ['tms', 'issue'].includes(label)
-            ? `${label}("","")`
-            : `${label}("")`
+          insertText: vscode.SnippetString(prepareSnippetForLabel(label))
         })
       );
     return {

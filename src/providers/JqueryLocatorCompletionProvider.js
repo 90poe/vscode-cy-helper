@@ -65,7 +65,7 @@ const shouldHaveAutocomplete = (documentContent, position) => {
       // should check if it is inside cypress commands
       if (
         positionInside(_.get(path, 'node.arguments[0].loc'), position) &&
-        _.get(path, 'node.callee.object.name') === 'cy' &&
+        _.get(path, 'node.callee.type') === 'MemberExpression' &&
         commandsForAutocompletion.includes(
           _.get(path, 'node.callee.property.name')
         )
@@ -113,7 +113,6 @@ class jQueryLocatorCompletionProvider {
       '[': Object.assign(attributes, customAttributesItems),
       ':': pseudo,
       '=': prefixes,
-      ']': core,
       ' ': Object.assign({}, core, relative)
     };
 

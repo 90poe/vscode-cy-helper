@@ -58,6 +58,7 @@ module.exports = {
     QUOTES: /['"`]/g
   },
   allureLabels: [
+    'AS_ID',
     'suite',
     'subSuite',
     'epic',
@@ -65,7 +66,6 @@ module.exports = {
     'story',
     'severity',
     'owner',
-    'package',
     'issue',
     'tms'
   ],

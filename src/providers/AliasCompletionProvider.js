@@ -3,7 +3,7 @@ const { traverseForAlias } = require('./AliasDefinitionProvider');
 class AliasCompletionProvider {
   provideCompletionItems(document) {
     // look for aliases
-    const aliases = traverseForAlias(document.fileName);
+    const aliases = traverseForAlias(document);
     // prepare completions list
     const completions = aliases.map(a => ({
       label: a.name,

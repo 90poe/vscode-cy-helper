@@ -86,8 +86,8 @@ class VS {
     return this._workspace.getConfiguration().cypressHelper;
   }
 
-  Position(coordinates, characters) {
-    return new this._Position(coordinates, characters);
+  Position(line, characters) {
+    return new this._Position(line, characters);
   }
 
   Range(start, end) {
