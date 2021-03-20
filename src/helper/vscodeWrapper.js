@@ -34,8 +34,8 @@ class VS {
     return this._commands.executeCommand(command, ...args);
   }
 
-  createTerminal(name) {
-    return this._window.createTerminal(name);
+  createTerminal(opts) {
+    return this._window.createTerminal(opts);
   }
 
   activeTextEditor() {
