@@ -38,8 +38,12 @@ const removeTags = terminal => {
   }
 };
 
-const createTerminal = () => {
-  _activeTerminal = vscode.createTerminal(TERMINAL_NAME);
+const createTerminal = cwd => {
+  _activeTerminal = vscode.createTerminal({
+    name: TERMINAL_NAME,
+    cwd: cwd
+  });
+  _activeTerminal.cwd = cwd;
   return _activeTerminal;
 };
 
@@ -49,12 +53,13 @@ const disposeTerminal = () => {
   _activeTerminal = null;
 };
 
-const getTerminal = () => {
+const getTerminal = cwd => {
   if (!reuseTerminal) {
     _activeTerminal && disposeTerminal();
   }
-  if (!_activeTerminal) {
-    createTerminal();
+  const currentDir = cwd || vscode.root();
+  if (!_activeTerminal || _activeTerminal.cwd !== currentDir) {
+    createTerminal(cwd);
   }
   return _activeTerminal;
 };

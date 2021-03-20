@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.1] - 2020-03-20
+### Changed
+ - now terminals in Cypress Helper are created with specific current directory. In case directory not matches current terminal it will spawn new one. By default workspace root is used.
+
+### Fixed
+ - #43, solved by checking if package.json exist in sub-folders. In case it exist we treat folder as root for new terminal to support Cypress Run and Cypress Open code lenses for nested projects and calculate corresponding relative path to spec or root path.
+
 ## [1.2.0] - 2020-03-19
 ### Added
  - #40, autocomplete for jquery locators
