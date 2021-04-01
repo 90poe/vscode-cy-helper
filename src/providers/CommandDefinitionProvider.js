@@ -8,7 +8,8 @@ const { detectCustomCommand } = require('../openCustomCommand');
 
 class CommandDefinitionProvider {
   provideDefinition() {
-    const commandName = detectCustomCommand();
+    const { commandName, _ } = detectCustomCommand();
+
     if (commandName) {
       const commandsLocation = path.join(
         root,

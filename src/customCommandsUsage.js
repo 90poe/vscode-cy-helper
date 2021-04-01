@@ -57,7 +57,12 @@ const findUnusedCustomCommands = () => {
  * returns command name and references array
  */
 const customCommandReferences = () => {
-  const command = detectCustomCommand();
+  const { commandName: command, err } = detectCustomCommand();
+  if (err) {
+    vscode.show('err', message.NO_COMMAND_DETECTED(err));
+    return;
+  }
+
   if (command) {
     const commandName = command.replace(regexp.QUOTES, '');
     const commandPattern = new RegExp(`\\.${commandName}\\(`, 'g');

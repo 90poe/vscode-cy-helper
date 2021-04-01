@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.2] - 2020-04-01
+### Fixed
+ - #48, address issue when errors are thrown for some commands on initialisation it blocks other functionality
+
 ## [1.2.1] - 2020-03-20
 ### Changed
  - now terminals in Cypress Helper are created with specific current directory. In case directory not matches current terminal it will spawn new one. By default workspace root is used.

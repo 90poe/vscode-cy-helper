@@ -40,7 +40,6 @@ const findClosestRange = (indexedMatches, target) => {
  */
 const detectCustomCommand = () => {
   const editor = vscode.activeTextEditor();
-  let commandName;
 
   if (editor.selection.start.character === editor.selection.end.character) {
     const { text: line } = editor.document.lineAt(editor.selection.active.line);
@@ -61,7 +60,10 @@ const detectCustomCommand = () => {
 
     const match = line.match(pattern);
     if (!match) {
-      throw new Error(`not found matches in "${line}"`);
+      return {
+        commandName: null,
+        err: `not found matches in "${line}"`
+      };
     }
 
     const matches = _.flatMap(match, () => pattern.exec(line).pop());
@@ -81,16 +83,21 @@ const detectCustomCommand = () => {
       findClosestRange(indexedMatches, selectionIndex);
 
     if (!closest) {
-      throw new Error(
-        `not found closest command in "${line}" at index ${selectionIndex}`
-      );
+      return {
+        commandName: null,
+        err: `not found closest command in "${line}" at index ${selectionIndex}`
+      };
     }
 
-    commandName = closest.match.split('.').pop().trim().replace(/['"`]/g, '');
-  } else {
-    commandName = editor.document.getText(editor.selection);
+    return {
+      commandName: closest.match.split('.').pop().trim().replace(/['"`]/g, ''),
+      err: null
+    };
   }
-  return commandName;
+  return {
+    commandName: editor.document.getText(editor.selection),
+    err: null
+  };
 };
 
 /**
@@ -99,10 +106,8 @@ const detectCustomCommand = () => {
  *  - open document with cursor on command definition
  */
 const openCustomCommand = () => {
-  let commandName;
-  try {
-    commandName = detectCustomCommand();
-  } catch (err) {
+  const { commandName, err } = detectCustomCommand();
+  if (err) {
     vscode.show('err', message.NO_COMMAND_DETECTED(err));
     return;
   }
