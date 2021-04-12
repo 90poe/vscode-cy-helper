@@ -5,7 +5,7 @@ const { cucumberTagsAutocomplete } = vscode.config();
 const { enable, allurePlugin, tags } = cucumberTagsAutocomplete;
 
 const prepareSnippetForLabel = label => {
-  let snippet = ['tms', 'issue'].includes(label)
+  let snippet = ['tms', 'issue', 'link'].includes(label)
     ? `${label}("\${1:name}","\${2:url}")`
     : `${label}("\${1:value}")`;
   return snippet;
@@ -30,7 +30,7 @@ class CucumberTagsProvider {
         completions.push({
           label: label,
           // type of completion is function
-          documentation: ['tms', 'issue'].includes(label)
+          documentation: ['tms', 'issue', 'link'].includes(label)
             ? `Insert link name and url`
             : `Insert value`,
           kind: 2,
