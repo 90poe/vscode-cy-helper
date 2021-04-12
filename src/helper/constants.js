@@ -59,6 +59,7 @@ module.exports = {
   },
   allureLabels: [
     'AS_ID',
+    'parentSuite',
     'suite',
     'subSuite',
     'epic',
@@ -67,7 +68,8 @@ module.exports = {
     'severity',
     'owner',
     'issue',
-    'tms'
+    'tms',
+    'link'
   ],
   SPACE: '\n        ',
   TSCONFIG_DEFAULT_DATA: `{
