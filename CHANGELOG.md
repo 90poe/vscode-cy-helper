@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.4] - 2020-04-18
+### Fixed
+ - #51, handle duplicated tests in open\run code lenses
+### Added
+ - cucumber allure tags autocomplete: link and parentSuite labels
+
 ## [1.2.2] - 2020-04-01
 ### Fixed
  - #48, address issue when errors are thrown for some commands on initialisation it blocks other functionality

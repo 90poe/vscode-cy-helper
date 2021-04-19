@@ -17,24 +17,25 @@ class CodeLensForRunProvider {
     this.codeLenses = [];
     const cucumberPreprocessorUsed = document.languageId === 'feature';
 
-    const text = document.getText().split('\n');
+    const texts = document.getText().split('\n');
 
     const tag = cucumberPreprocessorUsed ? '"@focus"' : '".only"';
 
-    return text
+    return texts
+      .map((text, index) => ({ text, index }))
       .filter(
-        row =>
-          row.trim().startsWith(SCENARIO) ||
-          row.trim().startsWith(TEST_BLOCK) ||
-          row.trim().startsWith(TEST_ONLY_BLOCK)
+        line =>
+          line.text.trim().startsWith(SCENARIO) ||
+          line.text.trim().startsWith(TEST_BLOCK) ||
+          line.text.trim().startsWith(TEST_ONLY_BLOCK)
       )
-      .reduce((lenses, row) => {
-        const rowIndex = text.indexOf(row);
-        const { range } = document.lineAt(rowIndex);
+      .reduce((lenses, line) => {
+        const { text, index } = line;
+        const { range } = document.lineAt(index);
         const useClearTagLense =
-          cucumberPreprocessorUsed && rowIndex > 0
-            ? text[rowIndex - 1].trim().startsWith(FOCUS_TAG_FORMATTED)
-            : row.trim().startsWith(TEST_ONLY_BLOCK);
+          cucumberPreprocessorUsed && index > 0
+            ? texts[index - 1].trim().startsWith(FOCUS_TAG_FORMATTED)
+            : text.trim().startsWith(TEST_ONLY_BLOCK);
         menuItems.OpenCypress &&
           lenses.push(
             vscode.codeLens(range, {
@@ -61,7 +62,7 @@ class CodeLensForRunProvider {
                 title: `Clear ${tag}`,
                 tooltip: `clear ${tag}`,
                 command: 'cypressHelper.clearOnlyTag',
-                arguments: [rowIndex, cucumberPreprocessorUsed]
+                arguments: [index, cucumberPreprocessorUsed]
               })
             )
           : lenses.push(
@@ -70,7 +71,7 @@ class CodeLensForRunProvider {
                 tooltip:
                   'open single test with command configured in CypressHelper.commandForOpen',
                 command: 'cypressHelper.setOnlyTag',
-                arguments: [rowIndex, cucumberPreprocessorUsed]
+                arguments: [index, cucumberPreprocessorUsed]
               })
             );
         return lenses;
