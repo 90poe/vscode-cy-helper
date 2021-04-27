@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.2.5] - 2020-04-27
 ## [1.2.4] - 2020-04-18
 ### Fixed
  - #51, handle duplicated tests in open\run code lenses
