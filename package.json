@@ -306,7 +306,7 @@
 		"fast-glob": "3.2.5",
 		"fs-extra": "9.0.1",
 		"gherkin": "5.1.0",
-		"lodash": "4.17.20",
+		"lodash": "4.17.21",
 		"minimatch": "3.0.4"
 	}
 }
